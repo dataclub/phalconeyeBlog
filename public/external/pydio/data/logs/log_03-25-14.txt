@@ -1,0 +1,36 @@
+03-25-14 19:19:00	127.0.0.1	ERROR	shared	class.serialConfDriver.php	error l.186	message=array_keys() expects parameter 1 to be array, null given
+03-25-14 19:20:30	127.0.0.1	INFO	shared	AuthService	Create User	user_id=admin
+03-25-14 19:20:33	127.0.0.1	ERROR	shared	class.AJXP_SerialMessageExchanger.php	error l.83	message=You must be logged in
+03-25-14 19:20:47	127.0.0.1	INFO	shared	conf.serial	Switch Repository	rep. id=ajxp_user
+03-25-14 19:25:53	127.0.0.1	INFO	shared	AuthService	Create User	user_id=admin
+03-25-14 19:26:07	127.0.0.1	INFO	shared	AuthService	Create User	user_id=admin
+03-25-14 19:26:07	127.0.0.1	ERROR	shared	class.AJXP_SerialMessageExchanger.php	error l.83	message=You must be logged in
+03-25-14 19:41:04	127.0.0.1	INFO	No User	conf.serial	Switch Repository	rep. id=0
+03-25-14 19:41:15	127.0.0.1	INFO	No User	access.fs	Upload File	file=default//BC_4_1.jmx
+03-25-14 19:41:16	127.0.0.1	INFO	No User	editor.browser	Download	Read content of ajxp.fs://0/BC_4_1.jmx
+03-25-14 19:41:25	127.0.0.1	INFO	No User	access.fs	Get_content	files=default/BC_4_1.jmx
+03-25-14 19:41:37	127.0.0.1	INFO	No User	access.fs	Get_content	files=default/BC_4_1.jmx
+03-25-14 19:42:20	127.0.0.1	ERROR	No User	index.php	error l.86	message=You are not allowed to access this resource.
+03-25-14 19:42:22	127.0.0.1	INFO	No User	editor.browser	Download	Read content of ajxp.fs://0/BC_4_1.jmx
+03-25-14 19:42:28	127.0.0.1	INFO	No User	access.fs	Get_content	files=default/BC_4_1.jmx
+03-25-14 19:42:35	127.0.0.1	ERROR	No User	index.php	error l.86	message=You are not allowed to access this resource.
+03-25-14 19:42:41	127.0.0.1	ERROR	No User	index.php	error l.86	message=You are not allowed to access this resource.
+03-25-14 19:42:44	127.0.0.1	ERROR	No User	index.php	error l.86	message=You are not allowed to access this resource.
+03-25-14 19:42:44	127.0.0.1	ERROR	No User	index.php	error l.86	message=You are not allowed to access this resource.
+03-25-14 19:42:49	127.0.0.1	ERROR	No User	index.php	error l.86	message=You are not allowed to access this resource.
+03-25-14 19:42:50	127.0.0.1	ERROR	No User	index.php	error l.86	message=You are not allowed to access this resource.
+03-25-14 19:42:51	127.0.0.1	ERROR	No User	index.php	error l.86	message=You are not allowed to access this resource.
+03-25-14 19:43:04	127.0.0.1	ERROR	No User	index.php	error l.86	message=You are not allowed to access this resource.
+03-25-14 19:43:05	127.0.0.1	ERROR	No User	index.php	error l.86	message=You are not allowed to access this resource.
+03-25-14 19:43:07	127.0.0.1	ERROR	No User	index.php	error l.86	message=You are not allowed to access this resource.
+03-25-14 19:43:09	127.0.0.1	ERROR	No User	index.php	error l.86	message=You are not allowed to access this resource.
+03-25-14 19:43:18	127.0.0.1	ERROR	No User	index.php	error l.86	message=You are not allowed to access this resource.
+03-25-14 19:43:23	127.0.0.1	ERROR	No User	index.php	error l.86	message=You are not allowed to access this resource.
+03-25-14 19:43:27	127.0.0.1	ERROR	No User	index.php	error l.86	message=You are not allowed to access this resource.
+03-25-14 19:43:33	127.0.0.1	ERROR	No User	index.php	error l.86	message=You are not allowed to access this resource.
+03-25-14 19:43:34	127.0.0.1	ERROR	No User	index.php	error l.86	message=You are not allowed to access this resource.
+03-25-14 19:43:37	127.0.0.1	ERROR	No User	index.php	error l.86	message=You are not allowed to access this resource.
+03-25-14 19:43:38	127.0.0.1	ERROR	No User	index.php	error l.86	message=You are not allowed to access this resource.
+03-25-14 19:48:46	127.0.0.1	INFO	No User	AuthService	Create User	user_id=admin
+03-25-14 19:50:57	127.0.0.1	INFO	No User	AuthService	Create User	user_id=admin
+03-25-14 19:53:08	127.0.0.1	INFO	No User	access.fs	Download	files=default/BC_4_1.zip
