@@ -50,14 +50,7 @@ INSERT INTO `content` (`id`, `page_id`, `widget_id`, `widget_order`, `layout`, `
 (8,	3,	1,	2,	'left',	'{\"title\":\"Left2\",\"html_en\":\"<p>Left2<\\/p>\\r\\n\",\"html_ru\":\"\",\"html\":null,\"roles\":null}'),
 (9,	1,	3,	1,	'middle',	'{\"logo\":\"assets\\/img\\/core\\/pe_logo.png\",\"show_title\":null,\"show_auth\":\"1\",\"roles\":null,\"content_id\":\"112\"}'),
 (10,	1,	2,	2,	'middle',	'{\"title\":\"\",\"class\":\"\",\"menu\":\"Default menu\",\"menu_id\":\"1\",\"roles\":null}'),
-(11,	2,	1,	1,	'middle',	'{\"title\":\"\",\"html_en\":\"<p style=\\\"text-align: center;\\\">PhalconEye v.0.4.0<\\/p>\\r\\n\",\"roles\":null,\"content_id\":\"11\"}'),
-(12,	4,	1,	1,	'right',	'{\"title\":\"Recent Posts\",\"html_en\":\"<p>{{blog_recent_posts}}<\\/p>\\r\\n\",\"roles\":null,\"content_id\":\"12\"}'),
-(13,	4,	1,	1,	'middle',	'{\"title\":\"Blog\",\"html_en\":\"<p>{{blog_content}}<\\/p>\\r\\n\",\"html_de\":null,\"roles\":null,\"content_id\":\"13\"}'),
-(14,	2,	2,	0,	'middle',	'{\"title\":null,\"class\":null,\"menu\":\"Testmenu\",\"menu_id\":\"2\",\"roles\":null}'),
-(15,	4,	1,	2,	'right',	'{\"title\":\"Recent Comments\",\"html_en\":\"<p>{{blog_recent_comments}}<\\/p>\\r\\n\",\"html_de\":null,\"roles\":null,\"content_id\":\"15\"}'),
-(16,	4,	1,	3,	'right',	'{\"title\":\"Archives\",\"html_en\":\"<p>{{blog_archives}}<\\/p>\\r\\n\",\"html_de\":null,\"roles\":null,\"content_id\":\"16\"}'),
-(17,	4,	1,	4,	'right',	'{\"title\":\"Categories\",\"html_en\":\"<p>{{blog_categories}}<\\/p>\\r\\n\",\"html_de\":null,\"roles\":null,\"content_id\":\"17\"}'),
-(18,	4,	1,	5,	'right',	'{\"title\":\"Tags\",\"html_en\":\"<p>{{blog_tags}}<\\/p>\\r\\n\",\"html_de\":null,\"roles\":null,\"content_id\":\"18\"}');
+(11,	2,	1,	1,	'middle',	'{\"title\":\"\",\"html_en\":\"<p style=\\\"text-align: center;\\\">PhalconEye v.0.4.0<\\/p>\\r\\n\",\"roles\":null,\"content_id\":\"11\"}');
 
 DROP TABLE IF EXISTS `languages`;
 CREATE TABLE `languages` (
@@ -177,7 +170,6 @@ INSERT INTO `language_translations` (`id`, `language_id`, `scope`, `original`, `
 (88,	1,	'core',	'Is enabled',	'Is enabled',	0),
 (89,	1,	'core',	'Close',	'Close',	0),
 (90,	1,	'core',	'Create new menu item',	'Create new menu item',	0),
-(91,	1,	'core',	'Blog',	'Blog',	0),
 (92,	1,	'core',	'Not Found',	'Not Found',	0),
 (93,	1,	'user',	'Username',	'Username',	0),
 (94,	1,	'user',	'Email',	'Email',	0),
@@ -310,7 +302,6 @@ INSERT INTO `language_translations` (`id`, `language_id`, `scope`, `original`, `
 (221,	1,	'core',	'Default language',	'Default language',	0),
 (222,	1,	'core',	'Auto detect',	'Auto detect',	0),
 (223,	1,	'core',	'Deutsch',	'Deutsch',	0),
-(224,	1,	'core',	'Blog Setting',	'Blog Setting',	0),
 (225,	1,	'core',	'Login',	'Login',	0),
 (226,	1,	'core',	'Register',	'Register',	0),
 (227,	1,	'user',	'Use you email or username to login.',	'Use you email or username to login.',	0),
@@ -327,9 +318,6 @@ INSERT INTO `language_translations` (`id`, `language_id`, `scope`, `original`, `
 (239,	1,	'core',	'Select menu that will be rendered.',	'Select menu that will be rendered.',	0),
 (240,	1,	'core',	'Menu css class',	'Menu css class',	0),
 (241,	1,	'core',	'Start typing to see menus variants',	'Start typing to see menus variants',	0),
-(246,	1,	'blog',	'Categories',	'Categories',	0),
-(247,	1,	'blog',	'Recent Comments',	'Recent Comments',	0),
-(248,	1,	'blog',	'Archives',	'Archives',	0),
 (249,	1,	'core',	'Install new package',	'Install new package',	0),
 (250,	1,	'core',	'Select package you want to install (zip extension).',	'Select package you want to install (zip extension).',	0),
 (251,	1,	'core',	'Package',	'Package',	0),
@@ -337,27 +325,15 @@ INSERT INTO `language_translations` (`id`, `language_id`, `scope`, `original`, `
 (253,	1,	'core',	'Newsletter',	'Newsletter',	0),
 (254,	1,	'core',	'Edit package',	'Edit package',	0),
 (255,	1,	'core',	'Edit this package.',	'Edit this package.',	0),
-(256,	1,	'blog',	'Tags',	'Tags',	0),
-(258,	1,	'blog',	'Post',	'Post',	0),
 (259,	1,	'user',	'User Creation',	'User Creation',	0),
 (260,	1,	'user',	'Create new user.',	'Create new user.',	0),
 (261,	1,	'user',	'Select user role',	'Select user role',	0),
-(262,	1,	'blog',	'Create new entrie',	'Create new entrie',	0),
-(263,	1,	'blog',	'List categories',	'List categories',	0),
-(264,	1,	'blog',	'Create new blog entrie',	'Create new blog entrie',	0),
-(265,	1,	'blog',	'List tags',	'List tags',	0),
-(266,	1,	'blog',	'List comments',	'List comments',	0),
 (267,	1,	'core',	'Packages management - Themes',	'Packages management - Themes',	0),
 (268,	1,	'core',	'No packages',	'No packages',	0),
 (269,	1,	'core',	'Packages management - Widgets',	'Packages management - Widgets',	0),
-(270,	1,	'blog',	'Comments',	'Comments',	0),
-(271,	1,	'blog',	'Create new post',	'Create new post',	0),
 (272,	1,	'user',	'User Editing',	'User Editing',	0),
 (273,	1,	'user',	'Edit User',	'Edit User',	0),
-(274,	1,	'user',	'Edit this user.',	'Edit this user.',	0),
-(277,	1,	'blog',	'Are you really want to delete this post?',	'Are you really want to delete this post?',	0),
-(278,	1,	'blog',	'Create new categorie',	'Create new categorie',	0),
-(279,	1,	'blog',	'Create new tags',	'Create new tags',	0);
+(274,	1,	'user',	'Edit this user.',	'Edit this user.',	0);
 
 DROP TABLE IF EXISTS `menus`;
 CREATE TABLE `menus` (
@@ -367,8 +343,7 @@ CREATE TABLE `menus` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 INSERT INTO `menus` (`id`, `name`) VALUES
-(1,	'Default menu'),
-(2,	'Testmenu');
+(1,	'Default menu');
 
 DROP TABLE IF EXISTS `menu_items`;
 CREATE TABLE `menu_items` (
@@ -396,12 +371,7 @@ CREATE TABLE `menu_items` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 INSERT INTO `menu_items` (`id`, `title`, `menu_id`, `parent_id`, `page_id`, `url`, `onclick`, `target`, `tooltip`, `tooltip_position`, `icon`, `icon_position`, `languages`, `roles`, `is_enabled`, `item_order`) VALUES
-(1,	'Home',	1,	NULL,	NULL,	'/',	NULL,	NULL,	NULL,	'top',	'files/PE_logo.png',	'left',	NULL,	NULL,	1,	0),
-(3,	'Blog',	1,	NULL,	NULL,	'blog',	NULL,	NULL,	NULL,	'top',	NULL,	'left',	NULL,	NULL,	1,	1),
-(4,	'Test1',	2,	NULL,	NULL,	'#',	NULL,	NULL,	NULL,	'top',	NULL,	'left',	NULL,	NULL,	1,	0),
-(5,	'Test2',	2,	NULL,	NULL,	'#',	NULL,	NULL,	NULL,	'top',	NULL,	'left',	NULL,	NULL,	1,	1),
-(6,	'Teest11',	2,	4,	NULL,	'#',	NULL,	NULL,	NULL,	'top',	NULL,	'left',	NULL,	NULL,	1,	0),
-(7,	'Test12',	2,	4,	NULL,	'#',	NULL,	NULL,	NULL,	'top',	NULL,	'left',	NULL,	NULL,	1,	1);
+(1,	'Home',	1,	NULL,	NULL,	'/',	NULL,	NULL,	NULL,	'top',	'files/PE_logo.png',	'left',	NULL,	NULL,	1,	0);
 
 DROP TABLE IF EXISTS `packages`;
 CREATE TABLE `packages` (
@@ -421,9 +391,7 @@ CREATE TABLE `packages` (
 
 INSERT INTO `packages` (`id`, `name`, `type`, `title`, `description`, `version`, `author`, `website`, `enabled`, `is_system`, `data`) VALUES
 (1,	'core',	'module',	'Core',	'PhalconEye Core',	'0.4.0',	'PhalconEye Team',	'http://phalconeye.com/',	1,	1,	NULL),
-(2,	'user',	'module',	'Users',	'PhalconEye Users',	'0.4.0',	'PhalconEye Team',	'http://phalconeye.com/',	1,	1,	NULL),
-(3,	'blog',	'module',	'Blog',	NULL,	'1.0.0',	'dataclub',	NULL,	1,	0,	'{\"events\":[],\"widgets\":[]}'),
-(4,	'newsletter',	'module',	'Newsletter',	'Adding Email in Newsletter and Creating Mass-Email send to List of Mails',	'1.0.0',	'dataclub',	NULL,	1,	0,	'{\"events\":[],\"widgets\":[]}');
+(2,	'user',	'module',	'Users',	'PhalconEye Users',	'0.4.0',	'PhalconEye Team',	'http://phalconeye.com/',	1,	1,	NULL);
 
 DROP TABLE IF EXISTS `package_dependencies`;
 CREATE TABLE `package_dependencies` (
@@ -456,8 +424,7 @@ CREATE TABLE `pages` (
 INSERT INTO `pages` (`id`, `title`, `type`, `url`, `description`, `keywords`, `layout`, `controller`, `roles`, `view_count`) VALUES
 (1,	'Header',	'header',	NULL,	'Header content',	'',	'middle',	NULL,	NULL,	0),
 (2,	'Footer',	'footer',	NULL,	'Footer content',	'',	'middle',	NULL,	NULL,	0),
-(3,	'Home',	'home',	'/',	'PhalconEye Home Page',	'PhalconEye',	'top_right_middle_left',	NULL,	NULL,	0),
-(4,	'Blog',	NULL,	'blogViewStruct',	NULL,	NULL,	'right_middle',	'BlogController->indexAction',	NULL,	0);
+(3,	'Home',	'home',	'/',	'PhalconEye Home Page',	'PhalconEye',	'top_right_middle_left',	NULL,	NULL,	0);
 
 DROP TABLE IF EXISTS `roles`;
 CREATE TABLE `roles` (
