@@ -13,57 +13,36 @@
   | to license@phalconeye.com so we can send you a copy immediately.       |
   +------------------------------------------------------------------------+
 */
-
-namespace Blog;
-
-use Engine\Installer as EngineInstaller;
+namespace Blog\Form\Admin\Blog;
 
 /**
- * Installer for Blog.
+ * Edit blog.
  *
- * @category  PhalconEye\Module
- * @package   Module
+ * @category  PhalconEye
+ * @package   Blog\Form\Admin\Blog
  * @author    Djavid Rustamov <nsxgdesigns@googlemail.com>
- * @copyright 2014-2015 PhalconEye Team
+ * @copyright 2015-2016 PhalconEye Team
  * @license   New BSD License
+ * @link      http://phalconeye.com/
  */
-class Installer extends EngineInstaller
+class Edit extends Create
 {
-    CONST
-        /**
-         * Current package version.
-         */
-        CURRENT_VERSION = '0.0.1';
-
     /**
-     * Used to install specific database entities or other specific action.
+     * Initialize form.
      *
      * @return void
      */
-    public function install()
+    public function initialize()
     {
-        $this->runSqlFile(__DIR__ . '/Assets/sql/installation.sql');
-    }
+        parent::initialize();
+        $this
+            ->setTitle('Edit Blog')
+            ->setDescription('Edit this blog post.');
 
-    /**
-     * Used before package will be removed from the system.
-     *
-     * @return void
-     */
-    public function remove()
-    {
 
-    }
-
-    /**
-     * Used to apply some updates.
-     *
-     * @param string $currentVersion Current version name.
-     *
-     * @return mixed 'string' (new version) if migration is not finished, 'null' if all updates were applied
-     */
-    public function update($currentVersion)
-    {
-        return $currentVersion = null;
+        $this->getFieldSet(self::FIELDSET_FOOTER)
+            ->clearElements()
+            ->addButton('save')
+            ->addButtonLink('cancel', 'Cancel', 'admin/module/blog');
     }
 }

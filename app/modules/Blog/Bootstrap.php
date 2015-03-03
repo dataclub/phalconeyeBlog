@@ -23,7 +23,6 @@ use Engine\Bootstrap as EngineBootstrap;
  *
  * @category  PhalconEye\Module
  * @package   Module
- * @package   Module
  * @author    Djavid Rustamov <nsxgdesigns@googlemail.com>
  * @copyright 2014-2015 PhalconEye Team
  * @license   New BSD License

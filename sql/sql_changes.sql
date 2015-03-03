@@ -471,7 +471,8 @@ CREATE TABLE `users` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 INSERT INTO `users` (`id`, `role_id`, `username`, `password`, `email`, `creation_date`, `modified_date`) VALUES
-(1,	1,	'dataclub',	'$2a$08$Vb6IZPh2FehnvDfwUJJ7NuWvcq8FhCrbhjk.Ka4oynXwVKDxtY8SS',	'dataclub@mailfish.de',	'2015-02-18 01:56:42',	NULL);
+(1,	1,	'dataclub',	'$2a$08$Vb6IZPh2FehnvDfwUJJ7NuWvcq8FhCrbhjk.Ka4oynXwVKDxtY8SS',	'dataclub@mailfish.de',	'2015-02-18 01:56:42',	NULL),
+(2,	2,	'test',	'$2a$08$vklr7ElrpLWN.aErQUzXYOF8UXMl.1eugmg4izzmJNm2.T9Vf9QV6',	'test@test.de',	'2015-03-03 14:20:14',	NULL);
 
 DROP TABLE IF EXISTS `widgets`;
 CREATE TABLE `widgets` (
@@ -530,5 +531,18 @@ INSERT INTO `language_translations` (`id`, `language_id`, `scope`, `original`, `
 (277,	1,	'blog',	'Are you really want to delete this post?',	'Möchten Sie wirklich diesen Eintrag löschen?',	0),
 (278,	1,	'blog',	'Create new categorie',	'Neue Kategorie erstellen',	0),
 (279,	1,	'blog',	'Create new tags',	'Neuen Tag erstellen',	0);
+
+DROP TABLE IF EXISTS `blog`;
+CREATE TABLE `blog` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `title` varchar(255) NOT NULL,
+  `body` varchar(255) DEFAULT NULL,
+  `creation_date` datetime DEFAULT NULL,
+  `modified_date` datetime DEFAULT NULL,
+  `user_id` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `user_id` (`user_id`),
+  CONSTRAINT `blog_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 

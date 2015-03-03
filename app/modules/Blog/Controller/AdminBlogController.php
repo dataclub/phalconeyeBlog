@@ -17,18 +17,14 @@
 namespace Blog\Controller;
 
 use Blog\Helper\BlogHelper;
+use Blog\Controller\Grid\Admin\BlogGrid;
+use Blog\Form\Admin\Blog\Create;
+use Blog\Form\Admin\Blog\Edit;
+use Blog\Model\Blog;
 
 use Core\Controller\AbstractAdminController;
 use Core\Form\EntityForm;
-use Core\Form\TextForm;
-use User\Controller\Grid\Admin\RoleGrid;
-use User\Controller\Grid\Admin\UserGrid;
-use User\Form\Admin\Create as CreateForm;
-use User\Form\Admin\Edit as EditForm;
-use User\Form\Admin\RoleCreate as RoleCreateForm;
-use User\Form\Admin\RoleEdit as RoleEditForm;
-use User\Model\Role;
-use User\Model\User;
+
 
 /**
  * Admin blog.
@@ -67,64 +63,56 @@ class AdminBlogController extends AbstractAdminController
             $this->view->headerNavigation->setActiveItem('admin/module/blog');
         }
 
-        $grid = new UserGrid($this->view);
+        $grid = new BlogGrid($this->view);
         if ($response = $grid->getResponse()) {
             return $response;
         }
+
     }
 
     /**
-     * Create new user.
+     * Create blog.
      *
-     * @return mixed
+     * @return void|ResponseInterface
      *
      * @Route("/create", methods={"GET", "POST"}, name="admin-module-blog-create")
      */
     public function createAction()
     {
-        $this->view->headerNavigation->setActiveItem('admin/module/blog');
-
-        $form = new CreateForm();
+        $form = new Create();
         $this->view->form = $form;
 
         if (!$this->request->isPost() || !$form->isValid(null, true)) {
             return;
         }
 
-        $user = $form->getEntity();
-        $user->setPassword($user->password);
-        $user->role_id = Role::getDefaultRole()->id;
-        $user->save();
+        $blog = $form->getEntity();
+        $blog->save();
 
         $this->flashSession->success('New object created successfully!');
+        return $this->response->redirect("admin/module/blog");
 
-        return $this->response->redirect(['for' => 'admin-users']);
+
     }
 
+
     /**
-     * Edit user.
+     * Edit blog.
      *
-     * @param int $id User identity.
+     * @param int $id Blog identity.
      *
-     * @return mixed
+     * @return void|ResponseInterface
      *
      * @Route("/edit/{id:[0-9]+}", methods={"GET", "POST"}, name="admin-module-blog-edit")
      */
     public function editAction($id)
     {
-        $item = User::findFirst($id);
+        $item = Blog::findFirst($id);
         if (!$item) {
-            return $this->response->redirect(['for' => 'admin-users']);
+            return $this->response->redirect("admin/module/blog");
         }
 
-        $lastPassword = $item->password;
-        $item->password = 'emptypassword';
-
-        if (isset($_POST['password']) && $_POST['password'] == 'emptypassword') {
-            $_POST['password'] = $item->password = $lastPassword;
-        }
-
-        $form = new EditForm($item);
+        $form = new Edit($item);
         $this->view->form = $form;
 
         if (!$this->request->isPost() || !$form->isValid()) {
@@ -132,42 +120,21 @@ class AdminBlogController extends AbstractAdminController
         }
 
         $this->flashSession->success('Object saved!');
-
-        return $this->response->redirect(['for' => 'admin-users']);
+        return $this->response->redirect("admin/module/blog");
     }
 
     /**
-     * View user details.
+     * Delete blog post.
      *
-     * @param int $id User identity.
+     * @param int $id Blog identity.
      *
-     * @return mixed
-     *
-     * @Get("/view/{id:[0-9]+}", name="admin-module-blog-view")
-     */
-    public function viewAction($id)
-    {
-        $user = User::findFirst($id);
-        $this->view->form = $form = TextForm::factory($user, [], [['password']]);
-
-        $form
-            ->setTitle('User details')
-            ->addFooterFieldSet()
-            ->addButtonLink('back', 'Back', ['for' => 'admin-users']);
-    }
-
-    /**
-     * Delete user.
-     *
-     * @param int $id User identity.
-     *
-     * @return mixed
+     * @return void|ResponseInterface
      *
      * @Get("/delete/{id:[0-9]+}", name="admin-module-blog-delete")
      */
     public function deleteAction($id)
     {
-        $item = User::findFirst($id);
+        $item = Blog::findFirst($id);
         if ($item) {
             if ($item->delete()) {
                 $this->flashSession->notice('Object deleted!');
@@ -176,120 +143,7 @@ class AdminBlogController extends AbstractAdminController
             }
         }
 
-        return $this->response->redirect(['for' => 'admin-users']);
-    }
-
-    /**
-     * User roles.
-     *
-     * @return void
-     *
-     * @Get("/roles", name="admin-module-blog-roles")
-     */
-    public function rolesAction()
-    {
-        $grid = new RoleGrid($this->view);
-        if ($response = $grid->getResponse()) {
-            return $response;
-        }
-    }
-
-    /**
-     * Role creation.
-     *
-     * @return mixed
-     *
-     * @Route("/roles-create", methods={"GET", "POST"}, name="admin-module-blog-create")
-     */
-    public function rolesCreateAction()
-    {
-        $form = new RoleCreateForm();
-        $this->view->form = $form;
-
-        if (!$this->request->isPost() || !$form->isValid()) {
-            return;
-        }
-
-        $item = $form->getEntity();
-        if ($item->is_default) {
-            $this->db->update(
-                $item->getSource(),
-                ['is_default'],
-                [0],
-                "id != {$item->id}"
-            );
-        }
-        $this->flashSession->success('New object created successfully!');
-
-        return $this->response->redirect(['for' => 'admin-users-roles']);
-    }
-
-    /**
-     * Edit role.
-     *
-     * @param int $id Role identity.
-     *
-     * @return mixed
-     *
-     * @Route("/roles-edit/{id:[0-9]+}", methods={"GET", "POST"}, name="admin-module-blog-edit")
-     */
-    public function rolesEditAction($id)
-    {
-        $item = Role::findFirst($id);
-        if (!$item) {
-            return $this->response->redirect(['for' => 'admin-users-roles']);
-        }
-
-        $form = new RoleEditForm($item);
-        $this->view->form = $form;
-
-        if (!$this->request->isPost() || !$form->isValid()) {
-            return;
-        }
-
-        $item = $form->getEntity();
-        if ($item->is_default) {
-            $this->db->update(
-                Role::getTableName(),
-                ['is_default'],
-                [0],
-                "id != {$item->id}"
-            );
-        }
-
-        $this->flashSession->success('Object saved!');
-
-        return $this->response->redirect(['for' => 'admin-users-roles']);
-    }
-
-    /**
-     * Delete role.
-     *
-     * @param int $id Role identity.
-     *
-     * @return mixed
-     *
-     * @Get("/roles-delete/{id:[0-9]+}", name="admin-module-blog-delete")
-     */
-    public function rolesDeleteAction($id)
-    {
-        $item = Role::findFirst($id);
-        if ($item) {
-            if ($item->is_default) {
-                $anotherRole = Role::findFirst();
-                if ($anotherRole) {
-                    $anotherRole->is_default = 1;
-                    $anotherRole->save();
-                }
-            }
-            if ($item->delete()) {
-                $this->flashSession->notice('Object deleted!');
-            } else {
-                $this->flashSession->error($item->getMessages());
-            }
-        }
-
-        return $this->response->redirect(['for' => 'admin-users-roles']);
+        return $this->response->redirect("admin/module/blog");
     }
 
 }

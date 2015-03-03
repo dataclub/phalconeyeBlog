@@ -37,7 +37,7 @@ class IndexController extends BlogAbstractController
      */
     public function indexAction()
     {
-        $view = $this->getView('blogViewStruct');
+        $view = $this->getView('blogView');
 
         $content = $view->content;
         $delimiters = array(
