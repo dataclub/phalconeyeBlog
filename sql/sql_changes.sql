@@ -498,10 +498,10 @@ INSERT INTO `widgets` (`id`, `name`, `module`, `description`, `is_paginated`, `i
 -- Changes for Blog-Module
 
 INSERT INTO `pages` (`id`, `title`, `type`, `url`, `description`, `keywords`, `layout`, `controller`, `roles`, `view_count`) VALUES
-(4, 'Blog',	NULL,	'blogViewStruct',	NULL,	NULL,	'right_middle',	'BlogController->indexAction',	NULL,	0);
+(4,	'Blog',	NULL,	'blogView',	NULL,	NULL,	'right_middle',	NULL,	NULL,	0);
 
 INSERT INTO `menu_items` (`id`, `title`, `menu_id`, `parent_id`, `page_id`, `url`, `onclick`, `target`, `tooltip`, `tooltip_position`, `icon`, `icon_position`, `languages`, `roles`, `is_enabled`, `item_order`) VALUES
-(2, 'Blog',	1,	NULL,	NULL,	'page/blogViewStruct',	NULL,	NULL,	NULL,	'top',	NULL,	'left',	NULL,	NULL,	1,	1);
+(2,	'Blog',	1,	NULL,	NULL,	'blog',	NULL,	NULL,	NULL,	'top',	NULL,	'left',	NULL,	NULL,	1,	1);
 
 INSERT INTO `packages` (`id`, `name`, `type`, `title`, `description`, `version`, `author`, `website`, `enabled`, `is_system`, `data`) VALUES
 (3,	'blog',	'module',	'Blog',	NULL,	'1.0.0',	'dataclub',	NULL,	1,	0,	'{\"events\":[],\"widgets\":[]}');
@@ -532,6 +532,7 @@ INSERT INTO `language_translations` (`id`, `language_id`, `scope`, `original`, `
 (278,	1,	'blog',	'Create new categorie',	'Neue Kategorie erstellen',	0),
 (279,	1,	'blog',	'Create new tags',	'Neuen Tag erstellen',	0);
 
+
 DROP TABLE IF EXISTS `blog`;
 CREATE TABLE `blog` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -544,5 +545,3 @@ CREATE TABLE `blog` (
   KEY `user_id` (`user_id`),
   CONSTRAINT `blog_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-
