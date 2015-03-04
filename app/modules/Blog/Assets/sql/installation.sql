@@ -4,9 +4,6 @@ INSERT INTO `pages` (`id`, `title`, `type`, `url`, `description`, `keywords`, `l
 INSERT INTO `menu_items` (`title`, `menu_id`, `parent_id`, `page_id`, `url`, `onclick`, `target`, `tooltip`, `tooltip_position`, `icon`, `icon_position`, `languages`, `roles`, `is_enabled`, `item_order`) VALUES
 ('Blog',	1,	NULL,	NULL,	'blog',	NULL,	NULL,	NULL,	'top',	NULL,	'left',	NULL,	NULL,	1,	1);
 
-INSERT INTO `packages` (`id`, `name`, `type`, `title`, `description`, `version`, `author`, `website`, `enabled`, `is_system`, `data`) VALUES
-(3,	'blog',	'module',	'Blog',	NULL,	'1.0.0',	'dataclub',	NULL,	1,	0,	'{\"events\":[],\"widgets\":[]}');
-
 INSERT INTO `content` (`page_id`, `widget_id`, `widget_order`, `layout`, `params`) VALUES
 (4,	1,	1,	'right',	'{\"title\":\"Recent Posts\",\"html_en\":\"<p>{{blog_recent_posts}}<\\/p>\\r\\n\",\"roles\":null,\"content_id\":\"12\"}'),
 (4,	1,	1,	'middle',	'{\"title\":\"Blog\",\"html_en\":\"<p>{{blog_content}}<\\/p>\\r\\n\",\"html_de\":null,\"roles\":null,\"content_id\":\"13\"}'),
