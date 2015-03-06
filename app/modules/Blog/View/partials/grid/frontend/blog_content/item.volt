@@ -14,30 +14,33 @@
   | Author: Ivan Vorontsov <ivan.vorontsov@phalconeye.com>                 |
   +------------------------------------------------------------------------+
 #}
-{% for columnName, column in grid.getColumns() %}
-    <td>
-        {% if column[constant('\Engine\Grid\AbstractGrid::COLUMN_PARAM_OUTPUT_LOGIC')] is defined %}
-            {{ column[constant('\Engine\Grid\AbstractGrid::COLUMN_PARAM_OUTPUT_LOGIC')](item, grid.getDI()) }}
-        {% else %}
-            {{ item[columnName] }}
-        {% endif %}
-    </td>
-{% endfor %}
 
-{% if grid.hasActions() %}
-    <td class="actions">
-        {% for key, action in grid.getItemActions(item) %}
-            <a
-                    href="{% if action['href'] is defined %}{{ url(action['href']) }}{% else %}javascript:;{% endif %}"
-            {% if action['attr'] is defined %}
-                {% for attrName, attrValue in action['attr'] %}
-                    {{ attrName }}="{{ attrValue }}"
-                {% endfor %}
-            {% endif %}
-            >
-            {{ key |i18n}}
-            </a>
-        {% endfor %}
-    </td>
-{% endif %}
-
+<article id="post-id-{{ item['id'] }}" class="post type-post status-publish format-standard hentry widget_wrapper category-uncategorized">
+    <header class="entry-header">
+        <h1 class="entry-title">{{ item['title'] }}</h1>
+        <div class="entry-meta">
+            <span class="posted-on">
+                <a rel="bookmark" href="?date">
+                    <time class="entry-date published">
+                        {% if item['modified_date'] is defined %}
+                            {{ item['modified_date'] }}
+                        {% else %}
+                            {{ item['creation_date'] }}
+                        {% endif %}
+                    </time>
+                </a>
+            </span>
+            <span class="byline">
+                <span class="author vcard">
+                    <a href="?author" class="url fn n">{{ item['username'] }}</a>
+                </span>
+            </span>
+        </div>
+    </header>
+    <div class="entry-content">
+        {{ item['body'] }}
+    </div>
+    <footer class="entry-meta">
+        <span class="comments-link"><a title="Comment" href="blog/comment/{{ item['id'] }}">Leave a comment</a></span>
+    </footer>
+</article>

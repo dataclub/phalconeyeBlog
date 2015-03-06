@@ -63,8 +63,18 @@ class BlogContentGrid extends FrontendBlogGrid
         $builder = new Builder();
         $builder
             ->addFrom('Blog\Model\Blog', 'b')
-            ->columns(['b.id'])
+            ->leftJoin('User\Model\User', 'u.id = b.user_id', 'u')
+            ->columns([
+                'b.id',
+                'b.title',
+                'b.body',
+                'b.creation_date',
+                'b.modified_date',
+                'u.username'
+            ])
             ->orderBy('b.id DESC');
+
+
 
         return $builder;
     }
@@ -98,7 +108,14 @@ class BlogContentGrid extends FrontendBlogGrid
     protected function _initColumns()
     {
         $this
-            ->addTextColumn('id', 'ID', [self::COLUMN_PARAM_TYPE => Column::BIND_PARAM_INT])
+            ->addTextColumn('id', 'ID', [self::COLUMN_PARAM_TYPE => Column::BIND_PARAM_STR])
+            ->addTextColumn('title', 'Title', [self::COLUMN_PARAM_TYPE => Column::BIND_PARAM_STR])
+            ->addTextColumn('user', 'Username', [self::COLUMN_PARAM_TYPE => Column::BIND_PARAM_STR])
+            ->addTextColumn('creation_date', 'Creation Date', [self::COLUMN_PARAM_TYPE => Column::BIND_PARAM_STR])
+            ->addTextColumn('modified_date', 'Modified Date', [self::COLUMN_PARAM_TYPE => Column::BIND_PARAM_STR])
+            ->addTextColumn('body', 'Body', [self::COLUMN_PARAM_TYPE => Column::BIND_PARAM_STR])
+
+
         ;
 
     }

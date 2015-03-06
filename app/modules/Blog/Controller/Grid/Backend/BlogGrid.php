@@ -46,7 +46,7 @@ class BlogGrid extends BackendBlogGrid
         $builder
             ->addFrom('Blog\Model\Blog', 'b')
             ->leftJoin('User\Model\User', 'b.user_id = u.id', 'u')
-            ->columns(['b.id', 'b.title', 'b.body', 'u.username'])
+            ->columns(['b.id', 'b.title', 'u.username'])
             ->orderBy('b.id DESC');
 
         return $builder;
@@ -83,7 +83,6 @@ class BlogGrid extends BackendBlogGrid
         $this
             ->addTextColumn('id', 'ID', [self::COLUMN_PARAM_TYPE => Column::BIND_PARAM_INT])
             ->addTextColumn('title', 'Title', [self::COLUMN_PARAM_TYPE => Column::TYPE_VARCHAR])
-            ->addTextColumn('body', 'body', [self::COLUMN_PARAM_TYPE => Column::TYPE_VARCHAR])
             ->addSelectColumn(
                 'u.username',
                 'User',

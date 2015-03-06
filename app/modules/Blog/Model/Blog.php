@@ -70,7 +70,7 @@ class Blog extends AbstractModel
     public $title;
 
     /**
-     * @Column(type="string", nullable=false, column="body", size="500")
+     * @Column(type="text", nullable=true, column="body")
      */
     public $body;
 

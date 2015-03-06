@@ -472,7 +472,7 @@ CREATE TABLE `users` (
 
 INSERT INTO `users` (`id`, `role_id`, `username`, `password`, `email`, `creation_date`, `modified_date`) VALUES
 (1,	1,	'dataclub',	'$2a$08$Vb6IZPh2FehnvDfwUJJ7NuWvcq8FhCrbhjk.Ka4oynXwVKDxtY8SS',	'dataclub@mailfish.de',	'2015-02-18 01:56:42',	NULL),
-(2,	2,	'test',	'$2a$08$vklr7ElrpLWN.aErQUzXYOF8UXMl.1eugmg4izzmJNm2.T9Vf9QV6',	'test@test.de',	'2015-03-03 14:20:14',	NULL);
+(2,	1,	'test',	'$2a$08$vklr7ElrpLWN.aErQUzXYOF8UXMl.1eugmg4izzmJNm2.T9Vf9QV6',	'test@test.de',	'2015-03-03 14:20:14',	NULL);
 
 DROP TABLE IF EXISTS `widgets`;
 CREATE TABLE `widgets` (
@@ -508,7 +508,7 @@ INSERT INTO `packages` (`id`, `name`, `type`, `title`, `description`, `version`,
 
 INSERT INTO `content` (`page_id`, `widget_id`, `widget_order`, `layout`, `params`) VALUES
 (4,	1,	1,	'right',	'{\"title\":\"Recent Posts\",\"html_en\":\"<p>{{recentPosts}}<\\/p>\\r\\n\",\"roles\":null,\"content_id\":\"12\"}'),
-(4,	1,	1,	'middle',	'{\"title\":\"Blog\",\"html_en\":\"<p>{{content}}<\\/p>\\r\\n\",\"html_de\":null,\"roles\":null,\"content_id\":\"13\"}'),
+(4,	1,	1,	'middle',	'{\"title\":\"\",\"html_en\":\"<p>{{content}}<\\/p>\\r\\n\",\"html_de\":null,\"roles\":null,\"content_id\":\"13\"}'),
 (4,	1,	2,	'right',	'{\"title\":\"Recent Comments\",\"html_en\":\"<p>{{recentComments}}<\\/p>\\r\\n\",\"html_de\":null,\"roles\":null,\"content_id\":\"15\"}'),
 (4,	1,	3,	'right',	'{\"title\":\"Categories\",\"html_en\":\"<p>{{categories}}<\\/p>\\r\\n\",\"html_de\":null,\"roles\":null,\"content_id\":\"17\"}'),
 (4,	1,	4,	'right',	'{\"title\":\"Archives\",\"html_en\":\"<p>{{archives}}<\\/p>\\r\\n\",\"html_de\":null,\"roles\":null,\"content_id\":\"16\"}'),
@@ -537,7 +537,7 @@ DROP TABLE IF EXISTS `blog`;
 CREATE TABLE `blog` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `title` varchar(255) NOT NULL,
-  `body` varchar(255) DEFAULT NULL,
+  `body` text,
   `creation_date` datetime DEFAULT NULL,
   `modified_date` datetime DEFAULT NULL,
   `user_id` int(11) NOT NULL,

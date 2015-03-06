@@ -13,41 +13,40 @@
   +------------------------------------------------------------------------+
 #}
 
-<table id="{{ grid.getId() }}" class="table grid-table" data-widget="grid">
-    <thead>
-    <tr>
-        {% for name, column in grid.getColumns() %}
-            <th>
-                {% if column[constant('\Engine\Grid\AbstractGrid::COLUMN_PARAM_SORTABLE')] is defined and column[constant('\Engine\Grid\AbstractGrid::COLUMN_PARAM_SORTABLE')] %}
-                    <a href="javascript:;" class="grid-sortable" data-sort="{{ name }}" data-direction="">
-                        {{ column[constant('\Engine\Grid\AbstractGrid::COLUMN_PARAM_LABEL')] |i18n }}
-                    </a>
-                {% else %}
-                    {{ column[constant('\Engine\Grid\AbstractGrid::COLUMN_PARAM_LABEL')] |i18n }}
-                {% endif %}
-            </th>
-        {% endfor %}
-        {% if grid.hasActions() %}
-            <th class="actions">{{ 'Actions' |i18n }}</th>
-        {% endif %}
-    </tr>
-    {% if grid.hasFilterForm() %}
-        <tr class="grid-filter">
-            {% for column in grid.getColumns() %}
-                <th>
-                    {% if column[constant('\Engine\Grid\AbstractGrid::COLUMN_PARAM_FILTER')] is defined and instanceof(column[constant('\Engine\Grid\AbstractGrid::COLUMN_PARAM_FILTER')], 'Engine\Form\AbstractElement') %}
-                        {% set element = column[constant('\Engine\Grid\AbstractGrid::COLUMN_PARAM_FILTER')] %}
-                        {{ element.setAttribute('autocomplete', 'off').render() }}
-                    {% endif %}
-                    <div class="clear-filter"></div>
-                </th>
-            {% endfor %}
-            <th class="actions">
-                <button class="btn btn-filter btn-primary">{{ 'Filter' |i18n }}</button>
-                <button class="btn btn-warning">{{ 'Reset' |i18n }}</button>
-            </th>
-        </tr>
-    {% endif %}
-    </thead>
+
+<style>
+    h1, h2, h3, h4, h5, h6 {
+        font-weight: normal;
+        line-height: 1.2;
+        margin-top: 0;
+    }
+    .blogpost article {
+        background: none repeat scroll 0 0 #fff;
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+        padding: 15px;
+    }
+
+    .bloglist {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+    }
+
+    .blogpost, .blogpost ul > .blogpost, .bloglist > .blogpost {
+        font-size: 14px;
+        list-style: outside none none;
+        margin: 0 0 20px;
+        position: relative;
+    }
+    li {
+        line-height: 20px;
+    }
+    ul {
+        padding: 0px;
+    }
+</style>
+
+
+<main id="main" class="site-main" role="main">
     {{ partial(grid.getTableBodyView(), ['grid': grid]) }}
-</table>
+</main>

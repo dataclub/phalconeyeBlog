@@ -66,9 +66,8 @@ class IndexController extends BlogAbstractController
      * Module index action.
      *
      * @return void
-     *
-     * @Route("/", methods={"GET"}, name="blog")
-     * @Route("/index", methods={"GET"}, name="blog")
+     * @Route("/", methods={"GET"}, name="blog-default")
+     * @Route("/index", methods={"GET"}, name="blog-default")
      */
     public function indexAction()
     {
@@ -169,5 +168,16 @@ class IndexController extends BlogAbstractController
         }
         $tagsGrid = $tagsGrid->render();
         return $tagsGrid;
+    }
+
+    /**
+     * Module comment action.
+     *
+     * @return void
+     *
+     * @Route("/comment/{id:[0-9]+}", methods={"GET", "POST"}, name="blog-comment")
+     */
+    public function commentAction(){
+        //TODO: Comment-Site here
     }
 }
