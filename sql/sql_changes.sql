@@ -500,19 +500,19 @@ INSERT INTO `widgets` (`id`, `name`, `module`, `description`, `is_paginated`, `i
 INSERT INTO `pages` (`id`, `title`, `type`, `url`, `description`, `keywords`, `layout`, `controller`, `roles`, `view_count`) VALUES
 (4,	'Blog',	NULL,	'blogView',	NULL,	NULL,	'right_middle',	NULL,	NULL,	0);
 
-INSERT INTO `menu_items` (`id`, `title`, `menu_id`, `parent_id`, `page_id`, `url`, `onclick`, `target`, `tooltip`, `tooltip_position`, `icon`, `icon_position`, `languages`, `roles`, `is_enabled`, `item_order`) VALUES
-(2,	'Blog',	1,	NULL,	NULL,	'blog',	NULL,	NULL,	NULL,	'top',	NULL,	'left',	NULL,	NULL,	1,	1);
+INSERT INTO `menu_items` (`title`, `menu_id`, `parent_id`, `page_id`, `url`, `onclick`, `target`, `tooltip`, `tooltip_position`, `icon`, `icon_position`, `languages`, `roles`, `is_enabled`, `item_order`) VALUES
+('Blog',	1,	NULL,	NULL,	'blog',	NULL,	NULL,	NULL,	'top',	NULL,	'left',	NULL,	NULL,	1,	1);
 
 INSERT INTO `packages` (`id`, `name`, `type`, `title`, `description`, `version`, `author`, `website`, `enabled`, `is_system`, `data`) VALUES
-(3,	'blog',	'module',	'Blog',	NULL,	'1.0.0',	'dataclub',	NULL,	1,	0,	'{\"events\":[],\"widgets\":[]}');
+(3,	'blog',	'module',	'Blog',	NULL,	'1.0.1',	'dataclub',	NULL,	1,	0,	'{\"events\":[],\"widgets\":[]}');
 
 INSERT INTO `content` (`page_id`, `widget_id`, `widget_order`, `layout`, `params`) VALUES
-(4,	1,	1,	'right',	'{\"title\":\"Recent Posts\",\"html_en\":\"<p>{{blog_recent_posts}}<\\/p>\\r\\n\",\"roles\":null,\"content_id\":\"12\"}'),
-(4,	1,	1,	'middle',	'{\"title\":\"Blog\",\"html_en\":\"<p>{{blog_content}}<\\/p>\\r\\n\",\"html_de\":null,\"roles\":null,\"content_id\":\"13\"}'),
-(4,	1,	2,	'right',	'{\"title\":\"Recent Comments\",\"html_en\":\"<p>{{blog_recent_comments}}<\\/p>\\r\\n\",\"html_de\":null,\"roles\":null,\"content_id\":\"15\"}'),
-(4,	1,	3,	'right',	'{\"title\":\"Archives\",\"html_en\":\"<p>{{blog_archives}}<\\/p>\\r\\n\",\"html_de\":null,\"roles\":null,\"content_id\":\"16\"}'),
-(4,	1,	4,	'right',	'{\"title\":\"Categories\",\"html_en\":\"<p>{{blog_categories}}<\\/p>\\r\\n\",\"html_de\":null,\"roles\":null,\"content_id\":\"17\"}'),
-(4,	1,	5,	'right',	'{\"title\":\"Tags\",\"html_en\":\"<p>{{blog_tags}}<\\/p>\\r\\n\",\"html_de\":null,\"roles\":null,\"content_id\":\"18\"}');
+(4,	1,	1,	'right',	'{\"title\":\"Recent Posts\",\"html_en\":\"<p>{{recentPosts}}<\\/p>\\r\\n\",\"roles\":null,\"content_id\":\"12\"}'),
+(4,	1,	1,	'middle',	'{\"title\":\"Blog\",\"html_en\":\"<p>{{content}}<\\/p>\\r\\n\",\"html_de\":null,\"roles\":null,\"content_id\":\"13\"}'),
+(4,	1,	2,	'right',	'{\"title\":\"Recent Comments\",\"html_en\":\"<p>{{recentComments}}<\\/p>\\r\\n\",\"html_de\":null,\"roles\":null,\"content_id\":\"15\"}'),
+(4,	1,	3,	'right',	'{\"title\":\"Categories\",\"html_en\":\"<p>{{categories}}<\\/p>\\r\\n\",\"html_de\":null,\"roles\":null,\"content_id\":\"17\"}'),
+(4,	1,	4,	'right',	'{\"title\":\"Archives\",\"html_en\":\"<p>{{archives}}<\\/p>\\r\\n\",\"html_de\":null,\"roles\":null,\"content_id\":\"16\"}'),
+(4,	1,	5,	'right',	'{\"title\":\"Tags\",\"html_en\":\"<p>{{tags}}<\\/p>\\r\\n\",\"html_de\":null,\"roles\":null,\"content_id\":\"18\"}');
 
 
 INSERT INTO `language_translations` (`id`, `language_id`, `scope`, `original`, `translated`, `checked`) VALUES
