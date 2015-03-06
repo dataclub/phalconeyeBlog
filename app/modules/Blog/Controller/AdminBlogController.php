@@ -17,7 +17,7 @@
 namespace Blog\Controller;
 
 use Blog\Helper\BlogHelper;
-use Blog\Controller\Grid\Admin\BlogGrid;
+use Blog\Controller\Grid\Backend\BlogGrid;
 use Blog\Form\Admin\Blog\Create;
 use Blog\Form\Admin\Blog\Edit;
 use Blog\Model\Blog;
@@ -31,8 +31,8 @@ use Core\Form\EntityForm;
  *
  * @category  PhalconEye
  * @package   Blog\Controller
- * @author    Ivan Vorontsov <ivan.vorontsov@phalconeye.com>
- * @copyright 2013-2014 PhalconEye Team
+ * @author    Djavid Rustamov <nsxgdesigns@googlemail.com>
+ * @copyright 2015-2016 PhalconEye Team
  * @license   New BSD License
  * @link      http://phalconeye.com/
  *
@@ -47,6 +47,7 @@ class AdminBlogController extends AbstractAdminController
      */
     public function init()
     {
+
         $this->view->navigation = BlogHelper::getNavigation();
     }
 

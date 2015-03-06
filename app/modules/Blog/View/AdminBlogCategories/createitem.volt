@@ -15,7 +15,7 @@
   +------------------------------------------------------------------------+
 #}
 
-{% extends "layouts/modal.volt" %}
+{% extends "layouts/backend/modal.volt" %}
 
 {% block title %}
     {{ 'Create new menu item'|i18n }}

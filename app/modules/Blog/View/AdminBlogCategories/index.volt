@@ -13,7 +13,7 @@
   +------------------------------------------------------------------------+
 #}
 
-{% extends "layouts/admin.volt" %}
+{% extends "layouts/backend/admin.volt" %}
 
 {% block title %}{{ "Categories"|i18n }}{% endblock %}
 

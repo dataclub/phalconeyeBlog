@@ -14,28 +14,47 @@
   +------------------------------------------------------------------------+
 */
 
-namespace Blog\Controller\Grid\Admin;
+namespace Blog\Controller\Grid\Frontend;
 
-use Core\Controller\Grid\CoreGrid;
 use Engine\Form;
 use Engine\Grid\GridItem;
 use Phalcon\Db\Column;
 use Phalcon\Mvc\Model\Query\Builder;
 use Phalcon\Mvc\View;
-use User\Model\User;
+
 
 /**
- * Blog grid.
+ * RecentComments grid.
  *
  * @category  PhalconEye
- * @package   Blog\Controller\Grid\Admin
+ * @package   Blog\Controller\Grid\Frontend
  * @author    Djavid Rustamov <nsxgdesigns@googlemail.com>
  * @copyright 2015-2016 PhalconEye Team
  * @license   New BSD License
  * @link      http://phalconeye.com/
  */
-class BlogGrid extends CoreGrid
+class BlogRecentCommentsGrid extends FrontendBlogGrid
 {
+    private $layoutView = 'partials/grid/frontend/blog_recent_comments/layout';
+    private $itemView = 'partials/grid/frontend/blog_recent_comments/item';
+    private $bodyView = 'partials/grid/frontend/blog_recent_comments/body';
+
+    public function getLayoutView()
+    {
+        return $this->_resolveView($this->layoutView);
+    }
+
+    public function getItemView()
+    {
+        return $this->_resolveView($this->itemView);
+    }
+
+    public function getTableBodyView()
+    {
+        return $this->_resolveView($this->bodyView);
+    }
+
+
     /**
      * Get main select builder.
      *
@@ -46,8 +65,7 @@ class BlogGrid extends CoreGrid
         $builder = new Builder();
         $builder
             ->addFrom('Blog\Model\Blog', 'b')
-            ->leftJoin('User\Model\User', 'b.user_id = u.id', 'u')
-            ->columns(['b.id', 'b.title', 'b.body', 'u.username'])
+            ->columns(['b.id'])
             ->orderBy('b.id DESC');
 
         return $builder;
@@ -83,21 +101,7 @@ class BlogGrid extends CoreGrid
     {
         $this
             ->addTextColumn('id', 'ID', [self::COLUMN_PARAM_TYPE => Column::BIND_PARAM_INT])
-            ->addTextColumn('title', 'Title', [self::COLUMN_PARAM_TYPE => Column::TYPE_VARCHAR])
-            ->addTextColumn('body', 'body', [self::COLUMN_PARAM_TYPE => Column::TYPE_VARCHAR])
-            ->addSelectColumn(
-                'u.username',
-                'User',
-                ['hasEmptyValue' => true, 'using' => ['username', 'username'], 'elementOptions' => User::find()],
-                [
-                    self::COLUMN_PARAM_USE_HAVING => false,
-                    self::COLUMN_PARAM_USE_LIKE => false,
-                    self::COLUMN_PARAM_OUTPUT_LOGIC =>
-                        function (GridItem $item) {
-                            return $item['username'];
-                        }
-                ]
-            );
+        ;
 
     }
 }

@@ -15,7 +15,7 @@
   +------------------------------------------------------------------------+
 #}
 
-{% extends "layouts/modal.volt" %}
+{% extends "layouts/backend/modal.volt" %}
 
 {% block title %}
     {{ name|i18n }}

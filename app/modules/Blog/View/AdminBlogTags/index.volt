@@ -13,7 +13,7 @@
   +------------------------------------------------------------------------+
 #}
 
-{% extends "layouts/admin.volt" %}
+{% extends "layouts/backend/admin.volt" %}
 
 {% block title %}{{ "Tags"|i18n }}{% endblock %}
 

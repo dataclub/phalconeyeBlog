@@ -24,6 +24,7 @@ use Engine\Exception;
 use Phalcon\Db\Column;
 use Phalcon\DI;
 use Phalcon\Mvc\View;
+use Engine\Asset\Manager as AssetManager;
 
 /**
  * Base controller.
@@ -48,7 +49,33 @@ use Phalcon\Mvc\View;
  */
 abstract class BlogAbstractController extends AbstractController
 {
-    public function getView($url){
+    protected function _setupAssets(){
+        parent::_setupAssets();
+
+        $this->di->get('assets')
+            ->collection(AssetManager::DEFAULT_COLLECTION_CSS)
+            ->addCss('assets/css/blog/paginator.css');
+
+        //replace grid.js from core
+        $parentJsPath = [];
+        foreach ($this->di->get('assets')->collection(AssetManager::DEFAULT_COLLECTION_JS) as $key => $resource) {
+            $jsPath =  $resource->getPath();
+            if(strpos($jsPath, 'grid.js') !== false){
+                $jsPath = str_replace('core', 'blog', $jsPath);
+            }
+            array_push($parentJsPath, $jsPath);
+        }
+
+        $this->assets->set(
+            AssetManager::DEFAULT_COLLECTION_JS,
+            $this->assets->getEmptyJsCollection()
+        );
+
+        foreach($parentJsPath as $path){
+            $this->assets->addJs($path);
+        }
+    }
+    public function setView($url){
         $page = null;
         if ($url !== null) {
             $page = Page::find(
@@ -74,15 +101,36 @@ abstract class BlogAbstractController extends AbstractController
 
         $this->view->content = $content;
         $this->view->page = $page;
-
-        return $this->view;
     }
 
-    public function renderView($view){
-        $this->view->pick('layouts/page');
+    public function renderView($view, $backend = true){
+        $view = $backend ? 'backend' : 'frontend';
+        $this->view->pick('layouts/'.$view.'/page');
     }
 
+    /**
+     * @param $folder
+     * @param $file
+     * @param array $params
+     * @return mixed
+     */
+    public function viewRenderer($folder, $file, $params = array()){
 
+        $view = new View();
+        $view->setViewsDir($this->view->getViewsDir());
 
+        $view->setDI($this->getDI());
+        $view->registerEngines(array(
+            ".volt" => "Phalcon\Mvc\View\Engine\Volt",
+        ));
 
+        foreach($params as $key => $value){
+            $view->setVar($key, $value);
+        }
+
+        $view->start();
+        $view->render($folder, $file);
+        $view->finish();
+        return $view->getContent();
+    }
 }

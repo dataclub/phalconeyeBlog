@@ -20,14 +20,15 @@ use Engine\Navigation;
 use Core\Model\Settings;
 use Engine\Helper;
 use Phalcon\Tag;
+use Phalcon\Mvc\View;
 
 /**
- * System settings helper.
+ * BlogHelper class.
  *
  * @category  PhalconEye
  * @package   Blog\Helper
- * @author    Ivan Vorontsov <ivan.vorontsov@phalconeye.com>
- * @copyright 2013-2014 PhalconEye Team
+ * @author    Djavid Rustamov <nsxgdesigns@googlemail.com>
+ * @copyright 2015-2016 PhalconEye Team
  * @license   New BSD License
  * @link      http://phalconeye.com/
  */
@@ -110,4 +111,5 @@ class BlogHelper extends Helper
 
         return $navigationItems;
     }
+
 }

@@ -15,23 +15,8 @@
   +------------------------------------------------------------------------+
 #}
 
-<tbody>
-{% if grid.getTotalCount() %}
-    {% for item in grid.getItems() %}
-        <tr>
-            {{ partial(grid.getItemView(), ['grid': grid, 'item': item]) }}
-        </tr>
-    {% endfor %}
-    <tr>
-        <td colspan="{{ (grid.getColumns() | length) + 1 }}">
-            {{ partial(resolveView('partials/paginator', 'core')) }}
-        </td>
-    </tr>
-{% else %}
-    <tr>
-        <td class="grid-no-items" colspan="{{ (grid.getColumns() | length) + 1 }}">
-            {{ 'No items'|i18n }}
-        </td>
-    </tr>
-{% endif %}
-</tbody>
+{% extends "layouts/frontend/page.volt" %}
+
+
+
+

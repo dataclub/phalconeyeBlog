@@ -1,4 +1,5 @@
-{#
+<?php
+/*
   +------------------------------------------------------------------------+
   | PhalconEye CMS                                                         |
   +------------------------------------------------------------------------+
@@ -11,36 +12,37 @@
   | obtain it through the world-wide-web, please send an email             |
   | to license@phalconeye.com so we can send you a copy immediately.       |
   +------------------------------------------------------------------------+
-  | Author: Ivan Vorontsov <ivan.vorontsov@phalconeye.com>                 |
-  +------------------------------------------------------------------------+
-#}
+*/
 
-{% extends "layouts/main.volt" %}
+namespace Blog\Controller\Grid\Frontend;
 
-{% block title %}{{ page.title |i18n }}{% endblock %}
+use Engine\Form;
+use Phalcon\Mvc\View;
+use Core\Controller\Grid\CoreGrid;
 
-{% block head %}
-    {% if page.keywords %}
-        <meta name="keywords" content="{{ page.keywords |i18n }}" />
-    {% endif %}
-    {% if page.description %}
-        <meta name="description" content="{{ page.description |i18n }}" />
-    {% endif %}
-{% endblock %}
-
-{% block content %}
-
-    {{ partial("partials/layout", ['page': page, 'content': content]) }}
-
-
-    {#{% if helper('acl').isAllowed('\Core\Model\Page', 'show_views') %}#}
-        {#<div class="page_views">{{ 'View count:'|i18n }}{{ page.view_count }}</div>#}
-    {#{% endif %}#}
-
-    {#{{ helper('acl').getAllowed('\Core\Model\Page', 'page_footer') }}#}
-
-
-    <div class="clear"></div>
-{% endblock %}
-
-
+/**
+ * Blog frontend grid.
+ * It defines base grid views.
+ *
+ * @category  PhalconEye
+ * @package   Blog\Controller\Grid\Frontend
+ * @author    Ivan Vorontsov <ivan.vorontsov@phalconeye.com>
+ * @copyright 2013-2014 PhalconEye Team
+ * @license   New BSD License
+ * @link      http://phalconeye.com/
+ */
+abstract class FrontendBlogGrid extends CoreGrid
+{
+    /**
+     * Resolve view.
+     *
+     * @param string $view   View path.
+     * @param string $module Module name (capitalized).
+     *
+     * @return string
+     */
+    protected function _resolveView($view, $module = 'Blog')
+    {
+        return '../../' . $module . '/View/' . $view;
+    }
+}

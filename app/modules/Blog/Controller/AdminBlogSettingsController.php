@@ -24,9 +24,9 @@ use Core\Controller\AbstractAdminController;
  * Admin settings.
  *
  * @category  PhalconEye
- * @package   Core\Controller
+ * @package   Blog\Controller
  * @author    Djavid Rustamov <nsxgdesigns@googlemail.com>
- * @copyright 2015-2015 PhalconEye Team
+ * @copyright 2015-2016 PhalconEye Team
  * @license   New BSD License
  * @link      http://phalconeye.com/
  *

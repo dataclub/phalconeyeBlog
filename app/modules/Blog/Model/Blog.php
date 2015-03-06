@@ -168,8 +168,6 @@ class Blog extends AbstractModel
             $this->_errorMessages = [];
         }
 
-
-
         return $this->validationHasFailed() !== true;
     }
 }

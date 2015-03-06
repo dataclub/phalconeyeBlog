@@ -31,10 +31,10 @@
         <ul class="pagination">
             {% if paginator.current > 1 %}
                 <li>
-                    <a href="{{ helper('url').paginatorUrl() }}" data-page="1">{{ 'First' |i18n }}</a>
+                    <a href="{{ helper('url').paginatorUrl() }}" data-page="1" data-table_id="{{ grid.getId() }}">{{ 'First' |i18n }}</a>
                 </li>
                 <li>
-                    <a href="{{ helper('url').paginatorUrl(paginator.before) }}" data-page="{{ paginator.before }}">&laquo;</a>
+                    <a href="{{ helper('url').paginatorUrl(paginator.before) }}" data-page="{{ paginator.before }}" data-table_id="{{ grid.getId() }}">&laquo;</a>
                 </li>
             {% endif %}
 
@@ -44,16 +44,16 @@
                 {% endif %}
 
                 <li {% if pageIndex is paginator.current %}class="active"{% endif %}>
-                    <a href="{{ helper('url').paginatorUrl(pageIndex) }}" data-page="{{ pageIndex }}">{{ pageIndex }}</a>
+                    <a href="{{ helper('url').paginatorUrl(pageIndex) }}" data-page="{{ pageIndex }}" data-table_id="{{ grid.getId() }}" data-table_id="{{ grid.getId() }}">{{ pageIndex }}</a>
                 </li>
             {% endfor %}
 
             {% if paginator.current < paginator.total_pages %}
                 <li>
-                    <a href="{{ helper('url').paginatorUrl(paginator.current + 1) }}" data-page="{{ paginator.current + 1 }}">&raquo;</a>
+                    <a href="{{ helper('url').paginatorUrl(paginator.current + 1) }}" data-page="{{ paginator.current + 1 }}" data-table_id="{{ grid.getId() }}">&raquo;</a>
                 </li>
                 <li>
-                    <a href="{{ helper('url').paginatorUrl(paginator.last ) }}" data-page="{{ paginator.last }}">{{ 'Last' |i18n }}</a>
+                    <a href="{{ helper('url').paginatorUrl(paginator.last ) }}" data-page="{{ paginator.last }}" data-table_id="{{ grid.getId() }}">{{ 'Last' |i18n }}</a>
                 </li>
             {% endif %}
         </ul>

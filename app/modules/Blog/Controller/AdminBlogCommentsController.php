@@ -34,9 +34,9 @@ use Phalcon\Http\ResponseInterface;
  * Admin menus controller.
  *
  * @category  PhalconEye
- * @package   Core\Controller
- * @author    Ivan Vorontsov <ivan.vorontsov@phalconeye.com>
- * @copyright 2013-2014 PhalconEye Team
+ * @package   Blog\Controller
+ * @author    Djavid Rustamov <nsxgdesigns@googlemail.com>
+ * @copyright 2015-2016 PhalconEye Team
  * @license   New BSD License
  * @link      http://phalconeye.com/
  *
