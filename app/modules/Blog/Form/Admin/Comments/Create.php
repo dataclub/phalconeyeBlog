@@ -14,17 +14,17 @@
   +------------------------------------------------------------------------+
 */
 
-namespace Blog\Form\Admin\Blog;
+namespace Blog\Form\Admin\Comments;
 
-use Blog\Model\Blog;
+use Blog\Model\Comments;
 use Core\Form\CoreForm;
 use Engine\Db\AbstractModel;
-use User\Model\User;
+
 /**
- * Create blog.
+ * Create comments.
  *
  * @category  PhalconEye
- * @package   Blog\Form\Admin\Blog
+ * @package   Blog\Form\Admin\Comments
  * @author    Djavid Rustamov <nsxgdesigns@googlemail.com>
  * @copyright 2015-2016 PhalconEye Team
  * @license   New BSD License
@@ -42,7 +42,7 @@ class Create extends CoreForm
         parent::__construct();
 
         if (!$entity) {
-            $entity = new Blog();
+            $entity = new Comments();
         }
 
         $this->addEntity($entity);
@@ -73,7 +73,7 @@ class Create extends CoreForm
 
         $this->addFooterFieldSet()
             ->addButton('create')
-            ->addButtonLink('cancel', 'Cancel', 'admin/module/blog');
+            ->addButtonLink('cancel', 'Cancel', 'admin/module/blog/comments');
 
         $content
             ->setRequired('title')

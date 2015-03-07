@@ -38,7 +38,7 @@ use Core\Form\EntityForm;
  *
  * @RoutePrefix("/admin/module/blog", name="admin-module-blog-index")
  */
-class AdminBlogController extends AbstractAdminController
+class AdminBlogController extends BlogAbstractAdminController
 {
     /**
      * Init navigation.
@@ -48,7 +48,13 @@ class AdminBlogController extends AbstractAdminController
     public function init()
     {
 
-        $this->view->navigation = BlogHelper::getNavigation();
+        //$this->view->navigation = BlogHelper::getNavigation();
+    }
+
+    private function setActiveItem(){
+        if($this->view->headerNavigation){
+            $this->view->headerNavigation->setActiveItem('admin/module/blog');
+        }
     }
 
     /**
@@ -60,9 +66,7 @@ class AdminBlogController extends AbstractAdminController
      */
     public function indexAction()
     {
-        if($this->view->headerNavigation){
-            $this->view->headerNavigation->setActiveItem('admin/module/blog');
-        }
+
 
         $grid = new BlogGrid($this->view);
         if ($response = $grid->getResponse()) {

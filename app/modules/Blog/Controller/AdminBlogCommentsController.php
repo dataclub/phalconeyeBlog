@@ -16,22 +16,18 @@
 
 namespace Blog\Controller;
 
-use Blog\Helper\BlogHelper;
+use Blog\Controller\Grid\Backend\CommentsGrid;
 
-use Core\Controller\AbstractAdminController;
-use Core\Controller\Grid\Admin\MenuGrid;
-use Core\Form\Admin\Menu\Create;
-use Core\Form\Admin\Menu\CreateItem;
-use Core\Form\Admin\Menu\Edit;
-use Core\Form\Admin\Menu\EditItem;
-use Core\Model\Menu;
-use Core\Model\MenuItem;
-use Core\Model\Page;
-use Engine\Widget\Controller as WidgetController;
-use Phalcon\Http\ResponseInterface;
+use Blog\Helper\BlogHelper;
+use Blog\Controller\Grid\Backend\BlogGrid;
+use Blog\Form\Admin\Comments\Create;
+use Blog\Form\Admin\Comments\Edit;
+use Blog\Model\Blog;
+
+use Core\Form\EntityForm;
 
 /**
- * Admin menus controller.
+ * Admin comments controller.
  *
  * @category  PhalconEye
  * @package   Blog\Controller
@@ -42,7 +38,7 @@ use Phalcon\Http\ResponseInterface;
  *
  * @RoutePrefix("/admin/module/blog/comments", name="admin-blog-module-comments-index")
  */
-class AdminBlogCommentsController extends AbstractAdminController
+class AdminBlogCommentsController extends BlogAbstractAdminController
 {
     /**
      * Init controller before actions.
@@ -67,7 +63,7 @@ class AdminBlogCommentsController extends AbstractAdminController
             $this->view->headerNavigation->setActiveItem('admin/module/blog');
         }
         
-        $grid = new MenuGrid($this->view);
+        $grid = new CommentsGrid($this->view);
         if ($response = $grid->getResponse()) {
             return $response;
         }

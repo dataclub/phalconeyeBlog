@@ -14,17 +14,17 @@
   +------------------------------------------------------------------------+
 */
 
-namespace Blog\Form\Admin\Blog;
+namespace Blog\Form\Admin\Categorie;
 
-use Blog\Model\Blog;
 use Core\Form\CoreForm;
+use Blog\Model\Categorie;
 use Engine\Db\AbstractModel;
-use User\Model\User;
+
 /**
- * Create blog.
+ * Create categorie form
  *
  * @category  PhalconEye
- * @package   Blog\Form\Admin\Blog
+ * @package   Blog\Form\Admin\Categorie
  * @author    Djavid Rustamov <nsxgdesigns@googlemail.com>
  * @copyright 2015-2016 PhalconEye Team
  * @license   New BSD License
@@ -42,7 +42,7 @@ class Create extends CoreForm
         parent::__construct();
 
         if (!$entity) {
-            $entity = new Blog();
+            $entity = new Categorie();
         }
 
         $this->addEntity($entity);
@@ -56,27 +56,16 @@ class Create extends CoreForm
     public function initialize()
     {
         $this
-            ->setTitle('Blog Creation')
-            ->setDescription('Create new blog post.');
+            ->setTitle('Menu Creation')
+            ->setDescription('Create new menu.');
 
         $content = $this->addContentFieldSet()
-            ->addText('title', null, null, null, [], ['autocomplete' => 'off'])
-            ->addCkEditor('body')
-            ->addSelect('user_id', 'User', 'Select user', User::find(), null, ['using' => ['id', 'username']]);
-
-        /*
-         *  ->addText('username', null, null, null, [], ['autocomplete' => 'off'])
-            ->addPassword('password', null, null, [], ['autocomplete' => 'off'])
-            ->addText('email', null, null, null, [], ['autocomplete' => 'off'])
-            ->addSelect('role_id', 'Role', 'Select user role', Role::find(), null, ['using' => ['id', 'name']]);
-         */
+            ->addText('name');
 
         $this->addFooterFieldSet()
             ->addButton('create')
-            ->addButtonLink('cancel', 'Cancel', 'admin/module/blog');
+            ->addButtonLink('cancel', 'Cancel', 'admin/module/blog/categorie');
 
-        $content
-            ->setRequired('title')
-            ->setRequired('body');
+        $content->setRequired('name');
     }
 }

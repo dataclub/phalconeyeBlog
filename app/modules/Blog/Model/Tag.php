@@ -23,7 +23,6 @@ use Phalcon\DI;
 use Phalcon\Mvc\Model\Validator\Email;
 use Phalcon\Mvc\Model\Validator\StringLength;
 use Phalcon\Mvc\Model\Validator\Uniqueness;
-use User\Model\User;
 
 /**
  * @category  PhalconEye
@@ -33,14 +32,14 @@ use User\Model\User;
  * @license   New BSD License
  * @link      http://phalconeye.com/
  *
- * @Source("blog")
+ * @Source("tag")
  *
- * @BelongsTo("user_id", '\User\Model\User', "id", {
+ * @BelongsTo("user_id", '\User\Model\Tag', "id", {
  *  "alias": "User"
  * })
- * @method static \Blog\Model\Blog findFirst($parameters = null)
+ * @method static \Blog\Model\Tag findFirst($parameters = null)
  */
-class Blog extends AbstractModel
+class Tag extends AbstractModel
 {
     const
         /**
@@ -75,9 +74,9 @@ class Blog extends AbstractModel
 
 
     /**
-     * Current blog.
+     * Current Comment.
      *
-     * @var Blog null
+     * @var Tag null
      */
     private static $_viewer = null;
 

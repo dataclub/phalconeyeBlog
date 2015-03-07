@@ -16,22 +16,15 @@
 
 namespace Blog\Controller;
 
+use Blog\Controller\Grid\Backend\TagGrid;
 use Blog\Helper\BlogHelper;
 
-use Core\Controller\AbstractAdminController;
-use Core\Controller\Grid\Admin\MenuGrid;
-use Core\Form\Admin\Menu\Create;
-use Core\Form\Admin\Menu\CreateItem;
-use Core\Form\Admin\Menu\Edit;
-use Core\Form\Admin\Menu\EditItem;
-use Core\Model\Menu;
-use Core\Model\MenuItem;
-use Core\Model\Page;
-use Engine\Widget\Controller as WidgetController;
-use Phalcon\Http\ResponseInterface;
+use Blog\Form\Admin\Tag\Create;
+use Blog\Form\Admin\Tag\Edit;
+use Blog\Model\Tag;
 
 /**
- * Admin menus controller.
+ * Admin tags controller.
  *
  * @category  PhalconEye
  * @package   Blog\Controller
@@ -42,7 +35,7 @@ use Phalcon\Http\ResponseInterface;
  *
  * @RoutePrefix("/admin/module/blog/tags", name="admin-blog-module-tags-index")
  */
-class AdminBlogTagsController extends AbstractAdminController
+class AdminBlogTagsController extends BlogAbstractAdminController
 {
     /**
      * Init controller before actions.
@@ -51,7 +44,7 @@ class AdminBlogTagsController extends AbstractAdminController
      */
     public function init()
     {
-        $this->view->navigation = BlogHelper::getNavigation();
+
     }
 
     /**
@@ -67,7 +60,7 @@ class AdminBlogTagsController extends AbstractAdminController
             $this->view->headerNavigation->setActiveItem('admin/module/blog');
         }
         
-        $grid = new MenuGrid($this->view);
+        $grid = new TagGrid($this->view);
         if ($response = $grid->getResponse()) {
             return $response;
         }

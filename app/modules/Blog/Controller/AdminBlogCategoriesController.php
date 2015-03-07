@@ -16,22 +16,20 @@
 
 namespace Blog\Controller;
 
-use Blog\Helper\BlogHelper;
+use Blog\Controller\Grid\Backend\CategorieGrid;
 
-use Core\Controller\AbstractAdminController;
-use Core\Controller\Grid\Admin\MenuGrid;
-use Core\Form\Admin\Menu\Create;
-use Core\Form\Admin\Menu\CreateItem;
-use Core\Form\Admin\Menu\Edit;
-use Core\Form\Admin\Menu\EditItem;
-use Core\Model\Menu;
-use Core\Model\MenuItem;
+
+use Blog\Helper\BlogHelper;
+use Blog\Form\Admin\Categorie\Create;
+use Blog\Form\Admin\Categorie\Edit;
+use Blog\Model\Categorie;
+use Blog\Model\CategorieItem;
+
+use Core\Form\EntityForm;
 use Core\Model\Page;
-use Engine\Widget\Controller as WidgetController;
-use Phalcon\Http\ResponseInterface;
 
 /**
- * Admin menus controller.
+ * Admin categories controller.
  *
  * @category  PhalconEye
  * @package   Blog\Controller
@@ -42,7 +40,7 @@ use Phalcon\Http\ResponseInterface;
  *
  * @RoutePrefix("/admin/module/blog/categories", name="admin-blog-module-categories-index")
  */
-class AdminBlogCategoriesController extends AbstractAdminController
+class AdminBlogCategoriesController extends BlogAbstractAdminController
 {
     /**
      * Init controller before actions.
@@ -51,7 +49,7 @@ class AdminBlogCategoriesController extends AbstractAdminController
      */
     public function init()
     {
-        $this->view->navigation = BlogHelper::getNavigation();
+
     }
 
     /**
@@ -59,26 +57,24 @@ class AdminBlogCategoriesController extends AbstractAdminController
      *
      * @return void|ResponseInterface
      *
-     * @Get("/", name="admin-blog-module-categories-index")
+     * @Get("/", name="admin-module-blog-categories-index")
      */
     public function indexAction()
     {
-        if($this->view->headerNavigation){
-            $this->view->headerNavigation->setActiveItem('admin/module/blog');
-        }
 
-        $grid = new MenuGrid($this->view);
+
+        $grid = new CategorieGrid($this->view);
         if ($response = $grid->getResponse()) {
             return $response;
         }
     }
 
     /**
-     * Create menu.
+     * Create categorie
      *
      * @return void|ResponseInterface
      *
-     * @Route("/create", methods={"GET", "POST"}, name="admin-blog-module-categories-create")
+     * @Route("/create", methods={"GET", "POST"}, name="admin-module-blog-categories-create")
      */
     public function createAction()
     {
@@ -90,23 +86,23 @@ class AdminBlogCategoriesController extends AbstractAdminController
         }
 
         $this->flashSession->success('New object created successfully!');
-        return $this->response->redirect(['for' => "admin-menus-manage", 'id' => $form->getEntity()->id]);
+        return $this->response->redirect(['for' => "admin-module-blog-categories-manage", 'id' => $form->getEntity()->id]);
     }
 
     /**
-     * Edit menu.
+     * Edit categorie
      *
-     * @param int $id Menu identity.
+     * @param int $id Categorie identity.
      *
      * @return void|ResponseInterface
      *
-     * @Route("/edit/{id:[0-9]+}", methods={"GET", "POST"}, name="admin-blog-module-categories-edit")
+     * @Route("/edit/{id:[0-9]+}", methods={"GET", "POST"}, name="admin-module-blog-categories-edit")
      */
     public function editAction($id)
     {
-        $item = Menu::findFirst($id);
+        $item = Categorie::findFirst($id);
         if (!$item) {
-            return $this->response->redirect(['for' => "admin-menus"]);
+            return $this->response->redirect(['for' => "admin-module-blog-categories"]);
         }
 
         $form = new Edit($item);
@@ -117,21 +113,21 @@ class AdminBlogCategoriesController extends AbstractAdminController
         }
 
         $this->flashSession->success('Object saved!');
-        return $this->response->redirect(['for' => "admin-menus"]);
+        return $this->response->redirect(['for' => "admin-module-blog-categories"]);
     }
 
     /**
-     * Delete menu.
+     * Delete categorie
      *
-     * @param int $id Menu identity.
+     * @param int $id Categorie identity.
      *
      * @return void|ResponseInterface
      *
-     * @Get("/delete/{id:[0-9]+}", name="admin-blog-module-categories-delete")
+     * @Get("/delete/{id:[0-9]+}", name="admin-module-blog-categories-delete")
      */
     public function deleteAction($id)
     {
-        $item = Menu::findFirst($id);
+        $item = Categorie::findFirst($id);
         if ($item) {
             if ($item->delete()) {
                 $this->flashSession->notice('Object deleted!');
@@ -140,16 +136,16 @@ class AdminBlogCategoriesController extends AbstractAdminController
             }
         }
 
-        return $this->response->redirect(['for' => "admin-menus"]);
+        return $this->response->redirect(['for' => "admin-module-blog-categories"]);
     }
 
 
     /**
-     * Create menu item.
+     * Create categorie item.
      *
      * @return void
      *
-     * @Route("/create-item", methods={"GET", "POST"}, name="admin-blog-module-categories-item")
+     * @Route("/create-item", methods={"GET", "POST"}, name="admin-module-blog-categories-item")
      */
     public function createItemAction()
     {
@@ -157,7 +153,7 @@ class AdminBlogCategoriesController extends AbstractAdminController
         $this->view->form = $form;
 
         $data = [
-            'menu_id' => $this->request->get('menu_id'),
+            'categorie_id' => $this->request->get('categorie_id'),
             'parent_id' => $this->request->get('parent_id')
         ];
 
@@ -177,7 +173,7 @@ class AdminBlogCategoriesController extends AbstractAdminController
 
         // Set proper order.
         $orderData = [
-            "menu_id = {$data['menu_id']}",
+            "categorie_id = {$data['categorie_id']}",
             'order' => 'item_order DESC'
         ];
 
@@ -185,35 +181,35 @@ class AdminBlogCategoriesController extends AbstractAdminController
             $orderData[0] .= " AND parent_id = {$data['parent_id']}";
         }
 
-        $orderItem = MenuItem::findFirst($orderData);
+        $orderItem = CategorieItem::findFirst($orderData);
 
         if ($orderItem->id != $item->id) {
             $item->item_order = $orderItem->item_order + 1;
         }
 
         $item->save();
-        $this->_clearMenuCache();
+        $this->_clearCategorieCache();
         $this->resolveModal(['reload' => true]);
     }
 
     /**
-     * Edit menu item.
+     * Edit categorie items
      *
-     * @param int $id Menu item identity.
+     * @param int $id Categorie item identity.
      *
      * @return void|ResponseInterface
      *
-     * @Route("/edit-item/{id:[0-9]+}", methods={"GET", "POST"}, name="admin-blog-module-categories-item")
+     * @Route("/edit-item/{id:[0-9]+}", methods={"GET", "POST"}, name="admin-module-blog-categories-item")
      */
     public function editItemAction($id)
     {
-        $item = MenuItem::findFirst($id);
+        $item = CategorieItem::findFirst($id);
 
         $form = new EditItem($item);
         $this->view->form = $form;
 
         $data = [
-            'menu_id' => $this->request->get('menu_id'),
+            'categorie_id' => $this->request->get('categorie_id'),
             'parent_id' => $this->request->get('parent_id'),
             'url_type' => ($item->page_id == null ? 0 : 1),
         ];
@@ -241,25 +237,25 @@ class AdminBlogCategoriesController extends AbstractAdminController
         }
 
         $item->save();
-        $this->_clearMenuCache();
+        $this->_clearCategorieCache();
         $this->resolveModal(['reload' => true]);
     }
 
     /**
-     * Delete menu item.
+     * Delete categorie items
      *
-     * @param int $id Menu item identity.
+     * @param int $id Categorie item identity.
      *
      * @return void|ResponseInterface
      *
-     * @Get("/delete-item/{id:[0-9]+}", name="admin-blog-module-categories-item")
+     * @Get("/delete-item/{id:[0-9]+}", name="admin-module-blog-categories-item")
      */
     public function deleteItemAction($id)
     {
-        $item = MenuItem::findFirst($id);
-        $menuId = null;
+        $item = CategorieItem::findFirst($id);
+        $categorieId = null;
         if ($item) {
-            $menuId = $item->menu_id;
+            $categorieId = $item->categorieId;
             $item->delete();
         }
 
@@ -268,35 +264,35 @@ class AdminBlogCategoriesController extends AbstractAdminController
         if ($parentId) {
             $parentLink = "?parent_id={$parentId}";
         }
-        if ($menuId) {
-            return $this->response->redirect("admin/menus/manage/{$menuId}{$parentLink}");
+        if ($categorieId) {
+            return $this->response->redirect("admin/module/blog/categories/manage/{$categorieId}{$parentLink}");
         }
 
-        return $this->response->redirect(['for' => "admin-menus"]);
+        return $this->response->redirect(['for' => "admin-module-blog-categories"]);
     }
 
     /**
-     * Order menu items (via json).
+     * Order categorie items (via json).
      *
      * @return void
      *
-     * @Post("/order", name="admin-blog-module-categories-order")
+     * @Post("/order", name="admin-module-blog-categories-order")
      */
     public function orderAction()
     {
         $order = $this->request->get('order', null, []);
         foreach ($order as $index => $id) {
-            $this->db->update(MenuItem::getTableName(), ['item_order'], [$index], "id = {$id}");
+            $this->db->update(CategorieItem::getTableName(), ['item_order'], [$index], "id = {$id}");
         }
         $this->view->disable();
     }
 
     /**
-     * Suggest menus (via json).
+     * Suggest categorie (via json).
      *
      * @return void
      *
-     * @Get("/suggest", name="admin-blog-module-categories-suggest")
+     * @Get("/suggest", name="admin-module-blog-categories-suggest")
      */
     public function suggestAction()
     {
@@ -308,7 +304,7 @@ class AdminBlogCategoriesController extends AbstractAdminController
             return;
         }
 
-        $results = Menu::find(
+        $results = Categorie::find(
             [
                 "conditions" => "name LIKE ?1",
                 "bind" => [1 => '%' . $query . '%']
@@ -327,11 +323,11 @@ class AdminBlogCategoriesController extends AbstractAdminController
     }
 
     /**
-     * Clear menu items cache.
+     * Clear categorie items cache.
      *
      * @return void
      */
-    protected function _clearMenuCache()
+    protected function _clearCategorieCache()
     {
         $cache = $this->getDI()->get('cacheOutput');
         $prefix = $this->config->application->cache->prefix;

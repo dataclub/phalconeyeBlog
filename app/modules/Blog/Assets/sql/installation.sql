@@ -43,3 +43,36 @@ CREATE TABLE `blog` (
   KEY `user_id` (`user_id`),
   CONSTRAINT `blog_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+DROP TABLE IF EXISTS `categorie`;
+CREATE TABLE `categorie` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `categorie_items`;
+CREATE TABLE `categorie_items` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `title` varchar(255) NOT NULL,
+  `menu_id` int(11) NOT NULL,
+  `parent_id` int(11) DEFAULT NULL,
+  `page_id` int(11) DEFAULT NULL,
+  `url` varchar(255) DEFAULT NULL,
+  `onclick` varchar(255) DEFAULT NULL,
+  `target` varchar(10) DEFAULT NULL,
+  `tooltip` varchar(255) DEFAULT NULL,
+  `tooltip_position` varchar(10) DEFAULT NULL,
+  `icon` varchar(255) DEFAULT NULL,
+  `icon_position` varchar(10) NOT NULL,
+  `languages` varchar(150) DEFAULT NULL,
+  `roles` varchar(150) DEFAULT NULL,
+  `is_enabled` tinyint(1) DEFAULT NULL,
+  `item_order` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `fki-menu_items-menus-menu_id-id` (`menu_id`),
+  KEY `fki-menu_items-menu_items-parent_id-id` (`parent_id`),
+  CONSTRAINT `fk-menu_items-menus-menu_id-id` FOREIGN KEY (`menu_id`) REFERENCES `menus` (`id`),
+  CONSTRAINT `fk-menu_items-menu_items-parent_id-id` FOREIGN KEY (`parent_id`) REFERENCES `menu_items` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;

@@ -12,52 +12,65 @@
   | obtain it through the world-wide-web, please send an email             |
   | to license@phalconeye.com so we can send you a copy immediately.       |
   +------------------------------------------------------------------------+
+  | Author: Ivan Vorontsov <ivan.vorontsov@phalconeye.com>                 |
+  +------------------------------------------------------------------------+
 */
 
-namespace Blog\Helper;
+namespace Blog\Controller;
 
-use Engine\Navigation;
+use Core\Model\Package;
 use Core\Model\Settings;
-use Engine\Helper;
-use Phalcon\Tag;
-use Phalcon\Mvc\View;
+use Engine\Navigation;
+use Engine\Package\Manager;
+use Engine\Asset\Manager as AssetManager;
 
+use Core\Controller\AbstractAdminController;
 /**
- * BlogHelper class.
+ * Base admin controller.
  *
  * @category  PhalconEye
- * @package   Blog\Helper
- * @author    Djavid Rustamov <nsxgdesigns@googlemail.com>
- * @copyright 2015-2016 PhalconEye Team
+ * @package   Blog\Controller
+ * @author    Ivan Vorontsov <ivan.vorontsov@phalconeye.com>
+ * @copyright 2013-2014 PhalconEye Team
  * @license   New BSD License
  * @link      http://phalconeye.com/
  */
-class BlogHelper extends Helper
+abstract class BlogAbstractAdminController extends AbstractAdminController
 {
     /**
-     * Get setting by name.
+     * Setup navigation.
      *
-     * @param string     $name    Setting name.
-     * @param null|mixed $default Default value.
-     *
-     * @return null|string
+     * @return void
      */
-    public function get($name, $default = null)
+    protected function _setupNavigation()
     {
-        return Settings::getSetting($name, $default);
-    }
+        parent::_setupNavigation();
 
-    public static function getNavigation(){
-        $_REQUEST['_url_'] = substr($_GET['_url'], 1, strlen($_GET['_url']));
+        $path = explode('/', $this->request->get('_url', 'string'));
+        $tmpPath = $path;
+        $activeItem = '';
+
+        //Remove empty values from $path-Array
+        foreach ($tmpPath as $key => $value) {
+            if(empty($value)){
+                unset($path[$key]);
+            }
+        }
+
+        $limit = (count($path) > 3 ? 1 : 0);
+        for ($i = 1, $count = count($path); $i <= $count - $limit && $i < 4; $i++) {
+            $activeItem .= $path[$i] . '/';
+        }
+        $activeItem = substr($activeItem, 0, -1);
+
+        $tmpNavi = $this->view->navigation;
+        $this->view->headerNavigation->setActiveItem($activeItem);
+
+
+
+
         $navigation = new Navigation();
-        $navigationItems = self::setNavigationItems();
-        $navigation->setItems($navigationItems);
-        $navigation->setActiveItem($_REQUEST['_url_']);
 
-        return $navigation;
-    }
-
-    static function setNavigationItems(){
         $navigationItems = [
             'index' => [
                 'href' => 'admin/module/blog',
@@ -89,7 +102,7 @@ class BlogHelper extends Helper
             ]
         ];
 
-
+/*
         $choosenNavItem = [];
         foreach ($navigationItems as $key => $item) {
             if(is_numeric($key)){
@@ -108,8 +121,10 @@ class BlogHelper extends Helper
             'title' => 'Create new ' . $choosenNavItem[$key]['title_single'],
             'prepend' => '<i class="glyphicon glyphicon-plus-sign"></i>'
         ];
-
-        return $navigationItems;
+*/
+        $navigation->setItems($navigationItems);
+        $navigation->setActiveItem($activeItem);
+        $this->view->navigation = $navigation;
     }
-
 }
+
