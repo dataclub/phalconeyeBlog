@@ -22,7 +22,7 @@ use Engine\Db\AbstractModel;
 use User\Model\User;
 
 /**
- * Create comments.
+ * Create comments
  *
  * @category  PhalconEye
  * @package   Blog\Form\Admin\Comments
