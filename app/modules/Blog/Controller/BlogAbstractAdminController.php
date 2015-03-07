@@ -122,16 +122,18 @@ abstract class BlogAbstractAdminController extends AbstractAdminController
             foreach (array('create', 'edit', 'delete', 'manage') as $key) {
                 if(strpos($itemKey, $key) !== FALSE){
                     $itemKey = str_replace($key, '', $itemKey);
-                    $itemKey = substr($itemKey, 0, strlen($itemKey)-1);
+
+                    $itemKey = substr($itemKey, 0, strpos($itemKey, '/'));
                     $itemKey = $itemKey == false ? 'blog' : $itemKey;
                     $choosenNavItem['itemKey'] = $itemKey;
                     $choosenNavItem[$itemKey] = $navigationItems[$itemKey];
                     break;
                 }
             }
-
-            $choosenNavItem['itemKey'] = $itemKey;
-            $choosenNavItem[$itemKey] = $navigationItems[$itemKey];
+            if(empty($choosenNavItem)){
+                $choosenNavItem['itemKey'] = $itemKey;
+                $choosenNavItem[$itemKey] = $navigationItems[$itemKey];
+            }
         }
 
         $navigationItems['create'] = [
