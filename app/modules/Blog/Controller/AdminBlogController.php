@@ -47,14 +47,6 @@ class AdminBlogController extends BlogAbstractAdminController
      */
     public function init()
     {
-
-        //$this->view->navigation = BlogHelper::getNavigation();
-    }
-
-    private function setActiveItem(){
-        if($this->view->headerNavigation){
-            $this->view->headerNavigation->setActiveItem('admin/module/blog');
-        }
     }
 
     /**
@@ -66,8 +58,6 @@ class AdminBlogController extends BlogAbstractAdminController
      */
     public function indexAction()
     {
-
-
         $grid = new BlogGrid($this->view);
         if ($response = $grid->getResponse()) {
             return $response;

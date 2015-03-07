@@ -56,10 +56,6 @@ class AdminBlogTagsController extends BlogAbstractAdminController
      */
     public function indexAction()
     {
-        if($this->view->headerNavigation){
-            $this->view->headerNavigation->setActiveItem('admin/module/blog');
-        }
-        
         $grid = new TagGrid($this->view);
         if ($response = $grid->getResponse()) {
             return $response;

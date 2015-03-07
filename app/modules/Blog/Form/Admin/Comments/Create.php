@@ -19,6 +19,7 @@ namespace Blog\Form\Admin\Comments;
 use Blog\Model\Comments;
 use Core\Form\CoreForm;
 use Engine\Db\AbstractModel;
+use User\Model\User;
 
 /**
  * Create comments.

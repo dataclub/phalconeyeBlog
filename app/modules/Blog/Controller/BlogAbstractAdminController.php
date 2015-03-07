@@ -37,16 +37,11 @@ use Core\Controller\AbstractAdminController;
  */
 abstract class BlogAbstractAdminController extends AbstractAdminController
 {
-    /**
-     * Setup navigation.
-     *
-     * @return void
-     */
-    protected function _setupNavigation()
-    {
-        parent::_setupNavigation();
+
+    private function getActiveItem($navigation = false){
 
         $path = explode('/', $this->request->get('_url', 'string'));
+
         $tmpPath = $path;
         $activeItem = '';
 
@@ -58,21 +53,34 @@ abstract class BlogAbstractAdminController extends AbstractAdminController
         }
 
         $limit = (count($path) > 3 ? 1 : 0);
-        for ($i = 1, $count = count($path); $i <= $count - $limit && $i < 4; $i++) {
+        $max = 4;
+        if($navigation){
+            $limit = (count($path) > 5 ? 1 : 0);
+            $max = 6;
+        }
+        for ($i = 1, $count = count($path); $i <= $count - $limit && $i < $max; $i++) {
             $activeItem .= $path[$i] . '/';
         }
         $activeItem = substr($activeItem, 0, -1);
 
-        $tmpNavi = $this->view->navigation;
-        $this->view->headerNavigation->setActiveItem($activeItem);
+        return $activeItem;
 
+    }
 
+    /**
+     * Setup navigation.
+     *
+     * @return void
+     */
+    protected function _setupNavigation()
+    {
+        parent::_setupNavigation();
+        $activeHeaderItem = $this->getActiveItem();
+        $activeNavItem = $this->getActiveItem(true);
 
-
-        $navigation = new Navigation();
 
         $navigationItems = [
-            'index' => [
+            'blog' => [
                 'href' => 'admin/module/blog',
                 'title' => 'Blog',
                 'title_single' => 'blog',
@@ -102,29 +110,43 @@ abstract class BlogAbstractAdminController extends AbstractAdminController
             ]
         ];
 
-/*
         $choosenNavItem = [];
-        foreach ($navigationItems as $key => $item) {
-            if(is_numeric($key)){
-                continue;
+        $itemKey = str_replace($activeHeaderItem, '', $activeNavItem);
+
+        if(empty($itemKey)){
+            $itemKey = 'blog';
+            $choosenNavItem['itemKey'] = $itemKey;
+            $choosenNavItem[$itemKey] = $navigationItems[$itemKey];
+        }else{
+            $itemKey = substr($itemKey, 1, strlen($itemKey)-1);
+            foreach (array('create', 'edit', 'delete', 'manage') as $key) {
+                if(strpos($itemKey, $key) !== FALSE){
+                    $itemKey = str_replace($key, '', $itemKey);
+                    $itemKey = substr($itemKey, 0, strlen($itemKey)-1);
+                    $itemKey = $itemKey == false ? 'blog' : $itemKey;
+                    $choosenNavItem['itemKey'] = $itemKey;
+                    $choosenNavItem[$itemKey] = $navigationItems[$itemKey];
+                    break;
+                }
             }
 
-            if(strpos($_REQUEST['_url_'], $key) !== false || $key == 'index'){
-                $choosenNavItem['key'] = $key;
-                $choosenNavItem[$key] = $item;
-                break;
-            }
+            $choosenNavItem['itemKey'] = $itemKey;
+            $choosenNavItem[$itemKey] = $navigationItems[$itemKey];
         }
-        $key = $choosenNavItem['key'];
+
         $navigationItems['create'] = [
-            'href' => $choosenNavItem[$key]['href'].'/create',
-            'title' => 'Create new ' . $choosenNavItem[$key]['title_single'],
+            'href' => $choosenNavItem[$itemKey]['href'].'/create',
+            'title' => 'Create new ' . $choosenNavItem[$itemKey]['title_single'],
             'prepend' => '<i class="glyphicon glyphicon-plus-sign"></i>'
         ];
-*/
+
+        $navigation = new Navigation();
         $navigation->setItems($navigationItems);
-        $navigation->setActiveItem($activeItem);
+        $navigation->setActiveItem($activeNavItem);
+
+
         $this->view->navigation = $navigation;
+        $this->view->headerNavigation->setActiveItem($activeHeaderItem);
     }
 }
 

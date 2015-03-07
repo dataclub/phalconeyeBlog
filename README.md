@@ -48,3 +48,5 @@ Phalcon Eye CMS is open-source software licensed under the New BSD License. See 
 Test-Login:
 Name: test
 Password: test123
+
+If you are going to install sql_changes.sql to make instance witout module-installation, don´t forget to add blog into module-sectionArray in /app/var/data/app.php
