@@ -14,18 +14,17 @@
   +------------------------------------------------------------------------+
 */
 
-namespace Blog\Form\Admin\Tag;
+namespace Blog\Form\Admin\Tags;
 
-use Blog\Model\Tag;
 use Core\Form\CoreForm;
+use Blog\Model\Tags;
 use Engine\Db\AbstractModel;
-use User\Model\User;
 
 /**
- * Create Tag
+ * Create tags form
  *
  * @category  PhalconEye
- * @package   Blog\Form\Admin\Tag
+ * @package   Blog\Form\Admin\Tags
  * @author    Djavid Rustamov <nsxgdesigns@googlemail.com>
  * @copyright 2015-2016 PhalconEye Team
  * @license   New BSD License
@@ -43,7 +42,7 @@ class Create extends CoreForm
         parent::__construct();
 
         if (!$entity) {
-            $entity = new Tag();
+            $entity = new Tags();
         }
 
         $this->addEntity($entity);
@@ -57,28 +56,16 @@ class Create extends CoreForm
     public function initialize()
     {
         $this
-            ->setTitle('Blog Creation')
-            ->setDescription('Create new blog post.');
-
+            ->setTitle('Tags Creation')
+            ->setDescription('Create new tags post');
 
         $content = $this->addContentFieldSet()
-            ->addText('title', null, null, null, [], ['autocomplete' => 'off'])
-            ->addCkEditor('body')
-            ->addSelect('user_id', 'User', 'Select user', User::find(), null, ['using' => ['id', 'username']]);
-
-        /*
-         *  ->addText('username', null, null, null, [], ['autocomplete' => 'off'])
-            ->addPassword('password', null, null, [], ['autocomplete' => 'off'])
-            ->addText('email', null, null, null, [], ['autocomplete' => 'off'])
-            ->addSelect('role_id', 'Role', 'Select user role', Role::find(), null, ['using' => ['id', 'name']]);
-         */
+            ->addText('name');
 
         $this->addFooterFieldSet()
             ->addButton('create')
             ->addButtonLink('cancel', 'Cancel', 'admin/module/blog/tags');
 
-        $content
-            ->setRequired('title')
-            ->setRequired('body');
+        $content->setRequired('name');
     }
 }

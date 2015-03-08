@@ -38,6 +38,9 @@ use User\Model\User;
  * @BelongsTo("user_id", '\User\Model\User', "id", {
  *  "alias": "User"
  * })
+ * @BelongsTo("categorie_id", '\Blog\Model\Categories', "id", {
+ *  "alias": "User"
+ * })
  * @method static \Blog\Model\Blog findFirst($parameters = null)
  */
 class Blog extends AbstractModel
@@ -62,6 +65,11 @@ class Blog extends AbstractModel
      * @Column(type="integer", nullable=false, column="user_id", size="11")
      */
     public $user_id;
+
+    /**
+     * @Column(type="integer", nullable=false, column="categorie_id", size="11")
+     */
+    public $categorie_id;
 
     /**
      * @Column(type="string", nullable=false, column="title", size="255")

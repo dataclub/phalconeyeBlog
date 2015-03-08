@@ -16,11 +16,14 @@
 
 namespace Blog\Form\Admin\Comments;
 
+use Blog\Model\Blog;
 use Blog\Model\Comments;
+use Blog\Model\Categories;
+
 use Core\Form\CoreForm;
 use Engine\Db\AbstractModel;
+use Engine\Form\FieldSet;
 use User\Model\User;
-
 /**
  * Create comments
  *
@@ -57,27 +60,26 @@ class Create extends CoreForm
     public function initialize()
     {
         $this
-            ->setTitle('Blog Creation')
-            ->setDescription('Create new blog post.');
+            ->setTitle('Comments Creation')
+            ->setDescription('Create new comments post');
+
 
         $content = $this->addContentFieldSet()
-            ->addText('title', null, null, null, [], ['autocomplete' => 'off'])
-            ->addCkEditor('body')
-            ->addSelect('user_id', 'User', 'Select user', User::find(), null, ['using' => ['id', 'username']]);
-
-        /*
-         *  ->addText('username', null, null, null, [], ['autocomplete' => 'off'])
-            ->addPassword('password', null, null, [], ['autocomplete' => 'off'])
-            ->addText('email', null, null, null, [], ['autocomplete' => 'off'])
-            ->addSelect('role_id', 'Role', 'Select user role', Role::find(), null, ['using' => ['id', 'name']]);
-         */
+            ->addText('name', null, null, null, [], ['autocomplete' => 'off'])
+            ->addText('email', null, null, null, [], ['autocomplete' => 'on'])
+            ->addTextArea('body')
+            ->addCheckbox('is_published', 'Publish ?', null, 1, true, true)
+            ->addSelect('blog_id', 'Blog', 'Select blog', Blog::find(), null, ['using' => ['id', 'title']]);
 
         $this->addFooterFieldSet()
             ->addButton('create')
             ->addButtonLink('cancel', 'Cancel', 'admin/module/blog/comments');
 
         $content
-            ->setRequired('title')
-            ->setRequired('body');
+            ->setRequired('name')
+            ->setRequired('email')
+            ->setRequired('body')
+            ->setRequired('blog_id')
+        ;
     }
 }

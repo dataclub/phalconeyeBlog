@@ -13,10 +13,11 @@
   | to license@phalconeye.com so we can send you a copy immediately.       |
   +------------------------------------------------------------------------+
 */
+
 namespace Blog\Form\Admin\Comments;
 
 /**
- * Edit blog.
+ * Edit comments
  *
  * @category  PhalconEye
  * @package   Blog\Form\Admin\Comments
@@ -36,13 +37,13 @@ class Edit extends Create
     {
         parent::initialize();
         $this
-            ->setTitle('Edit Blog')
-            ->setDescription('Edit this blog post.');
+            ->setTitle('Edit Comments')
+            ->setDescription('Edit this comments post');
 
 
         $this->getFieldSet(self::FIELDSET_FOOTER)
             ->clearElements()
             ->addButton('save')
-            ->addButtonLink('cancel', 'Cancel', 'admin/module/blog');
+            ->addButtonLink('cancel', 'Cancel', 'admin/module/blog/comments');
     }
 }

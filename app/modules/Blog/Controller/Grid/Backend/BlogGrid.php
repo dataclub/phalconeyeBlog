@@ -22,6 +22,7 @@ use Phalcon\Db\Column;
 use Phalcon\Mvc\Model\Query\Builder;
 use Phalcon\Mvc\View;
 use User\Model\User;
+use Blog\Model\Categories;
 
 /**
  * Blog grid.
@@ -46,7 +47,8 @@ class BlogGrid extends BackendBlogGrid
         $builder
             ->addFrom('Blog\Model\Blog', 'b')
             ->leftJoin('User\Model\User', 'b.user_id = u.id', 'u')
-            ->columns(['b.id', 'b.title', 'u.username'])
+            ->leftJoin('Blog\Model\Categories', 'b.categorie_id = c.id', 'c')
+            ->columns(['b.id', 'b.title', 'b.body', 'u.username', 'c.name'])
             ->orderBy('b.id DESC');
 
         return $builder;
@@ -83,6 +85,20 @@ class BlogGrid extends BackendBlogGrid
         $this
             ->addTextColumn('id', 'ID', [self::COLUMN_PARAM_TYPE => Column::BIND_PARAM_INT])
             ->addTextColumn('title', 'Title', [self::COLUMN_PARAM_TYPE => Column::TYPE_VARCHAR])
+            ->addSelectColumn(
+                'c.name',
+                'Categories',
+                ['hasEmptyValue' => true, 'using' => ['name', 'name'], 'elementOptions' => Categories::find()],
+                [
+                    self::COLUMN_PARAM_USE_HAVING => false,
+                    self::COLUMN_PARAM_USE_LIKE => false,
+                    self::COLUMN_PARAM_OUTPUT_LOGIC =>
+                        function (GridItem $item) {
+                            return $item['name'];
+                        }
+                ]
+            )
+            ->addTextColumn('body', 'body', [self::COLUMN_PARAM_TYPE => Column::TYPE_VARCHAR])
             ->addSelectColumn(
                 'u.username',
                 'User',

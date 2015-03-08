@@ -17,8 +17,10 @@
 namespace Blog\Form\Admin\Blog;
 
 use Blog\Model\Blog;
+use Blog\Model\Categories;
 use Core\Form\CoreForm;
 use Engine\Db\AbstractModel;
+use Engine\Form\FieldSet;
 use User\Model\User;
 /**
  * Create blog.
@@ -59,8 +61,10 @@ class Create extends CoreForm
             ->setTitle('Blog Creation')
             ->setDescription('Create new blog post.');
 
+
         $content = $this->addContentFieldSet()
             ->addText('title', null, null, null, [], ['autocomplete' => 'off'])
+            ->addSelect('categorie_id', 'Categories', 'Select categorie', Categories::find(), null, ['using' => ['id', 'name']])
             ->addCkEditor('body')
             ->addSelect('user_id', 'User', 'Select user', User::find(), null, ['using' => ['id', 'username']]);
 
@@ -77,6 +81,8 @@ class Create extends CoreForm
 
         $content
             ->setRequired('title')
-            ->setRequired('body');
+            ->setRequired('body')
+            ->setRequired('categorie_id')
+            ->setRequired('user_id');
     }
 }

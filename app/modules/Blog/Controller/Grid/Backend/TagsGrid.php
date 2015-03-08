@@ -21,10 +21,9 @@ use Engine\Grid\GridItem;
 use Phalcon\Db\Column;
 use Phalcon\Mvc\Model\Query\Builder;
 use Phalcon\Mvc\View;
-use User\Model\User;
 
 /**
- * Tag grid.
+ * Tags grid.
  *
  * @category  PhalconEye
  * @package   Blog\Controller\Grid\Backend
@@ -33,7 +32,7 @@ use User\Model\User;
  * @license   New BSD License
  * @link      http://phalconeye.com/
  */
-class TagGrid extends BackendBlogGrid
+class TagsGrid extends BackendBlogGrid
 {
     /**
      * Get main select builder.
@@ -44,10 +43,9 @@ class TagGrid extends BackendBlogGrid
     {
         $builder = new Builder();
         $builder
-            ->addFrom('Blog\Model\Blog', 'b')
-            ->leftJoin('User\Model\User', 'b.user_id = u.id', 'u')
-            ->columns(['b.id', 'b.title', 'u.username'])
-            ->orderBy('b.id DESC');
+            ->addFrom('Blog\Model\Tags', 't')
+            ->columns(['t.id', 't.name'])
+            ->orderBy('t.id DESC');
 
         return $builder;
     }
@@ -62,11 +60,11 @@ class TagGrid extends BackendBlogGrid
     public function getItemActions(GridItem $item)
     {
         return [
-            'Edit' => ['href' => ['for' => 'admin-module-blog-edit', 'id' => $item['id']]],
+            'Edit' => ['href' => ['for' => 'admin-module-blog-tags-edit', 'id' => $item['id']]],
             'Delete' => [
                 'href' =>
                     [
-                        'for' => 'admin-module-blog-delete', 'id' => $item['id']
+                        'for' => 'admin-module-blog-tags-delete', 'id' => $item['id']
                     ],
                 'attr' => ['class' => 'grid-action-delete']
             ]
@@ -82,20 +80,7 @@ class TagGrid extends BackendBlogGrid
     {
         $this
             ->addTextColumn('id', 'ID', [self::COLUMN_PARAM_TYPE => Column::BIND_PARAM_INT])
-            ->addTextColumn('title', 'Title', [self::COLUMN_PARAM_TYPE => Column::TYPE_VARCHAR])
-            ->addSelectColumn(
-                'u.username',
-                'User',
-                ['hasEmptyValue' => true, 'using' => ['username', 'username'], 'elementOptions' => User::find()],
-                [
-                    self::COLUMN_PARAM_USE_HAVING => false,
-                    self::COLUMN_PARAM_USE_LIKE => false,
-                    self::COLUMN_PARAM_OUTPUT_LOGIC =>
-                        function (GridItem $item) {
-                            return $item['username'];
-                        }
-                ]
-            );
+            ->addTextColumn('name', 'Name', [self::COLUMN_PARAM_TYPE => Column::TYPE_VARCHAR]);
 
     }
 }

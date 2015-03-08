@@ -14,36 +14,53 @@
   +------------------------------------------------------------------------+
 */
 
-namespace Blog\Form\Admin\Categorie;
+namespace Blog\Model;
+
+use Engine\Db\AbstractModel;
+use Phalcon\Mvc\Model\Validator\Uniqueness;
 
 /**
- * Edit categorie
+ * Tags
  *
  * @category  PhalconEye
- * @package   Blog\Form\Admin\Categorie
+ * @package   Blog\Model
  * @author    Djavid Rustamov <nsxgdesigns@googlemail.com>
  * @copyright 2015-2016 PhalconEye Team
  * @license   New BSD License
  * @link      http://phalconeye.com/
+ *
+ * @Source("tags")
+ *
+ * @method static \Blog\Model\Tags findFirst($parameters = null)
  */
-class Edit extends Create
+class Tags extends AbstractModel
 {
     /**
-     * Initialize form.
-     *
-     * @return void
+     * @Primary
+     * @Identity
+     * @Column(type="integer", nullable=false, column="id", size="11")
      */
-    public function initialize()
+    public $id;
+
+    /**
+     * @Column(type="string", nullable=false, column="name", size="255")
+     */
+    public $name;
+
+    /**
+     * Validations and business logic.
+     *
+     * @return bool
+     */
+    public function validation()
     {
-        parent::initialize();
-        $this
-            ->setTitle('Edit Menu')
-            ->setDescription('Edit this menu.');
+        if ($this->_errorMessages === null) {
+            $this->_errorMessages = [];
+        }
 
 
-        $this->getFieldSet(self::FIELDSET_FOOTER)
-            ->clearElements()
-            ->addButton('save')
-            ->addButtonLink('cancel', 'Cancel', ['for' => 'admin/module/blog/categorie']);
+        $this->validate(new Uniqueness(["field" => "name"]));
+
+        return $this->validationHasFailed() !== true;
     }
 }

@@ -142,6 +142,15 @@ abstract class BlogAbstractAdminController extends AbstractAdminController
             'prepend' => '<i class="glyphicon glyphicon-plus-sign"></i>'
         ];
 
+        /*
+         * exceptional case: admin should not create own comments in admin,
+         * because he must only be able to edit or delete usercommits
+
+        if($itemKey == 'comments'){
+            unset($navigationItems['create']);
+        }       * */
+
+
         $navigation = new Navigation();
         $navigation->setItems($navigationItems);
         $navigation->setActiveItem($activeNavItem);

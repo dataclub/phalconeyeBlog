@@ -16,16 +16,12 @@
 
 namespace Blog\Model;
 
-use Core\Api\Acl;
 use Engine\Db\AbstractModel;
-use Engine\Db\Model\Behavior\Timestampable;
-use Phalcon\DI;
-use Phalcon\Mvc\Model\Validator\Email;
-use Phalcon\Mvc\Model\Validator\StringLength;
 use Phalcon\Mvc\Model\Validator\Uniqueness;
-use User\Model\User;
 
 /**
+ * Categories
+ *
  * @category  PhalconEye
  * @package   Blog\Model
  * @author    Djavid Rustamov <nsxgdesigns@googlemail.com>
@@ -33,28 +29,12 @@ use User\Model\User;
  * @license   New BSD License
  * @link      http://phalconeye.com/
  *
- * @Source("comments")
+ * @Source("categories")
  *
- * @BelongsTo("user_id", '\User\Model\User', "id", {
- *  "alias": "User"
- * })
- *
- * @BelongsTo("blog_id", '\Blog\Model\Blog', "id", {
- *  "alias": "Blog"
- * })
- * @method static \Blog\Model\Blog findFirst($parameters = null)
+ * @method static \Blog\Model\Categories findFirst($parameters = null)
  */
-class Comments extends AbstractModel
+class Categories extends AbstractModel
 {
-    const
-        /**
-         * Cache prefix.
-         */
-        CACHE_PREFIX = 'comment_id';
-
-    // use trait Timestampable for creation_date and modified_date fields.
-    use Timestampable;
-
     /**
      * @Primary
      * @Identity
@@ -63,29 +43,34 @@ class Comments extends AbstractModel
     public $id;
 
     /**
-     * @Column(type="integer", nullable=false, column="blog_id", size="11")
-     */
-    public $blog_id;
-
-    /**
-     * @Column(type="string", nullable=false, column="name", size="20")
+     * @Column(type="string", nullable=false, column="name", size="255")
      */
     public $name;
 
     /**
-     * @Column(type="text", nullable=false, column="body")
+     * Return the related "CategorieItem" entity.
+     *
+     * @param array $arguments Entity params.
+     *
+     * @return CategorieItem[]
+
+    public function getCategorieItems($arguments = [])
+    {
+        return $this->getRelated('CategorieItem', $arguments);
+    }
      */
-    public $body;
 
     /**
-     * @Column(type="string", nullable=false, column="email", size="20")
-     */
-    public $email;
+     * Logic before removal
+     *
+     * @return void
 
-    /**
-     * @Column(type="boolean", nullable=false, column="is_published")
+    public function beforeDelete()
+    {
+        $this->getCategorieItems()->delete();
+    }
      */
-    public $is_published = false;
+
 
     /**
      * Validations and business logic.
@@ -97,6 +82,9 @@ class Comments extends AbstractModel
         if ($this->_errorMessages === null) {
             $this->_errorMessages = [];
         }
+
+
+        $this->validate(new Uniqueness(["field" => "name"]));
 
         return $this->validationHasFailed() !== true;
     }

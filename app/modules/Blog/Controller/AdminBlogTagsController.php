@@ -16,12 +16,12 @@
 
 namespace Blog\Controller;
 
-use Blog\Controller\Grid\Backend\TagGrid;
-use Blog\Helper\BlogHelper;
+use Blog\Controller\Grid\Backend\TagsGrid;
 
-use Blog\Form\Admin\Tag\Create;
-use Blog\Form\Admin\Tag\Edit;
-use Blog\Model\Tag;
+use Blog\Helper\BlogHelper;
+use Blog\Form\Admin\Tags\Create;
+use Blog\Form\Admin\Tags\Edit;
+use Blog\Model\Tags;
 
 /**
  * Admin tags controller.
@@ -33,7 +33,7 @@ use Blog\Model\Tag;
  * @license   New BSD License
  * @link      http://phalconeye.com/
  *
- * @RoutePrefix("/admin/module/blog/tags", name="admin-blog-module-tags-index")
+ * @RoutePrefix("/admin/module/blog/tags", name="admin-module-blog-tags-index")
  */
 class AdminBlogTagsController extends BlogAbstractAdminController
 {
@@ -52,22 +52,22 @@ class AdminBlogTagsController extends BlogAbstractAdminController
      *
      * @return void|ResponseInterface
      *
-     * @Get("/", name="admin-blog-module-tags-index")
+     * @Get("/", name="admin-module-blog-tags-index")
      */
     public function indexAction()
     {
-        $grid = new TagGrid($this->view);
+        $grid = new TagsGrid($this->view);
         if ($response = $grid->getResponse()) {
             return $response;
         }
     }
 
     /**
-     * Create menu.
+     * Create tags.
      *
      * @return void|ResponseInterface
      *
-     * @Route("/create", methods={"GET", "POST"}, name="admin-blog-module-tags-create")
+     * @Route("/create", methods={"GET", "POST"}, name="admin-module-blog-tags-create")
      */
     public function createAction()
     {
@@ -79,23 +79,23 @@ class AdminBlogTagsController extends BlogAbstractAdminController
         }
 
         $this->flashSession->success('New object created successfully!');
-        return $this->response->redirect(['for' => "admin-menus-manage", 'id' => $form->getEntity()->id]);
+        return $this->response->redirect('admin/module/blog/tags');
     }
 
     /**
-     * Edit menu.
+     * Edit tags.
      *
-     * @param int $id Menu identity.
+     * @param int $id Tags identity.
      *
      * @return void|ResponseInterface
      *
-     * @Route("/edit/{id:[0-9]+}", methods={"GET", "POST"}, name="admin-blog-module-tags-edit")
+     * @Route("/edit/{id:[0-9]+}", methods={"GET", "POST"}, name="admin-module-blog-tags-edit")
      */
     public function editAction($id)
     {
-        $item = Menu::findFirst($id);
+        $item = Tags::findFirst($id);
         if (!$item) {
-            return $this->response->redirect(['for' => "admin-menus"]);
+            return $this->response->redirect("admin/module/blog/tags");
         }
 
         $form = new Edit($item);
@@ -106,21 +106,21 @@ class AdminBlogTagsController extends BlogAbstractAdminController
         }
 
         $this->flashSession->success('Object saved!');
-        return $this->response->redirect(['for' => "admin-menus"]);
+        return $this->response->redirect('admin/module/blog/tags');
     }
 
     /**
-     * Delete menu.
+     * Delete tags.
      *
-     * @param int $id Menu identity.
+     * @param int $id Tags identity.
      *
      * @return void|ResponseInterface
      *
-     * @Get("/delete/{id:[0-9]+}", name="admin-blog-module-tags-delete")
+     * @Get("/delete/{id:[0-9]+}", name="admin-module-blog-tags-delete")
      */
     public function deleteAction($id)
     {
-        $item = Menu::findFirst($id);
+        $item = Tags::findFirst($id);
         if ($item) {
             if ($item->delete()) {
                 $this->flashSession->notice('Object deleted!');
@@ -129,162 +129,17 @@ class AdminBlogTagsController extends BlogAbstractAdminController
             }
         }
 
-        return $this->response->redirect(['for' => "admin-menus"]);
+        return $this->response->redirect('admin/module/blog/tags');
     }
 
+
+
     /**
-     * Create menu item.
+     * Suggest tags (via json).
      *
      * @return void
      *
-     * @Route("/create-item", methods={"GET", "POST"}, name="admin-blog-module-tags-item")
-     */
-    public function createItemAction()
-    {
-        $form = new CreateItem();
-        $this->view->form = $form;
-
-        $data = [
-            'menu_id' => $this->request->get('menu_id'),
-            'parent_id' => $this->request->get('parent_id')
-        ];
-
-        $form->setValues($data);
-        if (!$this->request->isPost() || !$form->isValid()) {
-            return;
-        }
-
-        $item = $form->getEntity();
-
-        // Clear url type.
-        if ($form->getValue('url_type') == 0) {
-            $item->pageId = null;
-        } else {
-            $item->url = null;
-        }
-
-        // Set proper order.
-        $orderData = [
-            "menu_id = {$data['menu_id']}",
-            'order' => 'item_order DESC'
-        ];
-
-        if (!empty($data['parent_id'])) {
-            $orderData[0] .= " AND parent_id = {$data['parent_id']}";
-        }
-
-        $orderItem = MenuItem::findFirst($orderData);
-
-        if ($orderItem->id != $item->id) {
-            $item->item_order = $orderItem->item_order + 1;
-        }
-
-        $item->save();
-        $this->_clearMenuCache();
-        $this->resolveModal(['reload' => true]);
-    }
-
-    /**
-     * Edit menu item.
-     *
-     * @param int $id Menu item identity.
-     *
-     * @return void|ResponseInterface
-     *
-     * @Route("/edit-item/{id:[0-9]+}", methods={"GET", "POST"}, name="admin-blog-module-tags-item")
-     */
-    public function editItemAction($id)
-    {
-        $item = MenuItem::findFirst($id);
-
-        $form = new EditItem($item);
-        $this->view->form = $form;
-
-        $data = [
-            'menu_id' => $this->request->get('menu_id'),
-            'parent_id' => $this->request->get('parent_id'),
-            'url_type' => ($item->page_id == null ? 0 : 1),
-        ];
-
-        if ($item->page_id) {
-            $page = Page::findFirst($item->page_id);
-            if ($page) {
-                $data['page_id'] = $page->id;
-                $data['page'] = $page->title;
-            }
-        }
-
-        $form->setValues($data);
-        if (!$this->request->isPost() || !$form->isValid()) {
-            return;
-        }
-
-        $item = $form->getEntity();
-
-        // Clear url type.
-        if ($form->getValue('url_type') == 0) {
-            $item->pageId = null;
-        } else {
-            $item->url = null;
-        }
-
-        $item->save();
-        $this->_clearMenuCache();
-        $this->resolveModal(['reload' => true]);
-    }
-
-    /**
-     * Delete menu item.
-     *
-     * @param int $id Menu item identity.
-     *
-     * @return void|ResponseInterface
-     *
-     * @Get("/delete-item/{id:[0-9]+}", name="admin-blog-module-tags-item")
-     */
-    public function deleteItemAction($id)
-    {
-        $item = MenuItem::findFirst($id);
-        $menuId = null;
-        if ($item) {
-            $menuId = $item->menu_id;
-            $item->delete();
-        }
-
-        $parentId = $this->request->get('parent_id');
-        $parentLink = '';
-        if ($parentId) {
-            $parentLink = "?parent_id={$parentId}";
-        }
-        if ($menuId) {
-            return $this->response->redirect("admin/menus/manage/{$menuId}{$parentLink}");
-        }
-
-        return $this->response->redirect(['for' => "admin-menus"]);
-    }
-
-    /**
-     * Order menu items (via json).
-     *
-     * @return void
-     *
-     * @Post("/order", name="admin-blog-module-tags-order")
-     */
-    public function orderAction()
-    {
-        $order = $this->request->get('order', null, []);
-        foreach ($order as $index => $id) {
-            $this->db->update(MenuItem::getTableName(), ['item_order'], [$index], "id = {$id}");
-        }
-        $this->view->disable();
-    }
-
-    /**
-     * Suggest menus (via json).
-     *
-     * @return void
-     *
-     * @Get("/suggest", name="admin-blog-module-tags-suggest")
+     * @Get("/suggest", name="admin-module-blog-tags-suggest")
      */
     public function suggestAction()
     {
@@ -296,7 +151,7 @@ class AdminBlogTagsController extends BlogAbstractAdminController
             return;
         }
 
-        $results = Menu::find(
+        $results = Tags::find(
             [
                 "conditions" => "name LIKE ?1",
                 "bind" => [1 => '%' . $query . '%']
@@ -314,19 +169,5 @@ class AdminBlogTagsController extends BlogAbstractAdminController
         $this->response->setContent(json_encode($data))->send();
     }
 
-    /**
-     * Clear menu items cache.
-     *
-     * @return void
-     */
-    protected function _clearMenuCache()
-    {
-        $cache = $this->getDI()->get('cacheOutput');
-        $prefix = $this->config->application->cache->prefix;
-        $widgetKeys = $cache->queryKeys($prefix . WidgetController::CACHE_PREFIX);
-        foreach ($widgetKeys as $key) {
-            $cache->delete(str_replace($prefix, '', $key));
-        }
-    }
 }
 

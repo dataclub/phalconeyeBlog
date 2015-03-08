@@ -13,41 +13,20 @@
   | to license@phalconeye.com so we can send you a copy immediately.       |
   +------------------------------------------------------------------------+
 */
-
-namespace Blog\Form\Admin\Categorie;
-
-use Core\Form\CoreForm;
-use Blog\Model\Categorie;
-use Engine\Db\AbstractModel;
+namespace Blog\Form\Admin\Tags;
 
 /**
- * Create categorie form
+ * Edit tags
  *
  * @category  PhalconEye
- * @package   Blog\Form\Admin\Categorie
+ * @package   Blog\Form\Admin\Tags
  * @author    Djavid Rustamov <nsxgdesigns@googlemail.com>
  * @copyright 2015-2016 PhalconEye Team
  * @license   New BSD License
  * @link      http://phalconeye.com/
  */
-class Create extends CoreForm
+class Edit extends Create
 {
-    /**
-     * Create form.
-     *
-     * @param AbstractModel $entity Entity object.
-     */
-    public function __construct(AbstractModel $entity = null)
-    {
-        parent::__construct();
-
-        if (!$entity) {
-            $entity = new Categorie();
-        }
-
-        $this->addEntity($entity);
-    }
-
     /**
      * Initialize form.
      *
@@ -55,17 +34,15 @@ class Create extends CoreForm
      */
     public function initialize()
     {
+        parent::initialize();
         $this
-            ->setTitle('Menu Creation')
-            ->setDescription('Create new menu.');
+            ->setTitle('Edit Tags')
+            ->setDescription('Edit this tag post');
 
-        $content = $this->addContentFieldSet()
-            ->addText('name');
 
-        $this->addFooterFieldSet()
-            ->addButton('create')
-            ->addButtonLink('cancel', 'Cancel', 'admin/module/blog/categorie');
-
-        $content->setRequired('name');
+        $this->getFieldSet(self::FIELDSET_FOOTER)
+            ->clearElements()
+            ->addButton('save')
+            ->addButtonLink('cancel', 'Cancel', 'admin/module/blog/tags');
     }
 }

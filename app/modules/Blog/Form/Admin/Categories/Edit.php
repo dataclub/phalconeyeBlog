@@ -14,60 +14,36 @@
   +------------------------------------------------------------------------+
 */
 
-namespace Blog\Model;
-
-use Engine\Db\AbstractModel;
+namespace Blog\Form\Admin\Categories;
 
 /**
- * Categorie
+ * Edit categories
  *
  * @category  PhalconEye
- * @package   Blog\Model
+ * @package   Blog\Form\Admin\Categories
  * @author    Djavid Rustamov <nsxgdesigns@googlemail.com>
  * @copyright 2015-2016 PhalconEye Team
  * @license   New BSD License
  * @link      http://phalconeye.com/
- *
- * @Source("categorie")
- * @HasMany("id", '\Blog\Model\CategorieItem', "categorie_id", {
- *  "alias": "CategorieItem"
- * })
- *
- * @method static \Blog\Model\Categorie findFirst($parameters = null)
  */
-class Categorie extends AbstractModel
+class Edit extends Create
 {
     /**
-     * @Primary
-     * @Identity
-     * @Column(type="integer", nullable=false, column="id", size="11")
-     */
-    public $id;
-
-    /**
-     * @Column(type="string", nullable=false, column="name", size="255")
-     */
-    public $name;
-
-    /**
-     * Return the related "CategorieItem" entity.
-     *
-     * @param array $arguments Entity params.
-     *
-     * @return CategorieItem[]
-     */
-    public function getCategorieItems($arguments = [])
-    {
-        return $this->getRelated('CategorieItem', $arguments);
-    }
-
-    /**
-     * Logic before removal
+     * Initialize form.
      *
      * @return void
      */
-    public function beforeDelete()
+    public function initialize()
     {
-        $this->getCategorieItems()->delete();
+        parent::initialize();
+        $this
+            ->setTitle('Edit Categories')
+            ->setDescription('Edit this categories post');
+
+
+        $this->getFieldSet(self::FIELDSET_FOOTER)
+            ->clearElements()
+            ->addButton('save')
+            ->addButtonLink('cancel', 'Cancel', 'admin/module/blog/categories');
     }
 }

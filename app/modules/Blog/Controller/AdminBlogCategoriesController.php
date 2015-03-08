@@ -16,17 +16,13 @@
 
 namespace Blog\Controller;
 
-use Blog\Controller\Grid\Backend\CategorieGrid;
+use Blog\Controller\Grid\Backend\CategoriesGrid;
 
 
 use Blog\Helper\BlogHelper;
-use Blog\Form\Admin\Categorie\Create;
-use Blog\Form\Admin\Categorie\Edit;
-use Blog\Model\Categorie;
-use Blog\Model\CategorieItem;
-
-use Core\Form\EntityForm;
-use Core\Model\Page;
+use Blog\Form\Admin\Categories\Create;
+use Blog\Form\Admin\Categories\Edit;
+use Blog\Model\Categories;
 
 /**
  * Admin categories controller.
@@ -61,16 +57,14 @@ class AdminBlogCategoriesController extends BlogAbstractAdminController
      */
     public function indexAction()
     {
-
-
-        $grid = new CategorieGrid($this->view);
+        $grid = new CategoriesGrid($this->view);
         if ($response = $grid->getResponse()) {
             return $response;
         }
     }
 
     /**
-     * Create categorie
+     * Create categories
      *
      * @return void|ResponseInterface
      *
@@ -86,7 +80,8 @@ class AdminBlogCategoriesController extends BlogAbstractAdminController
         }
 
         $this->flashSession->success('New object created successfully!');
-        return $this->response->redirect(['for' => "admin-module-blog-categories-manage", 'id' => $form->getEntity()->id]);
+
+        return $this->response->redirect("admin/module/blog/categories");
     }
 
     /**
@@ -100,7 +95,7 @@ class AdminBlogCategoriesController extends BlogAbstractAdminController
      */
     public function editAction($id)
     {
-        $item = Categorie::findFirst($id);
+        $item = Categories::findFirst($id);
         if (!$item) {
             return $this->response->redirect(['for' => "admin-module-blog-categories"]);
         }
@@ -113,7 +108,7 @@ class AdminBlogCategoriesController extends BlogAbstractAdminController
         }
 
         $this->flashSession->success('Object saved!');
-        return $this->response->redirect(['for' => "admin-module-blog-categories"]);
+        return $this->response->redirect('admin/module/blog/categories');
     }
 
     /**
@@ -127,7 +122,7 @@ class AdminBlogCategoriesController extends BlogAbstractAdminController
      */
     public function deleteAction($id)
     {
-        $item = Categorie::findFirst($id);
+        $item = Categories::findFirst($id);
         if ($item) {
             if ($item->delete()) {
                 $this->flashSession->notice('Object deleted!');
@@ -215,7 +210,7 @@ class AdminBlogCategoriesController extends BlogAbstractAdminController
         ];
 
         if ($item->page_id) {
-            $page = Page::findFirst($item->page_id);
+            $page = Categories::findFirst($item->page_id);
             if ($page) {
                 $data['page_id'] = $page->id;
                 $data['page'] = $page->title;
@@ -304,7 +299,7 @@ class AdminBlogCategoriesController extends BlogAbstractAdminController
             return;
         }
 
-        $results = Categorie::find(
+        $results = Categories::find(
             [
                 "conditions" => "name LIKE ?1",
                 "bind" => [1 => '%' . $query . '%']

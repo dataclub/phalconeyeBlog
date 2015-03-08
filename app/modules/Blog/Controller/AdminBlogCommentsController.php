@@ -17,8 +17,8 @@
 namespace Blog\Controller;
 
 use Blog\Controller\Grid\Backend\CommentsGrid;
-use Blog\Helper\BlogHelper;
 
+use Blog\Helper\BlogHelper;
 use Blog\Form\Admin\Comments\Create;
 use Blog\Form\Admin\Comments\Edit;
 use Blog\Model\Comments;
@@ -33,7 +33,7 @@ use Blog\Model\Comments;
  * @license   New BSD License
  * @link      http://phalconeye.com/
  *
- * @RoutePrefix("/admin/module/blog/comments", name="admin-blog-module-comments-index")
+ * @RoutePrefix("/admin/module/blog/comments", name="admin-module-blog-comments-index")
  */
 class AdminBlogCommentsController extends BlogAbstractAdminController
 {
@@ -52,7 +52,7 @@ class AdminBlogCommentsController extends BlogAbstractAdminController
      *
      * @return void|ResponseInterface
      *
-     * @Get("/", name="admin-blog-module-comments-index")
+     * @Get("/", name="admin-module-blog-comments-index")
      */
     public function indexAction()
     {
@@ -63,11 +63,11 @@ class AdminBlogCommentsController extends BlogAbstractAdminController
     }
 
     /**
-     * Create menu.
+     * Create comments
      *
      * @return void|ResponseInterface
      *
-     * @Route("/create", methods={"GET", "POST"}, name="admin-blog-module-comments-create")
+     * @Route("/create", methods={"GET", "POST"}, name="admin-module-blog-comments-create")
      */
     public function createAction()
     {
@@ -79,23 +79,23 @@ class AdminBlogCommentsController extends BlogAbstractAdminController
         }
 
         $this->flashSession->success('New object created successfully!');
-        return $this->response->redirect(['for' => "admin-menus-manage", 'id' => $form->getEntity()->id]);
+        return $this->response->redirect('admin/module/blog/comments');
     }
 
     /**
-     * Edit menu.
+     * Edit comments
      *
-     * @param int $id Menu identity.
+     * @param int $id Comments identity.
      *
      * @return void|ResponseInterface
      *
-     * @Route("/edit/{id:[0-9]+}", methods={"GET", "POST"}, name="admin-blog-module-comments-edit")
+     * @Route("/edit/{id:[0-9]+}", methods={"GET", "POST"}, name="admin-module-blog-comments-edit")
      */
     public function editAction($id)
     {
         $item = Comments::findFirst($id);
         if (!$item) {
-            return $this->response->redirect(['for' => "admin-menus"]);
+            return $this->response->redirect("admin/module/blog/comments");
         }
 
         $form = new Edit($item);
@@ -106,17 +106,17 @@ class AdminBlogCommentsController extends BlogAbstractAdminController
         }
 
         $this->flashSession->success('Object saved!');
-        return $this->response->redirect(['for' => "admin-menus"]);
+        return $this->response->redirect('admin/module/blog/comments');
     }
 
     /**
-     * Delete menu.
+     * Delete comments
      *
-     * @param int $id Menu identity.
+     * @param int $id Comments identity.
      *
      * @return void|ResponseInterface
      *
-     * @Get("/delete/{id:[0-9]+}", name="admin-blog-module-comments-delete")
+     * @Get("/delete/{id:[0-9]+}", name="admin-module-blog-comments-delete")
      */
     public function deleteAction($id)
     {
@@ -129,204 +129,7 @@ class AdminBlogCommentsController extends BlogAbstractAdminController
             }
         }
 
-        return $this->response->redirect(['for' => "admin-menus"]);
-    }
-
-    /**
-     * Create menu item.
-     *
-     * @return void
-     *
-     * @Route("/create-item", methods={"GET", "POST"}, name="admin-blog-module-comments-item")
-     */
-    public function createItemAction()
-    {
-        $form = new CreateItem();
-        $this->view->form = $form;
-
-        $data = [
-            'menu_id' => $this->request->get('menu_id'),
-            'parent_id' => $this->request->get('parent_id')
-        ];
-
-        $form->setValues($data);
-        if (!$this->request->isPost() || !$form->isValid()) {
-            return;
-        }
-
-        $item = $form->getEntity();
-
-        // Clear url type.
-        if ($form->getValue('url_type') == 0) {
-            $item->pageId = null;
-        } else {
-            $item->url = null;
-        }
-
-        // Set proper order.
-        $orderData = [
-            "menu_id = {$data['menu_id']}",
-            'order' => 'item_order DESC'
-        ];
-
-        if (!empty($data['parent_id'])) {
-            $orderData[0] .= " AND parent_id = {$data['parent_id']}";
-        }
-
-        $orderItem = MenuItem::findFirst($orderData);
-
-        if ($orderItem->id != $item->id) {
-            $item->item_order = $orderItem->item_order + 1;
-        }
-
-        $item->save();
-        $this->_clearMenuCache();
-        $this->resolveModal(['reload' => true]);
-    }
-
-    /**
-     * Edit menu item.
-     *
-     * @param int $id Menu item identity.
-     *
-     * @return void|ResponseInterface
-     *
-     * @Route("/edit-item/{id:[0-9]+}", methods={"GET", "POST"}, name="admin-blog-module-comments-item")
-     */
-    public function editItemAction($id)
-    {
-        $item = MenuItem::findFirst($id);
-
-        $form = new EditItem($item);
-        $this->view->form = $form;
-
-        $data = [
-            'menu_id' => $this->request->get('menu_id'),
-            'parent_id' => $this->request->get('parent_id'),
-            'url_type' => ($item->page_id == null ? 0 : 1),
-        ];
-
-        if ($item->page_id) {
-            $page = Page::findFirst($item->page_id);
-            if ($page) {
-                $data['page_id'] = $page->id;
-                $data['page'] = $page->title;
-            }
-        }
-
-        $form->setValues($data);
-        if (!$this->request->isPost() || !$form->isValid()) {
-            return;
-        }
-
-        $item = $form->getEntity();
-
-        // Clear url type.
-        if ($form->getValue('url_type') == 0) {
-            $item->pageId = null;
-        } else {
-            $item->url = null;
-        }
-
-        $item->save();
-        $this->_clearMenuCache();
-        $this->resolveModal(['reload' => true]);
-    }
-
-    /**
-     * Delete menu item.
-     *
-     * @param int $id Menu item identity.
-     *
-     * @return void|ResponseInterface
-     *
-     * @Get("/delete-item/{id:[0-9]+}", name="admin-blog-module-tags-item")
-     */
-    public function deleteItemAction($id)
-    {
-        $item = MenuItem::findFirst($id);
-        $menuId = null;
-        if ($item) {
-            $menuId = $item->menu_id;
-            $item->delete();
-        }
-
-        $parentId = $this->request->get('parent_id');
-        $parentLink = '';
-        if ($parentId) {
-            $parentLink = "?parent_id={$parentId}";
-        }
-        if ($menuId) {
-            return $this->response->redirect("admin/menus/manage/{$menuId}{$parentLink}");
-        }
-
-        return $this->response->redirect(['for' => "admin-menus"]);
-    }
-
-    /**
-     * Order menu items (via json).
-     *
-     * @return void
-     *
-     * @Post("/order", name="admin-blog-module-tags-order")
-     */
-    public function orderAction()
-    {
-        $order = $this->request->get('order', null, []);
-        foreach ($order as $index => $id) {
-            $this->db->update(MenuItem::getTableName(), ['item_order'], [$index], "id = {$id}");
-        }
-        $this->view->disable();
-    }
-
-    /**
-     * Suggest menus (via json).
-     *
-     * @return void
-     *
-     * @Get("/suggest", name="admin-blog-module-tags-suggest")
-     */
-    public function suggestAction()
-    {
-        $this->view->disable();
-        $query = $this->request->get('query');
-        if (!$query) {
-            $this->response->setContent('[]')->send();
-
-            return;
-        }
-
-        $results = Menu::find(
-            [
-                "conditions" => "name LIKE ?1",
-                "bind" => [1 => '%' . $query . '%']
-            ]
-        );
-
-        $data = [];
-        foreach ($results as $result) {
-            $data[] = [
-                'id' => $result->id,
-                'label' => $result->name
-            ];
-        }
-
-        $this->response->setContent(json_encode($data))->send();
-    }
-
-    /**
-     * Clear menu items cache.
-     *
-     * @return void
-     */
-    protected function _clearMenuCache()
-    {
-        $cache = $this->getDI()->get('cacheOutput');
-        $prefix = $this->config->application->cache->prefix;
-        $widgetKeys = $cache->queryKeys($prefix . WidgetController::CACHE_PREFIX);
-        foreach ($widgetKeys as $key) {
-            $cache->delete(str_replace($prefix, '', $key));
-        }
+        return $this->response->redirect('admin/module/blog/comments');
     }
 }
 

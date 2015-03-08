@@ -16,12 +16,14 @@
 
 namespace Blog\Controller\Grid\Backend;
 
+use Blog\Model\Comments;
 use Engine\Form;
 use Engine\Grid\GridItem;
 use Phalcon\Db\Column;
 use Phalcon\Mvc\Model\Query\Builder;
 use Phalcon\Mvc\View;
 use User\Model\User;
+use Blog\Model\Categories;
 
 /**
  * Comments grid.
@@ -44,10 +46,17 @@ class CommentsGrid extends BackendBlogGrid
     {
         $builder = new Builder();
         $builder
-            ->addFrom('Blog\Model\Blog', 'b')
-            ->leftJoin('User\Model\User', 'b.user_id = u.id', 'u')
-            ->columns(['b.id', 'b.title', 'u.username'])
-            ->orderBy('b.id DESC');
+            ->addFrom('Blog\Model\Comments', 'c')
+            ->leftJoin('Blog\Model\Blog', 'c.blog_id = b.id', 'b')
+            ->columns([
+                'c.id',
+                'c.name',
+                'c.email',
+                'c.is_published',
+                'c.creation_date',
+                'c.modified_date',
+            ])
+            ->orderBy('c.is_published, c.creation_date DESC');
 
         return $builder;
     }
@@ -62,11 +71,11 @@ class CommentsGrid extends BackendBlogGrid
     public function getItemActions(GridItem $item)
     {
         return [
-            'Edit' => ['href' => ['for' => 'admin-module-blog-edit', 'id' => $item['id']]],
+            'Edit' => ['href' => ['for' => 'admin-module-blog-comments-edit', 'id' => $item['id']]],
             'Delete' => [
                 'href' =>
                     [
-                        'for' => 'admin-module-blog-delete', 'id' => $item['id']
+                        'for' => 'admin-module-blog-comments-delete', 'id' => $item['id']
                     ],
                 'attr' => ['class' => 'grid-action-delete']
             ]
@@ -82,20 +91,27 @@ class CommentsGrid extends BackendBlogGrid
     {
         $this
             ->addTextColumn('id', 'ID', [self::COLUMN_PARAM_TYPE => Column::BIND_PARAM_INT])
-            ->addTextColumn('title', 'Title', [self::COLUMN_PARAM_TYPE => Column::TYPE_VARCHAR])
+            ->addTextColumn('name', 'Author', [self::COLUMN_PARAM_TYPE => Column::TYPE_VARCHAR])
+            ->addTextColumn('email', 'E-Mail', [self::COLUMN_PARAM_TYPE => Column::TYPE_VARCHAR])
+            //->addTextColumn('is_published', 'published?', [self::COLUMN_PARAM_TYPE => Column::TYPE_VARCHAR])
             ->addSelectColumn(
-                'u.username',
-                'User',
-                ['hasEmptyValue' => true, 'using' => ['username', 'username'], 'elementOptions' => User::find()],
+                'c.is_published',
+                'Comments',
+                [
+                    'hasEmptyValue' => true,
+                    'using' => ['is_published', 'is_published'],
+                    'elementOptions' => Comments::find()
+                ],
                 [
                     self::COLUMN_PARAM_USE_HAVING => false,
                     self::COLUMN_PARAM_USE_LIKE => false,
                     self::COLUMN_PARAM_OUTPUT_LOGIC =>
                         function (GridItem $item) {
-                            return $item['username'];
+                            return $item['is_published'] === TRUE ? 'Yes' : 'No';
                         }
                 ]
-            );
+            )
+            ->addTextColumn('creation_date', 'Creation Date', [self::COLUMN_PARAM_TYPE => Column::TYPE_VARCHAR]);
 
     }
 }
