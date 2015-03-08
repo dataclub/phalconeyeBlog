@@ -2,3 +2,5 @@ app/var/*
 .idea
 .idea/*
 logs
+app/config
+public/.htaccess
