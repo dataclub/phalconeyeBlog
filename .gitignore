@@ -2,5 +2,16 @@ app/var/*
 .idea
 .idea/*
 logs
-app/config
+
+
+
+
+
+
+
+app/config/*
+app/config/development/
+app/config/production/
+app/config/development/application.php
+app/config/production/application.php
 public/.htaccess
