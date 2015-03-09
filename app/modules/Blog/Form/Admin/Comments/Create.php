@@ -65,10 +65,10 @@ class Create extends CoreForm
 
 
         $content = $this->addContentFieldSet()
-            ->addText('name', null, null, null, [], ['autocomplete' => 'off'])
-            ->addText('email', null, null, null, [], ['autocomplete' => 'on'])
-            ->addTextArea('body')
-            ->addCheckbox('is_published', 'Publish ?', null, 1, true, true)
+            ->addText('name', 'Name', 'Give your full name', null, [], ['autocomplete' => 'off'])
+            ->addText('email', 'E-Mail', 'Give your email', null, [], ['autocomplete' => 'on'])
+            ->addTextArea('body', 'Content', 'Put your content here')
+            ->addCheckbox('is_published', 'Publish ?', 'To publish check the item', 1, true, false)
             ->addSelect('blog_id', 'Blog', 'Select blog', Blog::find(), null, ['using' => ['id', 'title']]);
 
         $this->addFooterFieldSet()

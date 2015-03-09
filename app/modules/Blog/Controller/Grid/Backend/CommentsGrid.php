@@ -93,25 +93,33 @@ class CommentsGrid extends BackendBlogGrid
             ->addTextColumn('id', 'ID', [self::COLUMN_PARAM_TYPE => Column::BIND_PARAM_INT])
             ->addTextColumn('name', 'Author', [self::COLUMN_PARAM_TYPE => Column::TYPE_VARCHAR])
             ->addTextColumn('email', 'E-Mail', [self::COLUMN_PARAM_TYPE => Column::TYPE_VARCHAR])
-            //->addTextColumn('is_published', 'published?', [self::COLUMN_PARAM_TYPE => Column::TYPE_VARCHAR])
             ->addSelectColumn(
                 'c.is_published',
                 'Comments',
                 [
                     'hasEmptyValue' => true,
                     'using' => ['is_published', 'is_published'],
-                    'elementOptions' => Comments::find()
+                    'elementOptions' => ['No', 'Yes']
                 ],
                 [
                     self::COLUMN_PARAM_USE_HAVING => false,
                     self::COLUMN_PARAM_USE_LIKE => false,
                     self::COLUMN_PARAM_OUTPUT_LOGIC =>
                         function (GridItem $item) {
-                            return $item['is_published'] === TRUE ? 'Yes' : 'No';
+                            $translation = $this->getDI()->getI18n();
+                            return $item['is_published'] == 1
+                                ? $translation->query('Yes')
+                                : $translation->query('No');
                         }
                 ]
             )
-            ->addTextColumn('creation_date', 'Creation Date', [self::COLUMN_PARAM_TYPE => Column::TYPE_VARCHAR]);
+            ->addTextColumn('creation_date', 'Creation Date', [
+                self::COLUMN_PARAM_TYPE => Column::TYPE_VARCHAR,
+                self::COLUMN_PARAM_OUTPUT_LOGIC =>
+                    function (GridItem $item) {
+                        return $this->date_format($item['creation_date']);
+                    }
+            ]);
 
     }
 }

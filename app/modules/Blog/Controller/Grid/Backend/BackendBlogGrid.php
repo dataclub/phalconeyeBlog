@@ -75,4 +75,8 @@ abstract class BackendBlogGrid extends CoreGrid
     {
         return '../../' . $module . '/View/' . $view;
     }
+
+    protected function date_format($dateTime){
+        return date_create($dateTime)->format('d.m.Y');
+    }
 }
