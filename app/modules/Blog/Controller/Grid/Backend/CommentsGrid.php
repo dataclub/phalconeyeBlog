@@ -53,10 +53,10 @@ class CommentsGrid extends BackendBlogGrid
                 'c.name',
                 'c.email',
                 'c.is_published',
-                'c.creation_date',
-                'c.modified_date',
+                'DATE_FORMAT(c.creation_date, "%d. %M, %Y") as creation_date',
+                'DATE_FORMAT(c.modified_date, "%d. %M, %Y") as modified_date',
             ])
-            ->orderBy('c.is_published, c.creation_date DESC');
+            ->orderBy('c.creation_date DESC');
 
         return $builder;
     }
@@ -95,7 +95,7 @@ class CommentsGrid extends BackendBlogGrid
             ->addTextColumn('email', 'E-Mail', [self::COLUMN_PARAM_TYPE => Column::TYPE_VARCHAR])
             ->addSelectColumn(
                 'c.is_published',
-                'Comments',
+                'Published?',
                 [
                     'hasEmptyValue' => true,
                     'using' => ['is_published', 'is_published'],
@@ -113,13 +113,7 @@ class CommentsGrid extends BackendBlogGrid
                         }
                 ]
             )
-            ->addTextColumn('creation_date', 'Creation Date', [
-                self::COLUMN_PARAM_TYPE => Column::TYPE_VARCHAR,
-                self::COLUMN_PARAM_OUTPUT_LOGIC =>
-                    function (GridItem $item) {
-                        return $this->date_format($item['creation_date']);
-                    }
-            ]);
+            ->addTextColumn('creation_date', 'Creation Date', [self::COLUMN_PARAM_TYPE => Column::TYPE_VARCHAR]);
 
     }
 }

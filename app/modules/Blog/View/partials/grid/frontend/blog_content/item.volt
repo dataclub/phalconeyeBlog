@@ -22,7 +22,7 @@
             <span class="posted-on">
                 <a rel="bookmark" href="?date">
                     <time class="entry-date published">
-                        {% if item['modified_date'] is defined %}
+                        {% if (item['modified_date']|length) > 1  %}
                             {{ item['modified_date'] }}
                         {% else %}
                             {{ item['creation_date'] }}

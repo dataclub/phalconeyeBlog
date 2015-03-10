@@ -68,8 +68,8 @@ class BlogContentGrid extends FrontendBlogGrid
                 'b.id',
                 'b.title',
                 'b.body',
-                'b.creation_date',
-                'b.modified_date',
+                "CONCAT_WS(' ', DAY(b.creation_date), MONTHNAME(b.creation_date), ',', YEAR(b.creation_date)) as creation_date",
+                "CONCAT_WS(' ', DAY(b.modified_date), MONTHNAME(b.modified_date), ',', YEAR(b.modified_date)) as modified_date",
                 'u.username'
             ])
             ->orderBy('b.id DESC');
@@ -111,8 +111,8 @@ class BlogContentGrid extends FrontendBlogGrid
             ->addTextColumn('id', 'ID', [self::COLUMN_PARAM_TYPE => Column::BIND_PARAM_STR])
             ->addTextColumn('title', 'Title', [self::COLUMN_PARAM_TYPE => Column::BIND_PARAM_STR])
             ->addTextColumn('user', 'Username', [self::COLUMN_PARAM_TYPE => Column::BIND_PARAM_STR])
-            ->addTextColumn('creation_date', 'Creation Date', [self::COLUMN_PARAM_TYPE => Column::BIND_PARAM_STR])
-            ->addTextColumn('modified_date', 'Modified Date', [self::COLUMN_PARAM_TYPE => Column::BIND_PARAM_STR])
+            ->addTextColumn('creation_date', 'Creation Date', [self::COLUMN_PARAM_TYPE => Column::TYPE_DATE])
+            ->addTextColumn('modified_date', 'Modified Date', [self::COLUMN_PARAM_TYPE => Column::TYPE_DATE])
             ->addTextColumn('body', 'Body', [self::COLUMN_PARAM_TYPE => Column::BIND_PARAM_STR])
 
 

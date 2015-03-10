@@ -49,7 +49,7 @@ class BlogGrid extends BackendBlogGrid
             ->leftJoin('User\Model\User', 'b.user_id = u.id', 'u')
             ->leftJoin('Blog\Model\Categories', 'b.categorie_id = c.id', 'c')
             ->columns(['b.id', 'b.title', 'b.body', 'u.username', 'c.name'])
-            ->orderBy('b.id DESC');
+            ->orderBy('b.modified_date DESC');
 
         return $builder;
     }
@@ -98,7 +98,6 @@ class BlogGrid extends BackendBlogGrid
                         }
                 ]
             )
-            ->addTextColumn('body', 'body', [self::COLUMN_PARAM_TYPE => Column::TYPE_VARCHAR])
             ->addSelectColumn(
                 'u.username',
                 'User',
