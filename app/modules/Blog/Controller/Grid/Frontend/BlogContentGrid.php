@@ -48,6 +48,24 @@ class BlogContentGrid extends FrontendBlogGrid
         return $this->_resolveView($this->itemView);
     }
 
+    public function hasActions(){
+
+    }
+
+    public function getCategories(GridItem $item){
+        /*
+        $resultset = $this->getDI()->getModelsManager()->createBuilder()
+            ->addFrom()
+            ->join('RobotsParts');
+        $bla = $item;
+        */
+        return 'blöa';
+    }
+
+    private function getCategoriesSource(){
+
+    }
+
     public function getTableBodyView()
     {
         return $this->_resolveView($this->bodyView);
@@ -64,16 +82,18 @@ class BlogContentGrid extends FrontendBlogGrid
         $builder
             ->addFrom('Blog\Model\Blog', 'b')
             ->leftJoin('User\Model\User', 'u.id = b.user_id', 'u')
+            ->leftJoin('Blog\Model\Comments', 'c.blog_id = b.id', 'c')
             ->columns([
                 'b.id',
                 'b.title',
                 'b.body',
                 "CONCAT_WS(' ', DAY(b.creation_date), MONTHNAME(b.creation_date), ',', YEAR(b.creation_date)) as creation_date",
                 "CONCAT_WS(' ', DAY(b.modified_date), MONTHNAME(b.modified_date), ',', YEAR(b.modified_date)) as modified_date",
-                'u.username'
+                'u.username',
+                'count(c.id) as counted_comments'
             ])
+            ->groupBy('b.id')
             ->orderBy('b.id DESC');
-
 
 
         return $builder;

@@ -15,24 +15,48 @@
   +------------------------------------------------------------------------+
 #}
 
-{% extends "layouts/backend/admin.volt" %}
+<script type="text/javascript">
+    var hideModal = function () {
+        PhalconEye.widget.modal.hide();
+        {% if reload is defined %}
+        window.location.reload();
+        {% endif %}
+    };
 
-{% block title %}{{ "Categorie Editing"|i18n }}{% endblock %}
+    {% if hide is defined %}
 
-{% block header %}
-    <div class="navbar navbar-header">
-        <div class="navbar-inner">
-            {{ navigation.render() }}
+    var hideTimeout = parseInt('{{ hide }}');
+    if (hideTimeout) {
+        setTimeout(hideModal, hideTimeout);
+    }
+    else {
+        hideModal();
+    }
+
+    {% elseif reload is defined %}
+
+    var reloadTimeout = parseInt('{{ reload }}');
+    if (reloadTimeout) {
+        setTimeout(function () {
+            window.location.reload();
+        }, reloadTimeout);
+    }
+    else {
+        window.location.reload();
+    }
+
+    {% endif %}
+
+    {% if customJs is defined %}
+    {{ customJs }}
+    {% endif %}
+</script>
+
+
+{% block body %}
+    {% if message is defined %}
+        <div class="modal-message">
+            {{ message|i18n }}
         </div>
-    </div>
-{% endblock %}
-
-{% block content %}
-    <div class="span12">
-        <div class="row-fluid">
-            {{ form.render() }}
-        </div>
-        <!--/row-->
-    </div><!--/span-->
-
+    {% endif %}
 {% endblock %}

@@ -81,9 +81,18 @@ class AdminBlogController extends BlogAbstractAdminController
             return;
         }
 
+
         $blog = $form->getEntity();
+        $blog->categorie_id = "['8', '9']";
         $blog->save();
 
+        /*
+        $blogCategories = $form->getEntity('blogCategories');
+        $blogCategories->setBlogID(1);
+        $blogCategories->setCategorieID(8);
+        $blogCategories->save();
+
+        */
         $this->flashSession->success('New object created successfully!');
         return $this->response->redirect("admin/module/blog");
 

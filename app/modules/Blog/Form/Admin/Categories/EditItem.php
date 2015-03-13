@@ -14,13 +14,13 @@
   +------------------------------------------------------------------------+
 */
 
-namespace Blog\Form\Admin\Categorie;
+namespace Blog\Form\Admin\Categories;
 
 /**
- * Edit menu item.
+ * Edit categories item
  *
  * @category  PhalconEye
- * @package   Blog\Form\Admin\Categorie
+ * @package   Blog\Form\Admin\Categories
  * @author    Djavid Rustamov <nsxgdesigns@googlemail.com>
  * @copyright 2015-2016 PhalconEye Team
  * @license   New BSD License

@@ -33,29 +33,19 @@ use User\Model\User;
  * @license   New BSD License
  * @link      http://phalconeye.com/
  *
- * @Source("blog")
+ * @Source("blogCategories")
  *
- * @BelongsTo("user_id", '\User\Model\User', "id", {
- *  "alias": "User"
- * })
- * @HasMany("id", '\Blog\Model\BlogCategories', "blog_id", {
- *  "alias": "BlogCategories"
+ * @BelongsTo("blog_id", '\Blog\Model\Blog', "id", {
+ *  "alias": "Blog"
  * })
  *
-
- * @method static \Blog\Model\Blog findFirst($parameters = null)
+ * @BelongsTo("parent_id", '\Blog\Model\Categories', "id", {
+ *  "alias": "Categories"
+ * })
+ * @method static \Blog\Model\BlogCategories findFirst($parameters = null)
  */
-class Blog extends AbstractModel
+class BlogCategories extends AbstractModel
 {
-    const
-        /**
-         * Cache prefix.
-         */
-        CACHE_PREFIX = 'comment_id';
-
-    // use trait Timestampable for creation_date and modified_date fields.
-    use Timestampable;
-
     /**
      * @Primary
      * @Identity
@@ -64,24 +54,30 @@ class Blog extends AbstractModel
     public $id;
 
     /**
-     * @Column(type="integer", nullable=false, column="user_id", size="11")
+     * @Column(type="integer", nullable=false, column="blog_id", size="11")
      */
-    public $user_id;
+    public $blog_id;
 
     /**
-     * @Column(type="string", nullable=true, column="user_id", size="150")
+     * @Column(type="integer", nullable=false, column="categorie_id", size="11")
      */
     public $categorie_id;
 
-    /**
-     * @Column(type="string", nullable=false, column="title", size="255")
-     */
-    public $title;
+    public function setBlogID($id){
+        $di = $this->getId();
+        if ($di === null || !empty($id)) {
+            $this->blog_id = $id;
 
-    /**
-     * @Column(type="text", nullable=true, column="body")
-     */
-    public $body;
+        }
+    }
+
+    public function setCategorieID($id){
+        $di = $this->getId();
+        if ($di === null || !empty($id)) {
+            $this->categorie_id = $id;
+
+        }
+    }
 
 
     /**

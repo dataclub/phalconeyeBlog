@@ -18,7 +18,7 @@
 {% extends "layouts/backend/modal.volt" %}
 
 {% block title %}
-    {{ 'Create new menu item'|i18n }}
+    {{ 'Create new categorie item'|i18n }}
 {% endblock %}
 
 {% block body %}

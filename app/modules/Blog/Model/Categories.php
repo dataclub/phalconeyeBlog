@@ -18,6 +18,7 @@ namespace Blog\Model;
 
 use Engine\Db\AbstractModel;
 use Phalcon\Mvc\Model\Validator\Uniqueness;
+use Engine\Db\Model\Behavior\Sortable;
 
 /**
  * Categories
@@ -31,10 +32,15 @@ use Phalcon\Mvc\Model\Validator\Uniqueness;
  *
  * @Source("categories")
  *
+ * @HasMany("id", '\Blog\Model\CategoriesItem', "categorie_id", {
+ *  "alias": "CategoriesItem"
+ * })
+ *
  * @method static \Blog\Model\Categories findFirst($parameters = null)
  */
 class Categories extends AbstractModel
 {
+
     /**
      * @Primary
      * @Identity
@@ -48,28 +54,27 @@ class Categories extends AbstractModel
     public $name;
 
     /**
-     * Return the related "CategorieItem" entity.
+     * Return the related "CategoriesItem" entity.
      *
      * @param array $arguments Entity params.
      *
-     * @return CategorieItem[]
-
+     * @return CategoriesItem[]
+     */
     public function getCategorieItems($arguments = [])
     {
-        return $this->getRelated('CategorieItem', $arguments);
+        return $this->getRelated('CategoriesItem', $arguments);
     }
-     */
 
     /**
      * Logic before removal
      *
      * @return void
-
+     */
     public function beforeDelete()
     {
         $this->getCategorieItems()->delete();
     }
-     */
+
 
 
     /**

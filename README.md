@@ -1,4 +1,4 @@
-Phalcon Eye CMS
+Based on Phalcon Eye CMS
 =====================
 
 Phalcon Eye - CMS based on Phalcon PHP Framework (https://github.com/phalcon/cphalcon).

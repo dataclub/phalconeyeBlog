@@ -16,6 +16,8 @@
 
 namespace Blog\Controller\Grid\Backend;
 
+use Blog\Model\Categorie;
+use Blog\Model\Categories;
 use Engine\Form;
 use Engine\Grid\GridItem;
 use Phalcon\Db\Column;
@@ -60,6 +62,7 @@ class CategoriesGrid extends BackendBlogGrid
     public function getItemActions(GridItem $item)
     {
         return [
+            'Manage' => ['href' => ['for' => 'admin-module-blog-categories-manage', 'id' => $item['id']]],
             'Edit' => ['href' => ['for' => 'admin-module-blog-categories-edit', 'id' => $item['id']]],
             'Delete' => [
                 'href' =>

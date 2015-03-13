@@ -47,8 +47,7 @@ class BlogGrid extends BackendBlogGrid
         $builder
             ->addFrom('Blog\Model\Blog', 'b')
             ->leftJoin('User\Model\User', 'b.user_id = u.id', 'u')
-            ->leftJoin('Blog\Model\Categories', 'b.categorie_id = c.id', 'c')
-            ->columns(['b.id', 'b.title', 'b.body', 'u.username', 'c.name'])
+            ->columns(['b.id', 'b.title', 'b.body', 'u.username'])
             ->orderBy('b.modified_date DESC');
 
         return $builder;
@@ -85,19 +84,6 @@ class BlogGrid extends BackendBlogGrid
         $this
             ->addTextColumn('id', 'ID', [self::COLUMN_PARAM_TYPE => Column::BIND_PARAM_INT])
             ->addTextColumn('title', 'Title', [self::COLUMN_PARAM_TYPE => Column::TYPE_VARCHAR])
-            ->addSelectColumn(
-                'c.name',
-                'Categories',
-                ['hasEmptyValue' => true, 'using' => ['name', 'name'], 'elementOptions' => Categories::find()],
-                [
-                    self::COLUMN_PARAM_USE_HAVING => false,
-                    self::COLUMN_PARAM_USE_LIKE => false,
-                    self::COLUMN_PARAM_OUTPUT_LOGIC =>
-                        function (GridItem $item) {
-                            return $item['name'];
-                        }
-                ]
-            )
             ->addSelectColumn(
                 'u.username',
                 'User',

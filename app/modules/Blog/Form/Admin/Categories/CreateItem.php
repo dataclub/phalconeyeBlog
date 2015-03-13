@@ -14,10 +14,10 @@
   +------------------------------------------------------------------------+
 */
 
-namespace Blog\Form\Admin\Categorie;
+namespace Blog\Form\Admin\Categories;
 
-use Blog\Model\CategorieItem;
 
+use Blog\Model\CategoriesItem;
 use Core\Form\CoreForm;
 use Core\Model\Language;
 use Engine\Db\AbstractModel;
@@ -25,10 +25,10 @@ use Engine\Form\FieldSet;
 use User\Model\Role;
 
 /**
- * Create categorie item.
+ * Create categories item.
  *
  * @category  PhalconEye
- * @package   Blog\Form\Admin\Categorie
+ * @package   Blog\Form\Admin\Categories
  * @author    Djavid Rustamov <nsxgdesigns@googlemail.com>
  * @copyright 2015-2016 PhalconEye Team
  * @license   New BSD License
@@ -46,7 +46,7 @@ class CreateItem extends CoreForm
         parent::__construct();
 
         if (!$entity) {
-            $entity = new CategorieItem();
+            $entity = new CategoriesItem();
         }
 
         $this->addEntity($entity);
@@ -60,51 +60,20 @@ class CreateItem extends CoreForm
      */
     public function initialize()
     {
-        $this->setDescription('This menu item will be available under menu or parent menu item.');
+        $this->setDescription('This categorie item will be available under categories or parent categorie item.');
 
         $content = $this->addContentFieldSet()
             ->addText('title')
-            ->addSelect(
-                'target',
-                'Target',
-                'Link type',
-                [
-                    null => 'Default link',
-                    MenuItem::ITEM_TARGET_BLANK => 'Opens the linked document in a new window or tab',
-                    MenuItem::ITEM_TARGET_PARENT => 'Opens the linked document in the parent frame',
-                    MenuItem::ITEM_TARGET_TOP => 'Opens the linked document in the full body of the window',
-                ]
-            )
-            ->addRadio('url_type', 'Select url type', null, [0 => 'Url', 1 => 'System page'])
-            ->addText('url', 'Url', 'Do not type url with starting slash... Example: "somepage/url/to?param=1"')
-            ->addText(
-                'page',
-                'Page',
-                'Start typing to see pages variants.',
-                null,
-                [],
-                [
-                    'data-link' => $this->getDI()->getUrl()->get('admin/pages/suggest'),
-                    'data-target' => '#page_id',
-                    'data-widget' => 'autocomplete',
-                    'autocomplete' => 'off'
-                ]
-            )
-            ->addTextArea(
-                'onclick',
-                'OnClick',
-                'Type JS action that will be performed when this menu item is selected.'
-            )
             ->addCkEditor('tooltip')
             ->addSelect(
                 'tooltip_position',
                 'Tooltip position',
                 null,
                 [
-                    MenuItem::ITEM_TOOLTIP_POSITION_TOP => 'Top',
-                    MenuItem::ITEM_TOOLTIP_POSITION_BOTTOM => 'Bottom',
-                    MenuItem::ITEM_TOOLTIP_POSITION_LEFT => 'Left',
-                    MenuItem::ITEM_TOOLTIP_POSITION_RIGHT => 'Right'
+                    CategoriesItem::ITEM_TOOLTIP_POSITION_TOP => 'Top',
+                    CategoriesItem::ITEM_TOOLTIP_POSITION_BOTTOM => 'Bottom',
+                    CategoriesItem::ITEM_TOOLTIP_POSITION_LEFT => 'Left',
+                    CategoriesItem::ITEM_TOOLTIP_POSITION_RIGHT => 'Right'
                 ]
             )
             ->addRemoteFile('icon', 'Select icon')
@@ -113,14 +82,14 @@ class CreateItem extends CoreForm
                 'Icon position',
                 null,
                 [
-                    MenuItem::ITEM_ICON_POSITION_LEFT => 'Left',
-                    MenuItem::ITEM_ICON_POSITION_RIGHT => 'Right'
+                    CategoriesItem::ITEM_ICON_POSITION_LEFT => 'Left',
+                    CategoriesItem::ITEM_ICON_POSITION_RIGHT => 'Right'
                 ]
             )
             ->addMultiSelect(
                 'languages',
                 'Languages',
-                'Choose the language in which the menu item will be displayed.
+                'Choose the language in which the categories item will be displayed.
                     If no one selected - will be displayed at all.',
                 Language::find(),
                 null,
@@ -136,7 +105,7 @@ class CreateItem extends CoreForm
             )
             ->addCheckbox('is_enabled', 'Is enabled', null, 1, true, false)
             ->addHidden('page_id')
-            ->addHidden('menu_id')
+            ->addHidden('categorie_id')
             ->addHidden('parent_id');
 
         $this->_setValidation($content);

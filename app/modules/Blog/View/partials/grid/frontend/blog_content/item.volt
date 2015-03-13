@@ -14,7 +14,7 @@
   | Author: Ivan Vorontsov <ivan.vorontsov@phalconeye.com>                 |
   +------------------------------------------------------------------------+
 #}
-
+{{ grid.getCategories(item) }}
 <article id="post-id-{{ item['id'] }}" class="post type-post status-publish format-standard hentry widget_wrapper category-uncategorized">
     <header class="entry-header">
         <h1 class="entry-title">{{ item['title'] }}</h1>
@@ -36,11 +36,21 @@
                 </span>
             </span>
         </div>
+        <div class="entry-meta">
+            <span class="cat-links">
+                            <a rel="category" title="View all posts in dfhdfhdfh" href="http://demo.opensourcecms.com/wordpress/?cat=8">dfhdfhdfh</a>, <a rel="category" title="View all posts in Testando" href="http://demo.opensourcecms.com/wordpress/?cat=5">Testando</a>, <a rel="category" title="View all posts in Teste" href="http://demo.opensourcecms.com/wordpress/?cat=4">Teste</a>, <a rel="category" title="View all posts in Uncategorized" href="http://demo.opensourcecms.com/wordpress/?cat=1">Uncategorized</a>, <a rel="category" title="View all posts in wzwhz" href="http://demo.opensourcecms.com/wordpress/?cat=7">wzwhz</a>
+                       </span>
+        </div>
+        <div class="entry-meta">
+                    <span class="tags-links">
+                    				<a rel="tag" href="http://demo.opensourcecms.com/wordpress/?tag=agagagag">agagagag</a>, <a rel="tag" href="http://demo.opensourcecms.com/wordpress/?tag=aggagagag">aggagagag</a>, <a rel="tag" href="http://demo.opensourcecms.com/wordpress/?tag=asfasfaff">asfasfaff</a>, <a rel="tag" href="http://demo.opensourcecms.com/wordpress/?tag=blog">blog</a>, <a rel="tag" href="http://demo.opensourcecms.com/wordpress/?tag=haha">haha</a>, <a rel="tag" href="http://demo.opensourcecms.com/wordpress/?tag=junge">junge</a>			</span>
+                </div>
+
     </header>
     <div class="entry-content">
         {{ item['body'] }}
     </div>
     <footer class="entry-meta">
-        <span class="comments-link"><a title="Comment" href="blog/comment/{{ item['id'] }}">Leave a comment</a></span>
+        <span class="comments-link"><a title="Comment" href="blog/comment/{{ item['id'] }}">Leave a comment ({{ item['counted_comments'] }})</a></span>
     </footer>
 </article>

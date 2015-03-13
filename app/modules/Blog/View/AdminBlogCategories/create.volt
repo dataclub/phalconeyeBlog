@@ -17,7 +17,7 @@
 
 {% extends "layouts/backend/admin.volt" %}
 
-{% block title %}{{ "Menu Creation"|i18n }}{% endblock %}
+{% block title %}{{ "Categorie Creation"|i18n }}{% endblock %}
 
 {% block header %}
     <div class="navbar navbar-header">
