@@ -69,8 +69,9 @@ class Radio extends AbstractElement implements ElementInterface
                     /** @var \Phalcon\Mvc\Model $option */
                     $data[$option->readAttribute($keyAttribute)] = $option->readAttribute($valueAttribute);
                 }
-
                 $this->setOption('elementOptions', $data);
+            }else{
+                $this->setOption('elementOptions', $elementOptions);
             }
         }
 
