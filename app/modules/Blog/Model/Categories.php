@@ -66,6 +66,62 @@ class Categories extends AbstractModel
     }
 
     /**
+     * Return all related "Categories" and "CategoriesItems" as nested keys and values array
+     * @param Categories|CategoriesItem $collection
+     * @param $collection
+     */
+    public static function getCategories($collection = null, $using = ['id', 'name'], &$nestedArray = [], $depth = 0){
+        $collection = $collection == null ? Categories::find() : $collection;
+
+        if(!empty($using)){
+            $keyAttribute =  array_shift($using);
+            $valueAttribute = array_shift($using);
+
+            foreach ($collection as $item) {
+                /** @var \Phalcon\Mvc\Model $option */
+                $keyValue = $item->readAttribute($keyAttribute);
+                $nestedArray[$keyValue] = array(
+                    'value' => $item->readAttribute($valueAttribute),
+                    'class' => 'checkbox-depth'.$depth
+                );
+
+
+                if($item instanceof Categories){
+                    $nulls = 'parent_id is null';
+                    $categorieItems = CategoriesItem::find(array($nulls, "categorie_id='".$keyValue."'"));
+                    Categories::getCategories($categorieItems, ['id', 'title'], $nestedArray, $depth+1);
+                }else{
+                    $categorieItems = CategoriesItem::find(array("parent_id='".$keyValue."'"));
+                    Categories::getCategories($categorieItems, ['id', 'title'], $nestedArray, $depth+1);
+
+
+                }
+
+
+/*
+                    $using = ['id', 'title'];
+                    $keyAttribute2 =  array_shift($using);
+                    $valueAttribute2 = array_shift($using);
+
+                    foreach ($categorieItems as $value) {
+                        $keyValue2 = $value->readAttribute($keyAttribute2);
+                        $nestedArray[$keyValue2] = array(
+                            'value' => $value->readAttribute($valueAttribute2),
+                            'class' => 'checkbox-depth1'
+                        )
+                        ;
+                    }
+*/
+
+
+
+
+            }
+        }
+
+        return $nestedArray;
+    }
+    /**
      * Logic before removal
      *
      * @return void

@@ -159,5 +159,13 @@ abstract class BlogAbstractAdminController extends AbstractAdminController
         $this->view->navigation = $navigation;
         $this->view->headerNavigation->setActiveItem($activeHeaderItem);
     }
+
+    protected function _setupAssets()
+    {
+        parent::_setupAssets();
+        $this->di->get('assets')
+            ->collection(AssetManager::DEFAULT_COLLECTION_CSS)
+            ->addCss('assets/css/blog/customizedBlog.css');
+    }
 }
 
