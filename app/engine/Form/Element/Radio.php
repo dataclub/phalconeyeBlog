@@ -127,7 +127,13 @@ class Radio extends AbstractElement implements ElementInterface
         $disabledOptions = $this->getOption('disabledOptions', []);
 
         $content = '';
+        $saveClass = $this->getAttribute('class');
         foreach ($elementOptions as $key => $value) {
+            $this->setAttribute('class', $saveClass);
+            if(is_array($value)){
+                $this->setAttribute('class', implode(' ', array($saveClass, $value['class'])));
+                $value = $value['value'];
+            }
             $content .= sprintf(
                 $this->getHtmlTemplate(),
                 $key,
