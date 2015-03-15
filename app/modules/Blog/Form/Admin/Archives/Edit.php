@@ -13,13 +13,13 @@
   | to license@phalconeye.com so we can send you a copy immediately.       |
   +------------------------------------------------------------------------+
 */
-namespace Blog\Form\Admin\Tags;
+namespace Blog\Form\Admin\Archives;
 
 /**
  * Edit blog.
  *
  * @category  PhalconEye
- * @package   Blog\Form\Admin\Tags
+ * @package   Blog\Form\Admin\Archives
  * @author    Djavid Rustamov <nsxgdesigns@googlemail.com>
  * @copyright 2015-2016 PhalconEye Team
  * @license   New BSD License

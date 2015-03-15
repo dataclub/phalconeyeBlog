@@ -14,58 +14,20 @@
   +------------------------------------------------------------------------+
 */
 
-namespace Blog\Form\Admin\Categories;
+namespace Blog\Form;
 
-use Blog\Form\BlogForm;
-use Blog\Model\Categories;
-use Engine\Db\AbstractModel;
+use Core\Form\CoreForm;
 
 /**
- * Create categories form
+ * Main blog form.
  *
  * @category  PhalconEye
- * @package   Blog\Form\Admin\Categories
+ * @package   Blog\Form
  * @author    Djavid Rustamov <nsxgdesigns@googlemail.com>
  * @copyright 2015-2016 PhalconEye Team
  * @license   New BSD License
  * @link      http://phalconeye.com/
  */
-class Create extends BlogForm
+class BlogForm extends CoreForm
 {
-    /**
-     * Create form.
-     *
-     * @param AbstractModel $entity Entity object.
-     */
-    public function __construct(AbstractModel $entity = null)
-    {
-        parent::__construct();
-
-        if (!$entity) {
-            $entity = new Categories();
-        }
-
-        $this->addEntity($entity);
-    }
-
-    /**
-     * Initialize form.
-     *
-     * @return void
-     */
-    public function initialize()
-    {
-        $this
-            ->setTitle('Categorie Creation')
-            ->setDescription('Create new categories post');
-
-        $content = $this->addContentFieldSet()
-            ->addText('name');
-
-        $this->addFooterFieldSet()
-            ->addButton('create')
-            ->addButtonLink('cancel', 'Cancel', 'admin/module/blog/categories');
-
-        $content->setRequired('name');
-    }
 }

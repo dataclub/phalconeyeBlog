@@ -17,21 +17,13 @@
 namespace Blog\Form\Admin\Blog;
 
 use Blog\Model\Blog;
-use Blog\Model\BlogCategories;
 use Blog\Model\Categories;
-use Blog\Model\CategoriesItem;
-use Core\Form\CoreForm;
-use Core\Model\MenuItem;
+use Blog\Form\BlogForm;
+
 use Engine\Db\AbstractModel;
-use Engine\Form\Element\Checkbox;
-use Engine\Form\Element\MultiCheckbox;
-use Engine\Form\Element\Radio;
-use Engine\Form\FieldSet;
 use User\Model\User;
 
 use Phalcon\Mvc\Model\Query\Builder;
-
-use Engine\Form\AbstractElement;
 /**
  * Create blog.
  *
@@ -42,7 +34,7 @@ use Engine\Form\AbstractElement;
  * @license   New BSD License
  * @link      http://phalconeye.com/
  */
-class Create extends CoreForm
+class Create extends BlogForm
 {
     /**
      * Create form.
@@ -73,8 +65,10 @@ class Create extends CoreForm
             ->setTitle('Blog Creation')
             ->setDescription('Create new blog post.');
 
+
+        $this->addContentFieldSet()
+            ->addMultiCheckbox('categorie_id', 'Categories', 'Select categories', Categories::getCategories(), null, ['using' => ['id', 'name']]);
         $content = $this->addContentFieldSet()
-            ->addMultiCheckbox('categorie_id', 'Categories', 'Select categories', Categories::getCategories(), null, ['using' => ['id', 'name']])
             ->addText('title', 'Title', 'Blog title', null, [], ['autocomplete' => 'off'])
             ->addCkEditor('body', 'Content', 'Put your content here')
             ->addSelect('user_id', 'User', 'Select user', User::find(), null, ['using' => ['id', 'username']])

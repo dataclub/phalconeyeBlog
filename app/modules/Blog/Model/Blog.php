@@ -69,11 +69,6 @@ class Blog extends AbstractModel
     public $user_id;
 
     /**
-     * @Column(type="string", nullable=true, column="user_id", size="150")
-     */
-    public $categorie_id;
-
-    /**
      * @Column(type="string", nullable=false, column="title", size="255")
      */
     public $title;

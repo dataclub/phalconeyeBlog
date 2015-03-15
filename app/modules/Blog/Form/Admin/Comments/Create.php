@@ -18,12 +18,9 @@ namespace Blog\Form\Admin\Comments;
 
 use Blog\Model\Blog;
 use Blog\Model\Comments;
-use Blog\Model\Categories;
 
-use Core\Form\CoreForm;
+use Blog\Form\BlogForm;
 use Engine\Db\AbstractModel;
-use Engine\Form\FieldSet;
-use User\Model\User;
 /**
  * Create comments
  *
@@ -34,7 +31,7 @@ use User\Model\User;
  * @license   New BSD License
  * @link      http://phalconeye.com/
  */
-class Create extends CoreForm
+class Create extends BlogForm
 {
     /**
      * Create form.

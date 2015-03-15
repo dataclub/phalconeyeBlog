@@ -1,3 +1,10 @@
+.checkbox-div {
+    width:200px;
+    height:150px;
+    overflow:auto;
+    border:1px solid #840;
+    margin:1em;
+}
 input[type="checkbox"].checkbox-depth1 {
     margin: 0 0 0 20px;
 }

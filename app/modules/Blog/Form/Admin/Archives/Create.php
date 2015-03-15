@@ -17,7 +17,7 @@
 namespace Blog\Form\Admin\Archives;
 
 use Blog\Model\Archives;
-use Core\Form\CoreForm;
+use Blog\Form\BlogForm;
 use Engine\Db\AbstractModel;
 
 /**
@@ -30,7 +30,7 @@ use Engine\Db\AbstractModel;
  * @license   New BSD License
  * @link      http://phalconeye.com/
  */
-class Create extends CoreForm
+class Create extends BlogForm
 {
     /**
      * Create form.
@@ -63,13 +63,6 @@ class Create extends CoreForm
             ->addText('title', null, null, null, [], ['autocomplete' => 'off'])
             ->addCkEditor('body')
             ->addSelect('user_id', 'User', 'Select user', User::find(), null, ['using' => ['id', 'username']]);
-
-        /*
-         *  ->addText('username', null, null, null, [], ['autocomplete' => 'off'])
-            ->addPassword('password', null, null, [], ['autocomplete' => 'off'])
-            ->addText('email', null, null, null, [], ['autocomplete' => 'off'])
-            ->addSelect('role_id', 'Role', 'Select user role', Role::find(), null, ['using' => ['id', 'name']]);
-         */
 
         $this->addFooterFieldSet()
             ->addButton('create')

@@ -83,7 +83,6 @@ class AdminBlogController extends BlogAbstractAdminController
 
 
         $blog = $form->getEntity();
-        $blog->categorie_id = "['8', '9']";
         $blog->save();
 
         /*

@@ -18,7 +18,7 @@ namespace Blog\Form\Admin\Categories;
 
 
 use Blog\Model\CategoriesItem;
-use Core\Form\CoreForm;
+use Blog\Form\BlogForm;
 use Core\Model\Language;
 use Engine\Db\AbstractModel;
 use Engine\Form\FieldSet;
@@ -34,7 +34,7 @@ use User\Model\Role;
  * @license   New BSD License
  * @link      http://phalconeye.com/
  */
-class CreateItem extends CoreForm
+class CreateItem extends BlogForm
 {
     /**
      * Create form.
