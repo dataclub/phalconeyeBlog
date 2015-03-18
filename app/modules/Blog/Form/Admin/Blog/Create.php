@@ -47,7 +47,6 @@ class Create extends BlogForm
 
         if (!$entity) {
             $entity = new Blog();
-
         }
 
         $this->addEntity($entity);
@@ -65,22 +64,18 @@ class Create extends BlogForm
             ->setTitle('Blog Creation')
             ->setDescription('Create new blog post.');
 
-
-        $this->addContentFieldSet()
-            ->addMultiCheckbox('categorie_id', 'Categories', 'Select categories', Categories::getCategories(), null, ['using' => ['id', 'name']]);
         $content = $this->addContentFieldSet()
             ->addText('title', 'Title', 'Blog title', null, [], ['autocomplete' => 'off'])
             ->addCkEditor('body', 'Content', 'Put your content here')
             ->addSelect('user_id', 'User', 'Select user', User::find(), null, ['using' => ['id', 'username']])
+            ->addMultiCheckbox('categorie_id[]', 'Categories', 'Select categories', Categories::getCategories(), null, ['using' => ['id', 'name']], ['form_element_class' => 'checkbox-div'])
             ;
-
 
 
 
         $content
             ->setRequired('title')
             ->setRequired('body')
-            //->setRequired('categorie_id')
             ->setRequired('user_id');
 
         $this->addFooterFieldSet()

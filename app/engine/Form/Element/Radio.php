@@ -85,7 +85,7 @@ class Radio extends AbstractElement implements ElementInterface
      */
     public function getAllowedOptions()
     {
-        return array_merge(parent::getAllowedOptions(), ['elementOptions', 'disabledOptions', 'using']);
+        return array_merge(parent::getAllowedOptions(), ['elementOptions', 'disabledOptions', 'using', 'form_element_class']);
     }
 
     /**

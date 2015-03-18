@@ -33,14 +33,18 @@ use User\Model\User;
  * @license   New BSD License
  * @link      http://phalconeye.com/
  *
- * @Source("blogCategories")
+ * @Source("blog_categories")
  *
- * @BelongsTo("blog_id", '\Blog\Model\Blog', "id", {
+ * @HasMany("blog_id", '\Blog\Model\Blog', "id", {
  *  "alias": "Blog"
  * })
  *
- * @BelongsTo("parent_id", '\Blog\Model\Categories', "id", {
+ * @HasMany("categories_id", '\Blog\Model\Categories', "id", {
  *  "alias": "Categories"
+ * })
+ *
+ * @HasMany("categorie_items_id", '\Blog\Model\CategoriesItem', "id", {
+ *  "alias": "CategoriesItem"
  * })
  * @method static \Blog\Model\BlogCategories findFirst($parameters = null)
  */
@@ -59,9 +63,14 @@ class BlogCategories extends AbstractModel
     public $blog_id;
 
     /**
-     * @Column(type="integer", nullable=false, column="categorie_id", size="11")
+     * @Column(type="integer", nullable=true, column="categories_id", size="11")
      */
-    public $categorie_id;
+    public $categories_id;
+
+    /**
+     * @Column(type="integer", nullable=true, column="categorie_items_id", size="11")
+     */
+    public $categorie_items_id;
 
     public function setBlogID($id){
         $di = $this->getId();
@@ -74,10 +83,19 @@ class BlogCategories extends AbstractModel
     public function setCategorieID($id){
         $di = $this->getId();
         if ($di === null || !empty($id)) {
-            $this->categorie_id = $id;
+            $this->categories_id = $id;
 
         }
     }
+
+    public function setCategorieItemsID($id){
+        $di = $this->getId();
+        if ($di === null || !empty($id)) {
+            $this->categorie_items_id = $id;
+
+        }
+    }
+
 
 
     /**

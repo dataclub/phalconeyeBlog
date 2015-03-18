@@ -106,11 +106,15 @@ DROP TABLE IF EXISTS `blog_categories`;
 CREATE TABLE `blog_categories` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `blog_id` int(11) NOT NULL,
-  `categorie_id` int(11) NOT NULL,
+  `categories_id` int(11),
+  `categorie_items_id` int(11),
+
   PRIMARY KEY (`id`),
-  KEY `fk_blog_categories_categories` (`categorie_id`),
+  KEY `fk_blog_categories_categories` (`categories_id`),
+  KEY `fk_blog_categories_categorie_items` (`categorie_items_id`),
   KEY `fk_blog_categories_blog` (`blog_id`),
-  CONSTRAINT `fk_blog_categories_categories` FOREIGN KEY (`categorie_id`) REFERENCES `categories` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `fk_blog_categories_categories` FOREIGN KEY (`categories_id`) REFERENCES `categories` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `fk_blog_categories_categorie_items` FOREIGN KEY (`categorie_items_id`) REFERENCES `categorie_items` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `fk_blog_categories_blog` FOREIGN KEY (`blog_id`) REFERENCES `blog` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 

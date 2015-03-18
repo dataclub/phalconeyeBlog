@@ -83,16 +83,13 @@ class AdminBlogController extends BlogAbstractAdminController
 
 
         $blog = $form->getEntity();
-        $blog->save();
+        if($blog->saveForm()){
+            $this->flashSession->success('New object created successfully!');
+        }else{
+            $this->flashSession->error('Object has not been created!');
+        }
 
-        /*
-        $blogCategories = $form->getEntity('blogCategories');
-        $blogCategories->setBlogID(1);
-        $blogCategories->setCategorieID(8);
-        $blogCategories->save();
 
-        */
-        $this->flashSession->success('New object created successfully!');
         return $this->response->redirect("admin/module/blog");
 
 

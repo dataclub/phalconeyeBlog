@@ -48,7 +48,7 @@ class BlogGrid extends BackendBlogGrid
             ->addFrom('Blog\Model\Blog', 'b')
             ->leftJoin('User\Model\User', 'b.user_id = u.id', 'u')
             ->columns(['b.id', 'b.title', 'b.body', 'u.username'])
-            ->orderBy('b.modified_date DESC');
+            ->orderBy('b.id DESC');
 
         return $builder;
     }

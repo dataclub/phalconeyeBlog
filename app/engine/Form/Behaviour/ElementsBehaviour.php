@@ -507,6 +507,13 @@ trait ElementsBehaviour
         array $attributes = []
     )
     {
+        // Eine spezielle Klassenzuordnung, um die Div-Höhe einzuschränken
+        $formElementClass = '';
+        if(isset($attributes['form_element_class'])){
+            $formElementClass = $attributes['form_element_class'];
+            unset($attributes['form_element_class']);
+        }
+
         $element = new Form\Element\MultiCheckbox($name, $options, $attributes);
 
         if (!$label) {
@@ -517,6 +524,7 @@ trait ElementsBehaviour
             ->setOption('label', $label)
             ->setOption('description', $description)
             ->setOption('elementOptions', $elementOptions)
+            ->setOption('form_element_class', $formElementClass)
             ->setValue($value);
         $this->add($element);
 

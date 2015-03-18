@@ -39,7 +39,7 @@
                 {% endif %}
             </div>
         {% endif %}
-        <div class="form_element">
+        <div class="form_element {{ element.getOption('form_element_class') }}">
             {% if instanceof(element, 'Engine\Form\Element\File') and element.getOption('isImage') and element.getValue() != '/' %}
                 <div class="form_element_file_image">
                     <img alt="" src="{{ element.getValue() }}"/>

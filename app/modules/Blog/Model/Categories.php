@@ -19,6 +19,7 @@ namespace Blog\Model;
 use Engine\Db\AbstractModel;
 use Phalcon\Mvc\Model\Validator\Uniqueness;
 use Engine\Db\Model\Behavior\Sortable;
+use Phalcon\Mvc\Model\Resultset\Simple;
 
 /**
  * Categories
@@ -71,6 +72,7 @@ class Categories extends AbstractModel
      * @param $collection
      */
     public static function getCategories($collection = null, $using = ['id', 'name'], &$nestedArray = [], $depth = 0){
+        $source = $collection == null ? Categories::getTableName() : CategoriesItem::getTableName();
         $collection = $collection == null ? Categories::find() : $collection;
 
         if(!empty($using)){
@@ -80,42 +82,19 @@ class Categories extends AbstractModel
             foreach ($collection as $item) {
                 /** @var \Phalcon\Mvc\Model $option */
                 $keyValue = $item->readAttribute($keyAttribute);
-                $nestedArray[$keyValue] = array(
+                $nestedArray[$source.'-'.$keyValue] = array(
+                    'key' => $keyValue,
                     'value' => $item->readAttribute($valueAttribute),
                     'class' => 'checkbox-depth'.$depth
                 );
 
 
                 if($item instanceof Categories){
-                    $nulls = 'parent_id is null';
-                    $categorieItems = CategoriesItem::find(array($nulls, "categorie_id='".$keyValue."'"));
-                    Categories::getCategories($categorieItems, ['id', 'title'], $nestedArray, $depth+1);
+                    $categorieItems = CategoriesItem::find(array('parent_id is null', "categorie_id='".$keyValue."'"));
                 }else{
                     $categorieItems = CategoriesItem::find(array("parent_id='".$keyValue."'"));
-                    Categories::getCategories($categorieItems, ['id', 'title'], $nestedArray, $depth+1);
-
-
                 }
-
-
-/*
-                    $using = ['id', 'title'];
-                    $keyAttribute2 =  array_shift($using);
-                    $valueAttribute2 = array_shift($using);
-
-                    foreach ($categorieItems as $value) {
-                        $keyValue2 = $value->readAttribute($keyAttribute2);
-                        $nestedArray[$keyValue2] = array(
-                            'value' => $value->readAttribute($valueAttribute2),
-                            'class' => 'checkbox-depth1'
-                        )
-                        ;
-                    }
-*/
-
-
-
-
+                Categories::getCategories($categorieItems, ['id', 'title'], $nestedArray, $depth+1);
             }
         }
 

@@ -79,6 +79,38 @@ class Blog extends AbstractModel
     public $body;
 
 
+    public function setBlogCategories(){
+        if($this->getId() == null){
+
+            return false;
+        }
+
+        foreach($_POST['categorie_id'] as $categorieID){
+            $categorieID = explode('-', $categorieID);
+            $source = $categorieID[0];
+            $categorieID = $categorieID[1];
+            $conditions = "blog_id = ?1 AND ".$source."_id = ?2";
+            $parameters = array(1 => $this->getId(), 2 => $categorieID);
+
+            if(BlogCategories::count(array($conditions, "bind" => $parameters)) > 0){
+                //Update
+            }else{
+
+                //Save
+                $blogCategories = new BlogCategories();
+                $blogCategories->blog_id = $this->getId();
+                if($source == Categories::getTableName()){
+                    $blogCategories->setCategorieID($categorieID);
+                }else{
+                    $blogCategories->setCategorieItemsID($categorieID);
+                }
+
+                $returnValues = $blogCategories->save();
+            }
+        }
+        return true;
+    }
+
     /**
      * Validations and business logic.
      *
@@ -91,5 +123,12 @@ class Blog extends AbstractModel
         }
 
         return $this->validationHasFailed() !== true;
+    }
+
+    public function saveForm(){
+        if($this->save()){
+            $this->setBlogCategories();
+            return true;
+        }
     }
 }

@@ -16,7 +16,9 @@
 
 namespace Blog\Form;
 
+use Blog\Form\Behaviour\BlogElementsBehaviour;
 use Core\Form\CoreForm;
+use Engine\Form\FieldSet;
 
 /**
  * Main blog form.
@@ -30,4 +32,47 @@ use Core\Form\CoreForm;
  */
 class BlogForm extends CoreForm
 {
+    use BlogElementsBehaviour;
+    /**
+     * Resolve view.
+     *
+     * @param string $view   View path.
+     * @param string $module Module name (capitalized).
+     *
+     * @return string
+     */
+    protected function _resolveView($view, $module = 'Blog')
+    {
+        return parent::_resolveView($view, $module);
+    }
+
+    /**
+     * Add footer fieldset.
+     *
+     * @return FieldSet
+     */
+    public function addContentFieldSet()
+    {
+
+        $fieldSet = new FieldSet(self::FIELDSET_CONTENT);
+        $this->addFieldSet($fieldSet);
+
+        return $fieldSet;
+    }
+
+    /**
+     * Add footer fieldset.
+     *
+     * @param bool $combined Combine elements?
+     *
+     * @return FieldSet
+     */
+    public function addFooterFieldSet($combined = true)
+    {
+        $fieldSet = new FieldSet(self::FIELDSET_FOOTER, null, ['class' => self::FIELDSET_FOOTER]);
+        $fieldSet->combineElements($combined);
+        $this->addFieldSet($fieldSet);
+
+        return $fieldSet;
+    }
 }
