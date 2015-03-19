@@ -532,15 +532,45 @@ INSERT INTO `language_translations` (`id`, `language_id`, `scope`, `original`, `
 (278,	1,	'blog',	'Create new categorie',	'Neue Kategorie erstellen',	0),
 (279,	1,	'blog',	'Create new tags',	'Neuen Tag erstellen',	0);
 
+
+DROP TABLE IF EXISTS `blog_tags`;
+DROP TABLE IF EXISTS `blog_categories`;
+DROP TABLE IF EXISTS `comments`;
+DROP TABLE IF EXISTS `blog`;
+DROP TABLE IF EXISTS `tags`;
+DROP TABLE IF EXISTS `categorie_items`;
 DROP TABLE IF EXISTS `categories`;
+
 CREATE TABLE `categories` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
+
   PRIMARY KEY (`id`),
   UNIQUE KEY `name` (`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-DROP TABLE IF EXISTS `tags`;
+
+CREATE TABLE `categorie_items` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `title` varchar(255) NOT NULL,
+  `categorie_id` int(11) NOT NULL,
+  `parent_id` int(11) DEFAULT NULL,
+  `tooltip` varchar(255) DEFAULT NULL,
+  `tooltip_position` varchar(10) DEFAULT NULL,
+  `icon` varchar(255) DEFAULT NULL,
+  `icon_position` varchar(10) NOT NULL,
+  `languages` varchar(150) DEFAULT NULL,
+  `roles` varchar(150) DEFAULT NULL,
+  `is_enabled` tinyint(1) DEFAULT NULL,
+  `item_order` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `fki-categorie_items-categories-categorie_id-id` (`categorie_id`),
+  KEY `fki-categorie_items-categorie_items-parent_id-id` (`parent_id`),
+  CONSTRAINT `fk-categorie_items-categories-categorie_id-id` FOREIGN KEY (`categorie_id`) REFERENCES `categories` (`id`),
+  CONSTRAINT `fk-categorie_items-categorie_items-parent_id-id` FOREIGN KEY (`parent_id`) REFERENCES `categorie_items` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
 CREATE TABLE `tags` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
@@ -548,7 +578,7 @@ CREATE TABLE `tags` (
   UNIQUE KEY `tag` (`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-DROP TABLE IF EXISTS `blog`;
+
 CREATE TABLE `blog` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `title` varchar(255) NOT NULL,
@@ -557,17 +587,15 @@ CREATE TABLE `blog` (
   `modified_date` datetime DEFAULT NULL,
 
   `user_id` int(11) NOT NULL,
-  `categorie_id` int(11) NOT NULL,
 
   PRIMARY KEY (`id`),
   KEY `fk_blog_users` (`user_id`),
-  KEY `fk_blog_categories` (`categorie_id`),
-  CONSTRAINT `fk_blog_users` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`),
-  CONSTRAINT `fk_blog_categories` FOREIGN KEY (`categorie_id`) REFERENCES `categories` (`id`)
+  CONSTRAINT `fk_blog_users` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
-DROP TABLE IF EXISTS `comments`;
+/** Relations to tables blog, categories, tags, comments, archives **/
+
 CREATE TABLE `comments` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(20) NOT NULL,
@@ -584,5 +612,31 @@ CREATE TABLE `comments` (
   CONSTRAINT `fk_comments_blog` FOREIGN KEY (`blog_id`) REFERENCES `blog` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-/** Relations to tables blog, categories, tags, comments, archives **/
+
+CREATE TABLE `blog_categories` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `blog_id` int(11) NOT NULL,
+  `categories_id` int(11),
+  `categorie_items_id` int(11),
+
+  PRIMARY KEY (`id`),
+  KEY `fk_blog_categories_categories` (`categories_id`),
+  KEY `fk_blog_categories_categorie_items` (`categorie_items_id`),
+  KEY `fk_blog_categories_blog` (`blog_id`),
+  CONSTRAINT `fk_blog_categories_categories` FOREIGN KEY (`categories_id`) REFERENCES `categories` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `fk_blog_categories_categorie_items` FOREIGN KEY (`categorie_items_id`) REFERENCES `categorie_items` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `fk_blog_categories_blog` FOREIGN KEY (`blog_id`) REFERENCES `blog` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `blog_tags` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `blog_id` int(11) NOT NULL,
+  `tag_id` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `fk_blog_tags_tags` (`tag_id`),
+  KEY `fk_blog_tags_blog` (`blog_id`),
+  CONSTRAINT `fk_blog_tags_tags` FOREIGN KEY (`tag_id`) REFERENCES `tags` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `fk_blog_tags_blog` FOREIGN KEY (`blog_id`) REFERENCES `blog` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 
