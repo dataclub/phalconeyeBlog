@@ -137,7 +137,8 @@ class Radio extends AbstractElement implements ElementInterface
             $content .= sprintf(
                 $this->getHtmlTemplate(),
                 $key,
-                ($key == $this->getValue() ? ' checked="checked"' : ''),
+                ((is_array($this->getValue()) && in_array($key, $this->getValue()))
+                || ($key == $this->getValue()) ? ' checked="checked"' : ''),
                 (in_array($key, $disabledOptions) ? ' disabled="disabled"' : ''),
                 $this->_($value)
             );

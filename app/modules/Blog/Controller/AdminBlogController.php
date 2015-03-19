@@ -82,7 +82,7 @@ class AdminBlogController extends BlogAbstractAdminController
         }
 
 
-        $blog = $form->getEntity();
+        $blog = $form->getEntity(Blog::getTableName());
         if($blog->saveForm()){
             $this->flashSession->success('New object created successfully!');
         }else{
@@ -118,6 +118,9 @@ class AdminBlogController extends BlogAbstractAdminController
         if (!$this->request->isPost() || !$form->isValid()) {
             return;
         }
+
+        $entity = $form->getEntity(Blog::getTableName());
+        $entity->updateForm();
 
         $this->flashSession->success('Object saved!');
         return $this->response->redirect("admin/module/blog");

@@ -85,6 +85,10 @@ class Blog extends AbstractModel
             return false;
         }
 
+        //Delete all related data from blog_categories
+        BlogCategories::find('blog_id='.$this->getId())->delete();
+
+        //add data
         foreach($_POST['categorie_id'] as $categorieID){
             $categorieID = explode('-', $categorieID);
             $source = $categorieID[0];
@@ -92,10 +96,8 @@ class Blog extends AbstractModel
             $conditions = "blog_id = ?1 AND ".$source."_id = ?2";
             $parameters = array(1 => $this->getId(), 2 => $categorieID);
 
-            if(BlogCategories::count(array($conditions, "bind" => $parameters)) > 0){
-                //Update
-            }else{
-
+            //save new
+            if(BlogCategories::count(array($conditions, "bind" => $parameters)) == 0){
                 //Save
                 $blogCategories = new BlogCategories();
                 $blogCategories->blog_id = $this->getId();
@@ -130,5 +132,21 @@ class Blog extends AbstractModel
             $this->setBlogCategories();
             return true;
         }
+    }
+
+    public function updateForm(){
+        $this->setBlogCategories();
+    }
+
+    /**
+     * Return the related "CategoriesItem" entity.
+     *
+     * @param array $arguments Entity params.
+     *
+     * @return CategoriesItem[]
+     */
+    public function getCategorieItems($arguments = [])
+    {
+        return $this->getRelated('CategoriesItem', $arguments);
     }
 }

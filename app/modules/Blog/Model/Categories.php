@@ -100,6 +100,27 @@ class Categories extends AbstractModel
 
         return $nestedArray;
     }
+
+    /**
+     * Return all values as [categories|categorie_items]-[id] array
+     * @param $entity \Blog\Model\Blog
+     * @return mixed
+     */
+    public static function getEntityValues($entity){
+        $categorieValues = [];
+
+        /** @var \Blog\Model\Categories $categories */
+        foreach (BlogCategories::find(array('blog_id = ' . $entity->getId())) as $blogCategories) {
+            if (empty($blogCategories->categories_id)) {
+                array_push($categorieValues, 'categorie_items-' . $blogCategories->categorie_items_id);
+            } else {
+                array_push($categorieValues, 'categories-' . $blogCategories->categories_id);
+            }
+        }
+
+        return $categorieValues;
+    }
+
     /**
      * Logic before removal
      *
@@ -128,4 +149,6 @@ class Categories extends AbstractModel
 
         return $this->validationHasFailed() !== true;
     }
+
+
 }

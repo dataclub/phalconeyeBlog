@@ -43,14 +43,13 @@ class Create extends BlogForm
      */
     public function __construct(AbstractModel $entity = null)
     {
-        parent::__construct();
-
         if (!$entity) {
             $entity = new Blog();
+        }else{
+            $this->addEntity($entity, $entity->getTableName());
         }
-
-        $this->addEntity($entity);
-
+        parent::__construct();
+        $this->addEntity($entity, $entity->getTableName());
     }
 
     /**
@@ -60,6 +59,7 @@ class Create extends BlogForm
      */
     public function initialize()
     {
+        $categorieValues = $this->hasEntity(Blog::getTableName()) ? Categories::getEntityValues($this->getEntity(Blog::getTableName())) : null;
         $this
             ->setTitle('Blog Creation')
             ->setDescription('Create new blog post.');
@@ -68,9 +68,8 @@ class Create extends BlogForm
             ->addText('title', 'Title', 'Blog title', null, [], ['autocomplete' => 'off'])
             ->addCkEditor('body', 'Content', 'Put your content here')
             ->addSelect('user_id', 'User', 'Select user', User::find(), null, ['using' => ['id', 'username']])
-            ->addMultiCheckbox('categorie_id[]', 'Categories', 'Select categories', Categories::getCategories(), null, ['using' => ['id', 'name']], ['form_element_class' => 'checkbox-div'])
+            ->addMultiCheckbox('categorie_id[]', 'Categories', 'Select categories', Categories::getCategories(), $categorieValues, ['using' => ['id', 'name']], ['form_element_class' => 'checkbox-div'])
             ;
-
 
 
         $content
