@@ -30,7 +30,15 @@ INSERT INTO `language_translations` (`id`, `language_id`, `scope`, `original`, `
 (278,	1,	'blog',	'Create new categorie',	'Neue Kategorie erstellen',	0),
 (279,	1,	'blog',	'Create new tags',	'Neuen Tag erstellen',	0);
 
+
+DROP TABLE IF EXISTS `blog_tags`;
+DROP TABLE IF EXISTS `blog_categories`;
+DROP TABLE IF EXISTS `comments`;
+DROP TABLE IF EXISTS `blog`;
+DROP TABLE IF EXISTS `tags`;
+DROP TABLE IF EXISTS `categorie_items`;
 DROP TABLE IF EXISTS `categories`;
+
 CREATE TABLE `categories` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
@@ -39,7 +47,7 @@ CREATE TABLE `categories` (
   UNIQUE KEY `name` (`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-DROP TABLE IF EXISTS `categorie_items`;
+
 CREATE TABLE `categorie_items` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `title` varchar(255) NOT NULL,
@@ -60,7 +68,7 @@ CREATE TABLE `categorie_items` (
   CONSTRAINT `fk-categorie_items-categorie_items-parent_id-id` FOREIGN KEY (`parent_id`) REFERENCES `categorie_items` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-DROP TABLE IF EXISTS `tags`;
+
 CREATE TABLE `tags` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
@@ -68,7 +76,7 @@ CREATE TABLE `tags` (
   UNIQUE KEY `tag` (`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-DROP TABLE IF EXISTS `blog`;
+
 CREATE TABLE `blog` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `title` varchar(255) NOT NULL,
@@ -85,7 +93,7 @@ CREATE TABLE `blog` (
 
 
 /** Relations to tables blog, categories, tags, comments, archives **/
-DROP TABLE IF EXISTS `comments`;
+
 CREATE TABLE `comments` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(20) NOT NULL,
@@ -102,7 +110,7 @@ CREATE TABLE `comments` (
   CONSTRAINT `fk_comments_blog` FOREIGN KEY (`blog_id`) REFERENCES `blog` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-DROP TABLE IF EXISTS `blog_categories`;
+
 CREATE TABLE `blog_categories` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `blog_id` int(11) NOT NULL,
@@ -118,9 +126,6 @@ CREATE TABLE `blog_categories` (
   CONSTRAINT `fk_blog_categories_blog` FOREIGN KEY (`blog_id`) REFERENCES `blog` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-
-
-DROP TABLE IF EXISTS `blog_tags`;
 CREATE TABLE `blog_tags` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `blog_id` int(11) NOT NULL,

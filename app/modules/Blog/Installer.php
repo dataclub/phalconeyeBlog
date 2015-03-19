@@ -33,7 +33,7 @@ class Installer extends EngineInstaller
         /**
          * Current package version.
          */
-        CURRENT_VERSION = '0.0.1';
+        CURRENT_VERSION = '1.0.2';
 
     /**
      * Used to install specific database entities or other specific action.
