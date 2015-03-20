@@ -42,7 +42,7 @@ use User\Model\User;
  * @BelongsTo("blog_id", '\Blog\Model\Blog', "id", {
  *  "alias": "Blog"
  * })
- * @method static \Blog\Model\Blog findFirst($parameters = null)
+ * @method static \Blog\Model\Comments findFirst($parameters = null)
  */
 class Comments extends AbstractModel
 {

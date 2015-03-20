@@ -42,11 +42,20 @@ use User\Model\User;
  *  "alias": "BlogCategories"
  * })
  *
+ * @HasMany("id", '\Blog\Model\Comments', "blog_id", {
+ *  "alias": "Comments"
+ * })
+ *
+ *
 
  * @method static \Blog\Model\Blog findFirst($parameters = null)
  */
 class Blog extends AbstractModel
 {
+    public function initialize()
+    {
+    }
+
     const
         /**
          * Cache prefix.
@@ -81,14 +90,14 @@ class Blog extends AbstractModel
 
     public function setBlogCategories(){
         if($this->getId() == null){
-
             return false;
         }
 
         //Delete all related data from blog_categories
-        BlogCategories::find('blog_id='.$this->getId())->delete();
+        //BlogCategories::find('blog_id='.$this->getId())->delete();
 
         //add data
+        if(isset($_POST['categorie_id']))
         foreach($_POST['categorie_id'] as $categorieID){
             $categorieID = explode('-', $categorieID);
             $source = $categorieID[0];
@@ -107,11 +116,19 @@ class Blog extends AbstractModel
                     $blogCategories->setCategorieItemsID($categorieID);
                 }
 
-                $returnValues = $blogCategories->save();
+                $blogCategories->save();
             }
         }
         return true;
     }
+
+    public function setBlogTags(){
+        if($this->getId() == null){
+            return false;
+        }
+
+    }
+
 
     /**
      * Validations and business logic.
@@ -130,6 +147,7 @@ class Blog extends AbstractModel
     public function saveForm(){
         if($this->save()){
             $this->setBlogCategories();
+            //$this->setBlogTags();
             return true;
         }
     }
@@ -139,14 +157,35 @@ class Blog extends AbstractModel
     }
 
     /**
-     * Return the related "CategoriesItem" entity.
+     * Return the related "BlogCategories" entity.
      *
      * @param array $arguments Entity params.
      *
-     * @return CategoriesItem[]
-     */
-    public function getCategorieItems($arguments = [])
+     * @return BlogCategories[]
+
+    public function getBlogCategories($arguments = [])
     {
-        return $this->getRelated('CategoriesItem', $arguments);
+        return $this->getRelated('BlogCategories', $arguments);
+    }
+
+     */
+
+    /**
+     * Logic before removal.
+     *
+     * @return bool
+     */
+    protected function beforeDelete()
+    {
+        $categoriesFlag = $this->getBlogCategories()->delete();
+        $commentsFlag = $this->getComments()->delete();
+
+        return $categoriesFlag && $commentsFlag;
+    }
+
+    protected function beforeSave()
+    {
+        $this->getBlogCategories()->delete();
+        //$this->getBlogTags()->delete();
     }
 }

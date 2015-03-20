@@ -56,7 +56,8 @@ abstract class BlogAbstractController extends AbstractController
             ->collection(AssetManager::DEFAULT_COLLECTION_CSS)
             ->addCss('assets/css/blog/paginator.css')
             ->addCss('external/ckeditor/contents.css')
-            ->addCss('assets/css/blog/style.css');
+            //->addCss('assets/css/blog/style.css')
+        ;
 
         //replace grid.js from core
         $parentJsPath = [];

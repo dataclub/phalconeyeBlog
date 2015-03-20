@@ -20,6 +20,7 @@ use Blog\Model\Blog;
 use Blog\Model\Categories;
 use Blog\Form\BlogForm;
 
+use Blog\Model\Tags;
 use Engine\Db\AbstractModel;
 use User\Model\User;
 
@@ -60,6 +61,8 @@ class Create extends BlogForm
     public function initialize()
     {
         $categorieValues = $this->hasEntity(Blog::getTableName()) ? Categories::getEntityValues($this->getEntity(Blog::getTableName())) : null;
+
+
         $this
             ->setTitle('Blog Creation')
             ->setDescription('Create new blog post.');
@@ -69,6 +72,7 @@ class Create extends BlogForm
             ->addCkEditor('body', 'Content', 'Put your content here')
             ->addSelect('user_id', 'User', 'Select user', User::find(), null, ['using' => ['id', 'username']])
             ->addMultiCheckbox('categorie_id[]', 'Categories', 'Select categories', Categories::getCategories(), $categorieValues, ['using' => ['id', 'name']], ['form_element_class' => 'checkbox-div'])
+            ->addMultiCheckbox('tag_id[]', 'Tags', 'Select tags', Tags::find(), [], ['using' => ['id', 'name']], ['form_element_class' => 'checkbox-div'])
             ;
 
 

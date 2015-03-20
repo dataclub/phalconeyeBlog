@@ -631,12 +631,11 @@ CREATE TABLE `blog_categories` (
 CREATE TABLE `blog_tags` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `blog_id` int(11) NOT NULL,
-  `tag_id` int(11) NOT NULL,
+  `tags_id` int(11) NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `fk_blog_tags_tags` (`tag_id`),
+  KEY `fk_blog_tags_tags` (`tags_id`),
   KEY `fk_blog_tags_blog` (`blog_id`),
-  CONSTRAINT `fk_blog_tags_tags` FOREIGN KEY (`tag_id`) REFERENCES `tags` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `fk_blog_tags_tags` FOREIGN KEY (`tags_id`) REFERENCES `tags` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `fk_blog_tags_blog` FOREIGN KEY (`blog_id`) REFERENCES `blog` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
 
