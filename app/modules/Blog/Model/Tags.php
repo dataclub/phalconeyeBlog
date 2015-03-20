@@ -31,6 +31,10 @@ use Phalcon\Mvc\Model\Validator\Uniqueness;
  *
  * @Source("tags")
  *
+ * @HasMany("id", '\Blog\Model\BlogTags', "tags_id", {
+ *  "alias": "BlogTags"
+ * })
+ *
  * @method static \Blog\Model\Tags findFirst($parameters = null)
  */
 class Tags extends AbstractModel
@@ -48,6 +52,18 @@ class Tags extends AbstractModel
     public $name;
 
     /**
+     * Return the related "BlogTags" entity.
+     *
+     * @param array $arguments Entity params.
+     *
+     * @return BlogTags[]
+     */
+    public function getBlogTags($arguments = [])
+    {
+        return $this->getRelated('BlogTags', $arguments);
+    }
+
+    /**
      * Validations and business logic.
      *
      * @return bool
@@ -62,5 +78,15 @@ class Tags extends AbstractModel
         $this->validate(new Uniqueness(["field" => "name"]));
 
         return $this->validationHasFailed() !== true;
+    }
+
+
+    /**
+     * Logic before removal
+     *
+     * @return void
+     */
+    public function beforeDelete() {
+        $this->getBlogTags()->delete();
     }
 }

@@ -37,6 +37,10 @@ use Phalcon\Mvc\Model\Resultset\Simple;
  *  "alias": "CategoriesItem"
  * })
  *
+ * @HasMany("id", '\Blog\Model\BlogCategories', "categories_id", {
+ *  "alias": "BlogCategories"
+ * })
+ *
  * @method static \Blog\Model\Categories findFirst($parameters = null)
  */
 class Categories extends AbstractModel
@@ -65,6 +69,20 @@ class Categories extends AbstractModel
     {
         return $this->getRelated('CategoriesItem', $arguments);
     }
+
+    /**
+     * Return the related "BlogCategories" entity.
+     *
+     * @param array $arguments Entity params.
+     *
+     * @return BlogCategories[]
+     */
+    public function getBlogCategories($arguments = [])
+    {
+        return $this->getRelated('BlogCategories', $arguments);
+    }
+
+
 
     /**
      * Return all related "Categories" and "CategoriesItems" as nested keys and values array
@@ -129,6 +147,7 @@ class Categories extends AbstractModel
     public function beforeDelete()
     {
         $this->getCategorieItems()->delete();
+        $this->getBlogCategories()->delete();
     }
 
 

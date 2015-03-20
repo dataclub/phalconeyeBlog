@@ -32,11 +32,11 @@ use Phalcon\Mvc\Model\Validator\Uniqueness;
  *
  * @Source("blog_tags")
  *
- * @BelongsTo("blog_id", '\User\Model\Blog', "id", {
+ * @HasMany("blog_id", '\Blog\Model\Blog', "id", {
  *  "alias": "Blog"
  * })
  *
- * @BelongsTo("tags_id", '\User\Model\Tags', "id", {
+ * @HasMany("tags_id", '\Blog\Model\Tags', "id", {
  *  "alias": "Tags"
  * })
  *
@@ -106,4 +106,11 @@ class BlogTags extends AbstractModel
 
         return $this->validationHasFailed() !== true;
     }
+
+    /**
+     * Logic before removal
+     *
+     * @return void
+     */
+    public function beforeDelete() { }
 }

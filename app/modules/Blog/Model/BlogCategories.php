@@ -123,4 +123,11 @@ class BlogCategories extends AbstractModel
 
         return $this->validationHasFailed() !== true;
     }
+
+    /**
+     * Logic before removal
+     *
+     * @return void
+     */
+    public function beforeDelete() { }
 }

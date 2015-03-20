@@ -41,7 +41,7 @@ use Phalcon\Mvc\Model\Validator\Uniqueness;
  *  "alias": "BlogCategories"
  * })
  *
- * @HasMany("id", '\Blog\Model\BlogTags', "tags_id", {
+ * @HasMany("id", '\Blog\Model\BlogTags', "blog_id", {
  *  "alias": "BlogTags"
  * })
  *
@@ -83,6 +83,42 @@ class Blog extends AbstractModel
      * @Column(type="text", nullable=true, column="body")
      */
     public $body;
+
+    /**
+     * Return the related "BlogCategories" entity.
+     *
+     * @param array $arguments Entity params.
+     *
+     * @return BlogCategories[]
+     */
+    public function getBlogCategories($arguments = [])
+    {
+        return $this->getRelated('BlogCategories', $arguments);
+    }
+
+    /**
+     * Return the related "BlogTags" entity.
+     *
+     * @param array $arguments Entity params.
+     *
+     * @return BlogTags[]
+     */
+    public function getBlogTags($arguments = [])
+    {
+        return $this->getRelated('BlogTags', $arguments);
+    }
+
+    /**
+     * Return the related "Comments" entity.
+     *
+     * @param array $arguments Entity params.
+     *
+     * @return Comments[]
+     */
+    public function getComments($arguments = [])
+    {
+        return $this->getRelated('Comments', $arguments);
+    }
 
     /**
      * Populate BlogCategories[] array with categories to save
@@ -188,13 +224,9 @@ class Blog extends AbstractModel
      */
     protected function beforeDelete()
     {
-        if($this->getId() == null){
-            return;
-        }
-
-        $blogCategoriesFlag = BlogCategories::find(array('blog_id='.$this->getId()))->delete();
-        $commentsFlag = Comments::find(array('blog_id='.$this->getId()))->delete();
-        $blogTags = BlogTags::find(array('blog_id='.$this->getId()))->delete();
+        $blogCategoriesFlag = $this->getBlogCategories()->delete();
+        $blogTags = $this->getBlogTags()->delete();
+        $commentsFlag = $this->getComments()->delete();
 
         return $blogCategoriesFlag && $commentsFlag && $blogTags;
     }
@@ -204,10 +236,7 @@ class Blog extends AbstractModel
      */
     protected function beforeSave()
     {
-        if($this->getId() == null){
-            return;
-        }
-        BlogCategories::find(array('blog_id='.$this->getId()))->delete();
-        BlogTags::find(array('blog_id='.$this->getId()))->delete();
+        $this->getBlogCategories()->delete();
+        $this->getBlogTags()->delete();
     }
 }
