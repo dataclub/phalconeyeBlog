@@ -504,7 +504,7 @@ INSERT INTO `menu_items` (`title`, `menu_id`, `parent_id`, `page_id`, `url`, `on
 ('Blog',	1,	NULL,	NULL,	'blog',	NULL,	NULL,	NULL,	'top',	NULL,	'left',	NULL,	NULL,	1,	1);
 
 INSERT INTO `packages` (`id`, `name`, `type`, `title`, `description`, `version`, `author`, `website`, `enabled`, `is_system`, `data`) VALUES
-(3,	'blog',	'module',	'Blog',	NULL,	'1.0.2',	'dataclub',	NULL,	1,	0,	'{\"events\":[],\"widgets\":[]}');
+(3,	'blog',	'module',	'Blog',	NULL,	'1.0.3',	'dataclub',	NULL,	1,	0,	'{\"events\":[],\"widgets\":[]}');
 
 INSERT INTO `content` (`page_id`, `widget_id`, `widget_order`, `layout`, `params`) VALUES
 (4,	1,	1,	'right',	'{\"title\":\"Recent Posts\",\"html_en\":\"<p>{{recentPosts}}<\\/p>\\r\\n\",\"roles\":null,\"content_id\":\"12\"}'),
