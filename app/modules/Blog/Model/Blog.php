@@ -16,14 +16,12 @@
 
 namespace Blog\Model;
 
-use Core\Api\Acl;
 use Engine\Db\AbstractModel;
 use Engine\Db\Model\Behavior\Timestampable;
 use Phalcon\DI;
 use Phalcon\Mvc\Model\Validator\Email;
 use Phalcon\Mvc\Model\Validator\StringLength;
 use Phalcon\Mvc\Model\Validator\Uniqueness;
-use User\Model\User;
 
 /**
  * @category  PhalconEye
@@ -38,8 +36,13 @@ use User\Model\User;
  * @BelongsTo("user_id", '\User\Model\User', "id", {
  *  "alias": "User"
  * })
+ *
  * @HasMany("id", '\Blog\Model\BlogCategories', "blog_id", {
  *  "alias": "BlogCategories"
+ * })
+ *
+ * @HasMany("id", '\Blog\Model\BlogTags', "tags_id", {
+ *  "alias": "BlogTags"
  * })
  *
  * @HasMany("id", '\Blog\Model\Comments', "blog_id", {
@@ -55,12 +58,6 @@ class Blog extends AbstractModel
     public function initialize()
     {
     }
-
-    const
-        /**
-         * Cache prefix.
-         */
-        CACHE_PREFIX = 'comment_id';
 
     // use trait Timestampable for creation_date and modified_date fields.
     use Timestampable;
@@ -87,48 +84,65 @@ class Blog extends AbstractModel
      */
     public $body;
 
-
-    public function setBlogCategories(){
+    /**
+     * Populate BlogCategories[] array with categories to save
+     * @return BlogCategories
+     */
+    public function populateBlogCategories(){
         if($this->getId() == null){
             return false;
         }
 
-        //Delete all related data from blog_categories
-        //BlogCategories::find('blog_id='.$this->getId())->delete();
+        $categories = [];
+        if(isset($_POST['blogCategories']))
+        foreach($_POST['blogCategories'] as $key => $value){
+            $value = explode('-', $value);
+            $source = $value[0];
+            $categorieID = $value[1];
 
-        //add data
-        if(isset($_POST['categorie_id']))
-        foreach($_POST['categorie_id'] as $categorieID){
-            $categorieID = explode('-', $categorieID);
-            $source = $categorieID[0];
-            $categorieID = $categorieID[1];
-            $conditions = "blog_id = ?1 AND ".$source."_id = ?2";
-            $parameters = array(1 => $this->getId(), 2 => $categorieID);
+            $parameters = array(
+                "blog_id = ?1 AND ".$source."_id = ?2",
+                "bind" => array(1 => $this->getId(), 2 => $categorieID)
+            );
 
-            //save new
-            if(BlogCategories::count(array($conditions, "bind" => $parameters)) == 0){
-                //Save
+            if(BlogCategories::count($parameters) == 0){
                 $blogCategories = new BlogCategories();
-                $blogCategories->blog_id = $this->getId();
+                $blogCategories->setBlogID($this->getId());
                 if($source == Categories::getTableName()){
                     $blogCategories->setCategorieID($categorieID);
                 }else{
                     $blogCategories->setCategorieItemsID($categorieID);
                 }
-
-                $blogCategories->save();
+                array_push($categories, $blogCategories);
             }
         }
-        return true;
+
+        return $categories;
     }
 
-    public function setBlogTags(){
+    public function populateBlogTags(){
         if($this->getId() == null){
             return false;
         }
 
-    }
+        $tags = [];
+        if(isset($_POST['blogTags']))
+            foreach($_POST['blogTags'] as $key => $tags_id){
+                $parameters = array(
+                    "blog_id = ?1 AND tags_id = ?2",
+                    "bind" => array(1 => $this->getId(), 2 => $tags_id)
+                );
 
+                if(BlogTags::count($parameters) == 0){
+                    $blogTags = new BlogTags();
+                    $blogTags->setBlogID($this->getId());
+                    $blogTags->setTagsID($tags_id);
+                    array_push($tags, $blogTags);
+                }
+            }
+
+        return $tags;
+    }
 
     /**
      * Validations and business logic.
@@ -146,46 +160,54 @@ class Blog extends AbstractModel
 
     public function saveForm(){
         if($this->save()){
-            $this->setBlogCategories();
-            //$this->setBlogTags();
-            return true;
+            $blogCategories = $this->populateBlogCategories();
+            $blogCategoriesFlag = BlogCategories::saveBlogCategories($blogCategories);
+
+            $blogTags = $this->populateBlogTags();
+            $blogTagsFlag = BlogTags::saveBlogTags($blogTags);
+            return $blogCategoriesFlag && $blogTagsFlag;
         }
+        return false;
     }
 
     public function updateForm(){
-        $this->setBlogCategories();
+        $blogCategories = $this->populateBlogCategories();
+        $blogCategoriesFlag = BlogCategories::saveBlogCategories($blogCategories);
+
+        $blogTags = $this->populateBlogTags();
+        $blogTagsFlag = BlogTags::saveBlogTags($blogTags);
+
+        return $blogCategoriesFlag && $blogTagsFlag;
     }
 
-    /**
-     * Return the related "BlogCategories" entity.
-     *
-     * @param array $arguments Entity params.
-     *
-     * @return BlogCategories[]
-
-    public function getBlogCategories($arguments = [])
-    {
-        return $this->getRelated('BlogCategories', $arguments);
-    }
-
-     */
 
     /**
-     * Logic before removal.
+     * Delete all related data, so the blog can be deleted
      *
      * @return bool
      */
     protected function beforeDelete()
     {
-        $categoriesFlag = $this->getBlogCategories()->delete();
-        $commentsFlag = $this->getComments()->delete();
+        if($this->getId() == null){
+            return;
+        }
 
-        return $categoriesFlag && $commentsFlag;
+        $blogCategoriesFlag = BlogCategories::find(array('blog_id='.$this->getId()))->delete();
+        $commentsFlag = Comments::find(array('blog_id='.$this->getId()))->delete();
+        $blogTags = BlogTags::find(array('blog_id='.$this->getId()))->delete();
+
+        return $blogCategoriesFlag && $commentsFlag && $blogTags;
     }
 
+    /**
+     * Remove all related data to save it again
+     */
     protected function beforeSave()
     {
-        $this->getBlogCategories()->delete();
-        //$this->getBlogTags()->delete();
+        if($this->getId() == null){
+            return;
+        }
+        BlogCategories::find(array('blog_id='.$this->getId()))->delete();
+        BlogTags::find(array('blog_id='.$this->getId()))->delete();
     }
 }

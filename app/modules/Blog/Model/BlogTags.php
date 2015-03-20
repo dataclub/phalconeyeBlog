@@ -30,23 +30,20 @@ use Phalcon\Mvc\Model\Validator\Uniqueness;
  * @license   New BSD License
  * @link      http://phalconeye.com/
  *
- * @Source("blog_categories")
+ * @Source("blog_tags")
  *
- * @HasMany("blog_id", '\Blog\Model\Blog', "id", {
+ * @BelongsTo("blog_id", '\User\Model\Blog', "id", {
  *  "alias": "Blog"
  * })
  *
- * @HasMany("categories_id", '\Blog\Model\Categories', "id", {
- *  "alias": "Categories"
+ * @BelongsTo("tags_id", '\User\Model\Tags', "id", {
+ *  "alias": "Tags"
  * })
  *
- * @HasMany("categorie_items_id", '\Blog\Model\CategoriesItem', "id", {
- *  "alias": "CategoriesItem"
- * })
  *
- * @method static \Blog\Model\BlogCategories findFirst($parameters = null)
+ * @method static \Blog\Model\Tags findFirst($parameters = null)
  */
-class BlogCategories extends AbstractModel
+class BlogTags extends AbstractModel
 {
     /**
      * @Primary
@@ -61,14 +58,10 @@ class BlogCategories extends AbstractModel
     public $blog_id;
 
     /**
-     * @Column(type="integer", nullable=true, column="categories_id", size="11")
+     * @Column(type="integer", nullable=false, column="tags_id", size="11")
      */
-    public $categories_id;
+    public $tags_id;
 
-    /**
-     * @Column(type="integer", nullable=true, column="categorie_items_id", size="11")
-     */
-    public $categorie_items_id;
 
     public function setBlogID($id){
         $di = $this->getId();
@@ -78,37 +71,27 @@ class BlogCategories extends AbstractModel
         }
     }
 
-    public function setCategorieID($id){
+    public function setTagsID($id){
         $di = $this->getId();
         if ($di === null || !empty($id)) {
-            $this->categories_id = $id;
-
-        }
-    }
-
-    public function setCategorieItemsID($id){
-        $di = $this->getId();
-        if ($di === null || !empty($id)) {
-            $this->categorie_items_id = $id;
+            $this->tags_id = $id;
 
         }
     }
 
     /**
-     * Saves given $blogCategories
-     * @param $blogCategories
+     * Saves given $blogTags
+     * @param $blogTags
      * @return bool
      */
-    public static function saveBlogCategories($blogCategories){
-        foreach ($blogCategories as $categories) {
-            if(!$categories->save()){
+    public static function saveBlogTags($blogTags){
+        foreach ($blogTags as $tags) {
+            if(!$tags->save()){
                 return false;
             }
         }
         return true;
     }
-
-
 
     /**
      * Validations and business logic.

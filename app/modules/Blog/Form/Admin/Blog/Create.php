@@ -17,6 +17,7 @@
 namespace Blog\Form\Admin\Blog;
 
 use Blog\Model\Blog;
+use Blog\Model\BlogTags;
 use Blog\Model\Categories;
 use Blog\Form\BlogForm;
 
@@ -60,7 +61,17 @@ class Create extends BlogForm
      */
     public function initialize()
     {
-        $categorieValues = $this->hasEntity(Blog::getTableName()) ? Categories::getEntityValues($this->getEntity(Blog::getTableName())) : null;
+        $categorieValues = $this->hasEntity(Blog::getTableName()) ?
+            Categories::getEntityValues($this->getEntity(Blog::getTableName())) : null;
+
+        $tagsValues = $this->hasEntity(Blog::getTableName()) ?
+            BlogTags::getBuilder(Blog::getTableName())
+                ->where('blog_id='.$this->getEntity(Blog::getTableName())->getId())
+                ->columns(['tags_id'])
+                ->getQuery()
+                ->execute()
+                ->toArray() : [];
+        $tagsValues = array_map(function($item){ return $item['tags_id'];}, $tagsValues);
 
 
         $this
@@ -71,8 +82,8 @@ class Create extends BlogForm
             ->addText('title', 'Title', 'Blog title', null, [], ['autocomplete' => 'off'])
             ->addCkEditor('body', 'Content', 'Put your content here')
             ->addSelect('user_id', 'User', 'Select user', User::find(), null, ['using' => ['id', 'username']])
-            ->addMultiCheckbox('categorie_id[]', 'Categories', 'Select categories', Categories::getCategories(), $categorieValues, ['using' => ['id', 'name']], ['form_element_class' => 'checkbox-div'])
-            ->addMultiCheckbox('tag_id[]', 'Tags', 'Select tags', Tags::find(), [], ['using' => ['id', 'name']], ['form_element_class' => 'checkbox-div'])
+            ->addMultiCheckbox('blogCategories[]', 'Categories', 'Select categories', Categories::getCategories(), $categorieValues, ['using' => ['id', 'name']], ['form_element_class' => 'checkbox-div'])
+            ->addMultiCheckbox('blogTags[]', 'Tags', 'Select tags', Tags::find(), $tagsValues, ['using' => ['id', 'name']], ['form_element_class' => 'checkbox-div'])
             ;
 
 
