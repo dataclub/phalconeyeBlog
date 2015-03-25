@@ -108,7 +108,7 @@ class Categories extends AbstractModel
 
 
                 if($item instanceof Categories){
-                    $categorieItems = CategoriesItem::find(array('parent_id is null', "categorie_id='".$keyValue."'"));
+                    $categorieItems = CategoriesItem::find(array("parent_id is null and categorie_id='".$keyValue."'"));
                 }else{
                     $categorieItems = CategoriesItem::find(array("parent_id='".$keyValue."'"));
                 }
@@ -128,7 +128,7 @@ class Categories extends AbstractModel
         $categorieValues = [];
 
         /** @var \Blog\Model\Categories $categories */
-        foreach (BlogCategories::find(array('blog_id = ' . $entity->getId())) as $blogCategories) {
+        foreach ($entity->getBlogCategories() as $blogCategories) {
             if (empty($blogCategories->categories_id)) {
                 array_push($categorieValues, 'categorie_items-' . $blogCategories->categorie_items_id);
             } else {

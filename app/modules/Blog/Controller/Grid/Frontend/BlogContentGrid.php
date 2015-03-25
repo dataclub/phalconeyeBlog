@@ -16,6 +16,11 @@
 
 namespace Blog\Controller\Grid\Frontend;
 
+use Blog\Model\Blog;
+use Blog\Model\BlogCategories;
+use Blog\Model\Categories;
+use Blog\Model\CategoriesItem;
+use Blog\Model\Tags;
 use Engine\Form;
 use Engine\Grid\GridItem;
 use Phalcon\Db\Column;
@@ -52,18 +57,79 @@ class BlogContentGrid extends FrontendBlogGrid
 
     }
 
-    public function getCategories(GridItem $item){
-        /*
-        $resultset = $this->getDI()->getModelsManager()->createBuilder()
-            ->addFrom()
-            ->join('RobotsParts');
-        $bla = $item;
-        */
-        return 'blöa';
+    public function getCategoriesForFrontend(GridItem $item){
+        $blog = Blog::findFirst('id='.$item->getObject()->id);
+
+        $categoriesArray = [];
+        foreach ($blog->getBlogCategories() as $blogCategories) {
+            $categories = $this->getAllParents($blogCategories);
+            array_push($categoriesArray, array(
+                'value' => $categories->value,
+                'title' => 'View all posts in ' . $categories->name,
+                'url' => '/blog/categories/' . $categories->url
+            ));
+
+        }
+
+        return $categoriesArray;
     }
 
-    private function getCategoriesSource(){
+    /**
+     * @param BlogCategories $blogCategories
+     * @param array $categoriesParent
+     * @return Categories
+     */
+    private function getAllParents($blogCategories, &$categoriesParent = [])
+    {
+        $categoriesObject = null;
+        if($blogCategories instanceof BlogCategories){
 
+            if (!empty($blogCategories->categories_id)) {
+                $categoriesObject = Categories::findFirst('id=' . $blogCategories->categories_id);
+                array_push($categoriesParent, $categoriesObject->name);
+            }else{
+                $categoriesObject = CategoriesItem::findFirst('id=' . $blogCategories->categorie_items_id);
+                array_push($categoriesParent, $categoriesObject->title);
+                if(!empty($categoriesObject->parent_id)){
+                    $this->getAllParents(CategoriesItem::findFirst('id='.$categoriesObject->parent_id), $categoriesParent);
+                }else if(!empty($categoriesObject->categorie_id)){
+                    $this->getAllParents(Categories::findFirst('id='.$categoriesObject->categorie_id), $categoriesParent);
+                }
+            }
+        }else if($blogCategories instanceof CategoriesItem){
+            $categoriesObject = $blogCategories;
+            array_push($categoriesParent, $categoriesObject->title);
+            if(!empty($categoriesObject->parent_id)){
+                $this->getAllParents(CategoriesItem::findFirst('id='.$categoriesObject->parent_id), $categoriesParent);
+            }else{
+                $this->getAllParents(Categories::findFirst('id='.$categoriesObject->categorie_id), $categoriesParent);
+            }
+        }else if($blogCategories instanceof Categories){
+            $categoriesObject = $blogCategories;
+            array_push($categoriesParent, $categoriesObject->name);
+        }
+
+        $categories = new Categories();
+        $categories->name = !empty($categoriesObject->name) ? $categoriesObject->name : $categoriesObject->title;
+        $categories->value = $categories->name;
+        $categories->url = implode('/', array_reverse($categoriesParent));
+        return $categories;
+    }
+
+    public function getTagsForFrontend(GridItem $item){
+        $blog = Blog::findFirst('id='.$item->getObject()->id);
+
+        $tagsArray = [];
+        foreach ($blog->getBlogTags() as $blogTags) {
+            $tags = Tags::findFirst('id='.$blogTags->tags_id);
+            array_push($tagsArray, array(
+                'value' => $tags->name,
+                'title' => 'View all posts in ' . $tags->name,
+                'url' => '/blog/tags/'.$tags->name
+            ));
+        }
+
+        return $tagsArray;
     }
 
     public function getTableBodyView()
@@ -87,8 +153,8 @@ class BlogContentGrid extends FrontendBlogGrid
                 'b.id',
                 'b.title',
                 'b.body',
-                "CONCAT_WS(' ', DAY(b.creation_date), MONTHNAME(b.creation_date), ',', YEAR(b.creation_date)) as creation_date",
-                "CONCAT_WS(' ', DAY(b.modified_date), MONTHNAME(b.modified_date), ',', YEAR(b.modified_date)) as modified_date",
+                "CONCAT_WS('', DAY(b.creation_date), '.', MONTHNAME(b.creation_date), ' ', YEAR(b.creation_date)) as creation_date",
+                "CONCAT_WS('', DAY(b.modified_date), '.', MONTHNAME(b.modified_date), ' ', YEAR(b.modified_date)) as modified_date",
                 'u.username',
                 'count(c.id) as counted_comments'
             ])

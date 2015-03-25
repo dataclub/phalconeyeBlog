@@ -14,7 +14,7 @@
 #}
 
 
-<style>
+<!--style>
     h1, h2, h3, h4, h5, h6 {
         font-weight: normal;
         line-height: 1.2;
@@ -44,9 +44,6 @@
     ul {
         padding: 0px;
     }
-</style>
+</style-->
 
-
-<main id="main" class="site-main" role="main">
-    {{ partial(grid.getTableBodyView(), ['grid': grid]) }}
-</main>
+{{ partial(grid.getTableBodyView(), ['grid': grid]) }}

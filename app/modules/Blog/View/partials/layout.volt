@@ -31,15 +31,6 @@
     </div>
 {% endif %}
 
-{# RIGHT #}
-{% if "right" in (content|keys) %}
-    <div id="general-content-right">
-        {% for widget in content["right"] %}
-            {{ widget }}
-        {% endfor %}
-    </div>
-{% endif %}
-
 {# MIDDLE #}
 {% if "middle" in (content|keys) %}
 
@@ -78,6 +69,15 @@
         </div>
     {% endif %}
 
+{% endif %}
+
+{# RIGHT #}
+{% if "right" in (content|keys) %}
+    <div id="general-content-right">
+        {% for widget in content["right"] %}
+            {{ widget }}
+        {% endfor %}
+    </div>
 {% endif %}
 
 {# BOTTOM #}
