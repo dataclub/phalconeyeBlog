@@ -116,6 +116,16 @@ class BlogContentGrid extends FrontendBlogGrid
         return $categories;
     }
 
+    private function getCategoriesCount(){
+        $categoriesBuilder = new Builder();
+        $categoriesBuilder
+            ->addFrom('Blog\Model\Categories', 'c')
+            ->leftJoin('Blog\Model\BlogCategories', 'c.id = bc.categories_id', 'bc')
+            ->columns(['c.name', 'count(c.name)'])
+            ->groupBy('c.name');
+        $bla = $categoriesBuilder->getQuery();
+    }
+
     public function getTagsForFrontend(GridItem $item){
         $blog = Blog::findFirst('id='.$item->getObject()->id);
 

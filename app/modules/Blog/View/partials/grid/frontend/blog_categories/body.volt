@@ -19,7 +19,9 @@
 {% if grid.getTotalCount() %}
     {% for item in grid.getItems() %}
         <tr>
-            {{ partial(grid.getItemView(), ['grid': grid, 'item': item]) }}
+            <td>
+                {{ partial(grid.getItemView(), ['grid': grid, 'item': item]) }}
+            </td>
         </tr>
     {% endfor %}
     <tr>

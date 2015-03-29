@@ -14,30 +14,20 @@
   | Author: Ivan Vorontsov <ivan.vorontsov@phalconeye.com>                 |
   +------------------------------------------------------------------------+
 #}
-{% for columnName, column in grid.getColumns() %}
-    <td>
-        {% if column[constant('\Engine\Grid\AbstractGrid::COLUMN_PARAM_OUTPUT_LOGIC')] is defined %}
-            {{ column[constant('\Engine\Grid\AbstractGrid::COLUMN_PARAM_OUTPUT_LOGIC')](item, grid.getDI()) }}
-        {% else %}
-            {{ item[columnName] }}
-        {% endif %}
-    </td>
-{% endfor %}
-
 {% if grid.hasActions() %}
-    <td class="actions">
-        {% for key, action in grid.getItemActions(item) %}
-            <a
-                    href="{% if action['href'] is defined %}{{ url(action['href']) }}{% else %}javascript:;{% endif %}"
-            {% if action['attr'] is defined %}
-                {% for attrName, attrValue in action['attr'] %}
-                    {{ attrName }}="{{ attrValue }}"
-                {% endfor %}
-            {% endif %}
-            >
-            {{ key |i18n}}
-            </a>
-        {% endfor %}
-    </td>
+<div class="actions">
+
+    {% for key, action in grid.getItemActions(item) %}
+                <a href="{% if action['href'] is defined %}{{ url(action['href']) }}{% else %}javascript:;{% endif %}"
+                {% if action['attr'] is defined %}
+                    {% for attrName, attrValue in action['attr'] %}
+                        {{ attrName }}="{{ attrValue }}"
+                    {% endfor %}
+                {% endif %}
+                >
+                {{ item['name'] |i18n}} ({{ grid.getCategoriesCount(item) + grid.getSubCategoriesCount(item)}})
+                </a>
+            {% endfor %}
+</div>
 {% endif %}
 

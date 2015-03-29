@@ -16,24 +16,5 @@
 #}
 
 <table id="{{ grid.getId() }}" class="table grid-table" data-widget="grid">
-    <thead>
-    <tr>
-        {% for name, column in grid.getColumns() %}
-            <th>
-                {% if column[constant('\Engine\Grid\AbstractGrid::COLUMN_PARAM_SORTABLE')] is defined and column[constant('\Engine\Grid\AbstractGrid::COLUMN_PARAM_SORTABLE')] %}
-                    <a href="javascript:;" class="grid-sortable" data-sort="{{ name }}" data-direction="">
-                        {{ column[constant('\Engine\Grid\AbstractGrid::COLUMN_PARAM_LABEL')] |i18n }}
-                    </a>
-                {% else %}
-                    {{ column[constant('\Engine\Grid\AbstractGrid::COLUMN_PARAM_LABEL')] |i18n }}
-                {% endif %}
-            </th>
-        {% endfor %}
-        {% if grid.hasActions() %}
-            <th class="actions">{{ 'Actions' |i18n }}</th>
-        {% endif %}
-    </tr>
-
-    </thead>
     {{ partial(grid.getTableBodyView(), ['grid': grid]) }}
 </table>

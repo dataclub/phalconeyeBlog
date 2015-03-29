@@ -21,6 +21,8 @@ use Core\Model\Settings;
 use Engine\Helper;
 use Phalcon\Tag;
 use Phalcon\Mvc\View;
+use Phalcon\Mvc\Model\Query\Builder;
+use Phalcon\DI;
 
 /**
  * BlogHelper class.
@@ -112,4 +114,12 @@ class BlogHelper extends Helper
         return $navigationItems;
     }
 
+    /**
+     * @param Builder $builder
+     */
+    public static function getQuery($builder){
+        $intermediate = $builder->getQuery()->parse();
+        $dialect      = DI::getDefault()->get('db')->getDialect();
+        return $dialect->select($intermediate);
+    }
 }
